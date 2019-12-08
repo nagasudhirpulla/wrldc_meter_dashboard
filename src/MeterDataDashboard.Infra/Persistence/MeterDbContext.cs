@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
-namespace MeterDataDashboard.Infra.Data
+namespace MeterDataDashboard.Infra.Persistence
 {
     public class MeterDbContext : IdentityDbContext
     {

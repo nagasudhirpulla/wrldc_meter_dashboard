@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MeterDataDashboard.Core.Common
+﻿namespace MeterDataDashboard.Infra.Identity
 {
     public static class SecurityConstants
     {

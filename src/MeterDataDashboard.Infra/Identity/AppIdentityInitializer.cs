@@ -1,13 +1,12 @@
-﻿using MeterDataDashboard.Core.Common;
-using MeterDataDashboard.Core.Interfaces;
+﻿using MeterDataDashboard.Core.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using System.Threading.Tasks;
 
 namespace MeterDataDashboard.Infra.Identity
 {
     public class AppIdentityInitializer : IAppIdentityInitializer
     {
-
         public UserManager<ApplicationUser> UserManager { get; set; }
         public RoleManager<IdentityRole> RoleManager { get; set; }
         public IConfiguration Configuration { get; set; }
@@ -15,42 +14,49 @@ namespace MeterDataDashboard.Infra.Identity
         /**
          * This method seeds admin, guest role and admin user
          * **/
-        public void SeedData()
+        public async void SeedData()
         {
             // get admin params from configuration
             UserInitVariables initVariables = new UserInitVariables();
             initVariables.InitializeFromConfig(Configuration);
             // seed roles
-            SeedUserRoles(RoleManager);
+            await SeedUserRoles(RoleManager);
             // seed admin user
-            SeedAdminUser(UserManager, initVariables);
+            await SeedUsers(UserManager, initVariables);
         }
 
         /**
-         * This method seeds admin user
+         * This method seeds admin and guest users
          * **/
-        public void SeedAdminUser(UserManager<ApplicationUser> userManager, UserInitVariables initVariables)
+        public async Task SeedUsers(UserManager<ApplicationUser> userManager, UserInitVariables initVariables)
         {
-            string AdminUserName = initVariables.AdminUserName;
-            string AdminEmail = initVariables.AdminEmail;
-            string AdminPassword = initVariables.AdminPassword;
+            await SeedUser(userManager, initVariables.AdminUserName, initVariables.AdminEmail,
+                initVariables.AdminPassword, SecurityConstants.AdminRoleString);
+            await SeedUser(userManager, initVariables.GuestUserName, initVariables.GuestEmail,
+                initVariables.GuestPassword, SecurityConstants.GuestRoleString);
+        }
 
-            // check if admin user doesn't exist
-            if (userManager.FindByNameAsync(AdminUserName).Result == null)
+        /**
+         * This method seeds a user
+         * **/
+        public async Task SeedUser(UserManager<ApplicationUser> userManager, string userName, string email, string password, string role)
+        {
+            // check if user doesn't exist
+            if ((await userManager.FindByNameAsync(userName)) == null)
             {
-                // create desired admin user object
+                // create desired user object
                 ApplicationUser user = new ApplicationUser
                 {
-                    UserName = AdminUserName,
-                    Email = AdminEmail
+                    UserName = userName,
+                    Email = email
                 };
 
-                // push desired admin user object to DB
-                IdentityResult result = userManager.CreateAsync(user, AdminPassword).Result;
+                // push desired user object to DB
+                IdentityResult result = await userManager.CreateAsync(user, password);
 
                 if (result.Succeeded)
                 {
-                    userManager.AddToRoleAsync(user, SecurityConstants.AdminRoleString).Wait();
+                    await userManager.AddToRoleAsync(user, role);
                 }
             }
         }
@@ -58,27 +64,26 @@ namespace MeterDataDashboard.Infra.Identity
         /**
          * This method seeds roles
          * **/
-        public void SeedUserRoles(RoleManager<IdentityRole> roleManager)
+        public async Task SeedUserRoles(RoleManager<IdentityRole> roleManager)
+        {
+            await SeedRole(roleManager, SecurityConstants.GuestRoleString);
+            await SeedRole(roleManager, SecurityConstants.AdminRoleString);
+        }
+
+        /**
+         * This method seeds a role
+         * **/
+        public async Task SeedRole(RoleManager<IdentityRole> roleManager, string roleString)
         {
             // check if role doesn't exist
-            if (!roleManager.RoleExistsAsync(SecurityConstants.GuestRoleString).Result)
+            if (!(await roleManager.RoleExistsAsync(roleString)))
             {
                 // create desired role object
                 IdentityRole role = new IdentityRole
                 {
-                    Name = SecurityConstants.GuestRoleString,
+                    Name = roleString,
                 };
                 // push desired role object to DB
-                IdentityResult roleResult = roleManager.CreateAsync(role).Result;
-            }
-
-
-            if (!roleManager.RoleExistsAsync(SecurityConstants.AdminRoleString).Result)
-            {
-                IdentityRole role = new IdentityRole
-                {
-                    Name = SecurityConstants.AdminRoleString,
-                };
                 IdentityResult roleResult = roleManager.CreateAsync(role).Result;
             }
         }

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity.UI.Services;
 using System.Threading.Tasks;
 
-namespace MeterDataDashboard.Infra
+namespace MeterDataDashboard.Infra.Services
 {
     public class EmailSender : IEmailSender
     {

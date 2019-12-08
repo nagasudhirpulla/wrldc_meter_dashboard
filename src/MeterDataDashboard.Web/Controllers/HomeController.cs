@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MeterDataDashboard.Web.Models;
+using MeterDataDashboard.Web.Extensions;
 
 namespace MeterDataDashboard.Web.Controllers
 {
@@ -20,6 +21,7 @@ namespace MeterDataDashboard.Web.Controllers
 
         public IActionResult Index()
         {
+            //return View().WithSuccess("You successfully opened Home page!");
             return View();
         }
 

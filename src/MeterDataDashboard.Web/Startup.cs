@@ -12,45 +12,28 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using MeterDataDashboard.Infra;
 using MeterDataDashboard.Infra.Identity;
-using MeterDataDashboard.Infra.Data;
+using MeterDataDashboard.Infra.Persistence;
+using MeterDataDashboard.Infra.Services;
+using MeterDataDashboard.Infra;
 
 namespace MeterDataDashboard.Web
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
             Configuration = configuration;
+            Environment = environment;
         }
 
         public IConfiguration Configuration { get; }
+        public IWebHostEnvironment Environment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<AppIdentityDbContext>(options =>
-                options.UseNpgsql(
-                    Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("MeterDataDashboard.Web")));
-            services.AddDbContext<MeterDbContext>(options =>
-                options.UseNpgsql(
-                    Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("MeterDataDashboard.Web")));
-            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
-            {
-                options.SignIn.RequireConfirmedAccount = false;
-                options.Password.RequireDigit = true;
-                options.Password.RequireLowercase = true;
-                options.Password.RequireNonAlphanumeric = true;
-                options.Password.RequireUppercase = false;
-                options.Password.RequiredLength = 4;
-                options.Password.RequiredUniqueChars = 2;
-            })
-                .AddEntityFrameworkStores<AppIdentityDbContext>()
-                .AddDefaultTokenProviders();
-
-            // Add application services.
-            services.AddTransient<IEmailSender, EmailSender>();
+            services.AddInfrastructure(Configuration, Environment);
 
             services
                 .AddControllersWithViews()
@@ -80,7 +63,7 @@ namespace MeterDataDashboard.Web
             app.UseAuthentication();
             app.UseAuthorization();
 
-            // seed Admin User and Admin, Guest Roles
+            // seed Users and Roles
             AppIdentityInitializer identityInitializer = new AppIdentityInitializer()
             {
                 UserManager = userManager,

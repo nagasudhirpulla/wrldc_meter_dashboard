@@ -32,11 +32,11 @@ namespace MeterDataDashboard.Infra
                 // Add Persistence Infra
                 services.AddDbContext<MeterDbContext>(options =>
                     options.UseNpgsql(
-                        configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("MeterDataDashboard.Infra")));
+                        configuration.GetConnectionString("DefaultConnection")));
 
                 services.AddDbContext<AppIdentityDbContext>(options =>
                     options.UseNpgsql(
-                        configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("MeterDataDashboard.Infra")));
+                        configuration.GetConnectionString("DefaultConnection")));
             }
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
@@ -53,7 +53,7 @@ namespace MeterDataDashboard.Infra
                 .AddDefaultTokenProviders();
 
             // Add Infra services
-            services.AddTransient<IEmailSender, EmailSender>();
+            services.AddTransient<IEmailSender, EmailSender>();            
             return services;
         }
     }

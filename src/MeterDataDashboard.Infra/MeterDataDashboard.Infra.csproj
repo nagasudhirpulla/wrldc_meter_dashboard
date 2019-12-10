@@ -13,11 +13,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\MeterDataDashboard.Application\MeterDataDashboard.Application.csproj" />
     <ProjectReference Include="..\MeterDataDashboard.Core\MeterDataDashboard.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Persistence\Configurations\" />
   </ItemGroup>
 
 </Project>

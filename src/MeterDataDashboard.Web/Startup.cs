@@ -16,6 +16,8 @@ using MeterDataDashboard.Infra.Identity;
 using MeterDataDashboard.Infra.Persistence;
 using MeterDataDashboard.Infra.Services;
 using MeterDataDashboard.Infra;
+using MeterDataDashboard.Application.Common;
+using MeterDataDashboard.Web.Services;
 
 namespace MeterDataDashboard.Web
 {
@@ -34,7 +36,7 @@ namespace MeterDataDashboard.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddInfrastructure(Configuration, Environment);
-
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
             services
                 .AddControllersWithViews()
                 .AddRazorRuntimeCompilation();

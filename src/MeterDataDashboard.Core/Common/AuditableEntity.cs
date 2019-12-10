@@ -4,7 +4,7 @@ using System.Text;
 
 namespace MeterDataDashboard.Core.Common
 {
-    public class AuditableEntity
+    public class AuditableEntity : BaseEntity
     {
         public string CreatedBy { get; set; }
 

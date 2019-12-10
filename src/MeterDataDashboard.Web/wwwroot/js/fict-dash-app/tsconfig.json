@@ -4,9 +4,7 @@
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",
     "sourceMap": true,
-    "allowJs": true,
-    "outDir": "build",
-    "jsx": "react"
+    "allowJs": true
   },
   "exclude": [ "node_modules" ]
 }

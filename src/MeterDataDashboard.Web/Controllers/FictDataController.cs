@@ -10,19 +10,32 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
+using MeterDataDashboard.Core.Entities;
+using MeterDataDashboard.Infra.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace MeterDataDashboard.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class FictDataController : ControllerBase
     {
         private readonly IConfiguration _configuration;
+        private readonly MeterDbContext _meterDbContext;
 
-        public FictDataController(IConfiguration configuration)
+        public FictDataController(IConfiguration configuration, MeterDbContext meterDbContext)
         {
             _configuration = configuration;
+            _meterDbContext = meterDbContext;
+        }
+
+        [HttpGet("GetMeasurements")]
+        public async Task<IEnumerable<FictMeasurement>> GetMeasurements()
+        {
+            // https://localhost:44390/api/fictdata/getmeasurements
+            List<FictMeasurement> fictMeasurements = await _meterDbContext.FictMeasurements.ToListAsync();
+            return fictMeasurements;
         }
 
         [HttpGet("{tag}/{start_date}/{end_date}")]

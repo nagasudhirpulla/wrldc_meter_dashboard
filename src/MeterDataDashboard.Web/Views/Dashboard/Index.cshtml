@@ -2,7 +2,17 @@
     ViewData["Title"] = "Dashboard";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="row align-content-center">
+    <select id="fictMeasSelect"></select>
+    <input id="start_date" type="date" />
+    <input id="end_date" type="date" />
+    <button id="addSeriesBtn">Add Series</button>
 </div>
+<div class="row">
+    <div id="plotDiv" class="col-md-12"></div>
+</div>
+
+@section Scripts {
+    @*<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>*@
+    <script src="~/js/fict-dash-app/dist/main.js"></script>
+}

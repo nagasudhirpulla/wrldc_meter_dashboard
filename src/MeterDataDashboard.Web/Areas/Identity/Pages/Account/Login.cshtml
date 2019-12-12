@@ -5,47 +5,43 @@
     ViewData["Title"] = "Log in";
 }
 
-<h1>@ViewData["Title"]</h1>
-<div class="row">
-    <div class="col-md-4">
-        <section>
-            <form id="account" method="post">
-                <hr />
-                <div asp-validation-summary="All" class="text-danger"></div>
+<div class="row justify-content-center align-items-center">
+    <div class="col col-md-8 col-lg-6 col-xl-4">
+        <div class="p-5">
+            <div class="text-center">
+                <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
+            </div>
+            <form class="user" id="account" method="post">
                 <div class="form-group">
-                    <label asp-for="Input.Username"></label>
-                    <input asp-for="Input.Username" class="form-control" />
+                    <input class="form-control form-control-user" asp-for="Input.Username" placeholder="Enter Username...">
                     <span asp-validation-for="Input.Username" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label asp-for="Input.Password"></label>
-                    <input asp-for="Input.Password" class="form-control" />
+                    <input asp-for="Input.Password" class="form-control form-control-user" placeholder="Password">
                     <span asp-validation-for="Input.Password" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <div class="checkbox">
-                        <label asp-for="Input.RememberMe">
-                            <input asp-for="Input.RememberMe" />
-                            @Html.DisplayNameFor(m => m.Input.RememberMe)
-                        </label>
+                    <div class="custom-control custom-checkbox small">
+                        <input type="checkbox" class="custom-control-input" asp-for="Input.RememberMe">
+                        <label class="custom-control-label" asp-for="Input.RememberMe">Remember Me</label>
                     </div>
                 </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Log in</button>
-                </div>
-                @*<div class="form-group">
-                    <p>
-                        <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
-                    </p>
-                    <p>
-                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
-                    </p>
-                    <p>
-                        <button type="submit" asp-page-handler="SendVerificationEmail" class="btn-link" style="padding:0px;margin:0px;border:0px">Resend email confirmation</button>
-                    </p>
-                </div>*@
+                <button type="submit" class="btn btn-primary btn-user btn-block">
+                    Login
+                </button>
             </form>
-        </section>
+
+            @*<hr>
+                <div class="text-center">
+                    <a class="small" id="forgot-password" asp-page="./ForgotPassword">Forgot Password?</a>
+                </div>
+                <div class="text-center">
+                    <a class="small" asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+                </div>
+                <div class="text-center">
+                    <button type="submit" asp-page-handler="SendVerificationEmail" class="small btn-link" style="padding:0px;margin:0px;border:0px">Resend email confirmation</button>
+                </div>*@
+        </div>
     </div>
 </div>
 

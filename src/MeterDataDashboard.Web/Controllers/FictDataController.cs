@@ -22,13 +22,11 @@ namespace MeterDataDashboard.Web.Controllers
     [Authorize]
     public class FictDataController : ControllerBase
     {
-        private readonly IConfiguration _configuration;
         private readonly MeterDbContext _meterDbContext;
         private readonly IMeterDataService _meterDataService;
 
         public FictDataController(IConfiguration configuration, MeterDbContext meterDbContext, IMeterDataService meterDataService)
         {
-            _configuration = configuration;
             _meterDbContext = meterDbContext;
             _meterDataService = meterDataService;
         }

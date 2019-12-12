@@ -1,0 +1,16 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using MeterDataDashboard.Infra.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+
+@if (SignInManager.IsSignedIn(User))
+{
+    @if (User.IsInRole(SecurityConstants.AdminRoleString))
+    {
+
+    }
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
+    </li>
+}

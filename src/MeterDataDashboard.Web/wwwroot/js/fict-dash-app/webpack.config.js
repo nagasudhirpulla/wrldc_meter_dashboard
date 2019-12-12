@@ -7,6 +7,7 @@ module.exports = {
         filename: "main.js"
     },
 
+    // https://webpack.js.org/configuration/externals/
     externals: {
         'plotly.js-dist': 'Plotly'
     },

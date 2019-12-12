@@ -19,7 +19,7 @@ window.onload = async () => {
     });
 }
 
-document.getElementById("addSeriesBtn").onclick = async () => {
+document.getElementById("plotBtn").onclick = async () => {
     const startDate = (document.getElementById("start_date") as HTMLInputElement).value;
     const endDate = (document.getElementById("end_date") as HTMLInputElement).value;
     const fictMeasSelect = document.getElementById("fictMeasSelect") as HTMLSelectElement;

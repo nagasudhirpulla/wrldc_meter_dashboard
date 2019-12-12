@@ -13,6 +13,7 @@ using Npgsql;
 using MeterDataDashboard.Core.Entities;
 using MeterDataDashboard.Infra.Persistence;
 using Microsoft.EntityFrameworkCore;
+using MeterDataDashboard.Core.MeterData.Services;
 
 namespace MeterDataDashboard.Web.Controllers
 {
@@ -23,11 +24,13 @@ namespace MeterDataDashboard.Web.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly MeterDbContext _meterDbContext;
+        private readonly IMeterDataService _meterDataService;
 
-        public FictDataController(IConfiguration configuration, MeterDbContext meterDbContext)
+        public FictDataController(IConfiguration configuration, MeterDbContext meterDbContext, IMeterDataService meterDataService)
         {
             _configuration = configuration;
             _meterDbContext = meterDbContext;
+            _meterDataService = meterDataService;
         }
 
         [HttpGet("GetMeasurements")]
@@ -42,43 +45,12 @@ namespace MeterDataDashboard.Web.Controllers
         public IEnumerable<double> Index(string tag, string start_date, string end_date)
         {
             // https://localhost:44390/api/fictdata/LO-91/2018-05-01/2018-05-10
-            List<double> res = new List<double>();
+            IEnumerable<double> res = new List<double>();
             DateTime startDate = DateTime.ParseExact(start_date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
             DateTime endDate = DateTime.ParseExact(end_date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
             try
             {
-                // Connect to a PostgreSQL database
-                NpgsqlConnection conn = new NpgsqlConnection(_configuration["ConnectionStrings:MeterConnection"]);
-                conn.Open();
-
-                // Define a query
-                NpgsqlCommand command = new NpgsqlCommand(@"SELECT data_time, mwh FROM public.fict_location_energy_data 
-                                                            where location_id=@locationId and data_time 
-                                                            between @startTime and @endTime order by data_time", conn);
-
-                command.Parameters.AddWithValue("@locationId", tag);
-                command.Parameters.AddWithValue("@startTime", startDate);
-                command.Parameters.AddWithValue("@endTime", endDate);
-
-                // Execute the query and obtain a result set
-                NpgsqlDataReader dr = command.ExecuteReader();
-
-                while (dr.HasRows)
-                {
-                    while (dr.Read())
-                    {
-                        DateTime dt = dr.GetDateTime(0);
-                        double ts = TimeUtils.ToMillisSinceUnixEpoch(dt);
-                        double val = dr.GetDouble(1);
-                        res.Add(ts);
-                        res.Add(val);
-                    }
-                    dr.NextResult();
-                }
-
-                dr.Dispose();
-
-                conn.Close();
+                res = _meterDataService.FetchFictData(tag, startDate, endDate);
             }
             catch (Exception ex)
             {

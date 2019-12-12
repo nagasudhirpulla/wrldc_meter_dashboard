@@ -1,4 +1,5 @@
-﻿using MeterDataDashboard.Infra.Identity;
+﻿using MeterDataDashboard.Core.MeterData.Services;
+using MeterDataDashboard.Infra.Identity;
 using MeterDataDashboard.Infra.Persistence;
 using MeterDataDashboard.Infra.Services;
 using Microsoft.AspNetCore.Hosting;
@@ -60,8 +61,10 @@ namespace MeterDataDashboard.Infra
                 options.AccessDeniedPath = "/Identity/Account/AccessDenied";
             });
 
+            // Add meter data fetch service
+            services.AddSingleton<IMeterDataService, MeterDataService>();
             // Add Infra services
-            services.AddTransient<IEmailSender, EmailSender>();            
+            services.AddTransient<IEmailSender, EmailSender>();
             return services;
         }
     }

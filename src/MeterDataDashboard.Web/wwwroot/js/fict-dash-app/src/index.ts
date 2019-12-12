@@ -20,10 +20,22 @@ window.onload = async () => {
 }
 
 document.getElementById("addSeriesBtn").onclick = async () => {
-    const fictMeasSelect = document.getElementById("fictMeasSelect") as HTMLSelectElement;
-    const locationTag = fictMeasSelect.options[fictMeasSelect.selectedIndex].value;
     const startDate = (document.getElementById("start_date") as HTMLInputElement).value;
     const endDate = (document.getElementById("end_date") as HTMLInputElement).value;
-    var measData = await getFictMeasData(locationTag, startDate, endDate);
-    setPlot("plotDiv", locationTag, measData);
+    const fictMeasSelect = document.getElementById("fictMeasSelect") as HTMLSelectElement;
+
+    let measDataList = [] as { title: string, data: number[] }[];
+
+    // iterate over selected entities
+    for (let optInd = 0; optInd < fictMeasSelect.options.length; optInd++) {
+        if (fictMeasSelect.options[optInd].selected == true) {
+            let locTag = fictMeasSelect.options[optInd].value;
+            let locName = fictMeasSelect.options[optInd].text;
+            var measData = await getFictMeasData(locTag, startDate, endDate);
+            measDataList.push({ title: locName, data: measData })
+        }
+    }
+
+    // render plot data
+    setPlot("plotDiv", measDataList, `Meter Data from ${startDate} to ${endDate}`);
 }

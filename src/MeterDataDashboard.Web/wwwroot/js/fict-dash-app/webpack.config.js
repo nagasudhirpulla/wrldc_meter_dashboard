@@ -7,6 +7,10 @@ module.exports = {
         filename: "main.js"
     },
 
+    externals: {
+        'plotly.js-dist': 'Plotly'
+    },
+
     // Enable sourcemaps for debugging webpack's output.
     devtool: "source-map",
 

@@ -9,7 +9,8 @@ module.exports = {
 
     // https://webpack.js.org/configuration/externals/
     externals: {
-        'plotly.js-dist': 'Plotly'
+        'plotly.js-dist': 'Plotly',
+        jquery: 'jQuery'
     },
 
     // Enable sourcemaps for debugging webpack's output.

@@ -1,5 +1,6 @@
 ﻿import { loadFictMeasurements, getFictMeasData } from "./fictMeasUtils";
 import { setPlot } from "./plotUtils";
+import $ from 'jquery';
 
 window.onload = async () => {
     const measList = await loadFictMeasurements();
@@ -11,6 +12,11 @@ window.onload = async () => {
         option.text = measList[i].description;
         fictMeasSelect.appendChild(option);
     }
+    // https://harvesthq.github.io/chosen/options.html
+    $(fictMeasSelect).chosen({
+        placeholder_text_multiple: "Select Entities",
+        no_results_text: "Oops, nothing found!"
+    });
 }
 
 document.getElementById("addSeriesBtn").onclick = async () => {

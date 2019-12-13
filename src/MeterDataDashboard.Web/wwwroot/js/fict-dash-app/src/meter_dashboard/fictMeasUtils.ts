@@ -1,6 +1,6 @@
 ﻿export const loadFictMeasurements = async () => {
     try {
-        const resp = await fetch(`./api/fictdata/getMeasurements`, {
+        const resp = await fetch(`${window.location.origin}/api/fictdata/getMeasurements`, {
             method: 'get'
         });
         const respJSON = await resp.json() as { locationTag: string, description: string, [key: string]: any }[];
@@ -16,7 +16,7 @@
 export const getFictMeasData = async (locationTag: string, startDate: string, endDate: string) => {
 
     try {
-        const resp = await fetch(`./api/fictdata/${locationTag}/${startDate}/${endDate}`, {
+        const resp = await fetch(`${window.location.origin}/api/fictdata/${locationTag}/${startDate}/${endDate}`, {
             method: 'get'
         });
         const respJSON = await resp.json() as number[];

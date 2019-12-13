@@ -1,5 +1,5 @@
 ﻿import { loadScadaMeasurements, getScadaMeasData } from "./scadaMeasUtils";
-import { setPlot } from "./plotUtils";
+import { setPlot } from "../plotUtils";
 import $ from 'jquery';
 
 window.onload = async () => {

@@ -3,8 +3,8 @@ const path = require('path');
 module.exports = {
     // multiple entry points - https://github.com/webpack/docs/wiki/multiple-entry-points
     entry: {
-        main: ['babel-polyfill', path.resolve(__dirname, 'src/index.ts')],
-        scada: ['babel-polyfill', path.resolve(__dirname, 'src/scada.ts')]
+        main: ['babel-polyfill', path.resolve(__dirname, 'src/meter_dashboard/index.ts')],
+        scada: ['babel-polyfill', path.resolve(__dirname, 'src/scada_dashboard/scada.ts')]
     },
 
     output: {

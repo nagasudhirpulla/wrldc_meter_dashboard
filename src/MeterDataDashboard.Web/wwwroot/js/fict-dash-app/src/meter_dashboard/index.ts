@@ -1,5 +1,5 @@
 ﻿import { loadFictMeasurements, getFictMeasData } from "./fictMeasUtils";
-import { setPlot } from "./plotUtils";
+import { setPlot } from "../plotUtils";
 import $ from 'jquery';
 
 window.onload = async () => {

@@ -1,0 +1,64 @@
+﻿@page
+@model MeterDataDashboard.Web.Pages.ScadaArchiveMeasurements.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>ScadaArchiveMeasurement</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ScadaArchiveMeasurement.MeasTag" class="control-label"></label>
+                <input asp-for="ScadaArchiveMeasurement.MeasTag" class="form-control" />
+                <span asp-validation-for="ScadaArchiveMeasurement.MeasTag" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ScadaArchiveMeasurement.Description" class="control-label"></label>
+                <input asp-for="ScadaArchiveMeasurement.Description" class="form-control" />
+                <span asp-validation-for="ScadaArchiveMeasurement.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ScadaArchiveMeasurement.MeasType" class="control-label"></label>
+                <input asp-for="ScadaArchiveMeasurement.MeasType" class="form-control" />
+                <span asp-validation-for="ScadaArchiveMeasurement.MeasType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ScadaArchiveMeasurement.CreatedBy" class="control-label"></label>
+                <input asp-for="ScadaArchiveMeasurement.CreatedBy" class="form-control" />
+                <span asp-validation-for="ScadaArchiveMeasurement.CreatedBy" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ScadaArchiveMeasurement.Created" class="control-label"></label>
+                <input asp-for="ScadaArchiveMeasurement.Created" class="form-control" type="date" />
+                <span asp-validation-for="ScadaArchiveMeasurement.Created" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ScadaArchiveMeasurement.LastModifiedBy" class="control-label"></label>
+                <input asp-for="ScadaArchiveMeasurement.LastModifiedBy" class="form-control" />
+                <span asp-validation-for="ScadaArchiveMeasurement.LastModifiedBy" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ScadaArchiveMeasurement.LastModified" class="control-label"></label>
+                <input asp-for="ScadaArchiveMeasurement.LastModified" class="form-control" />
+                <span asp-validation-for="ScadaArchiveMeasurement.LastModified" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

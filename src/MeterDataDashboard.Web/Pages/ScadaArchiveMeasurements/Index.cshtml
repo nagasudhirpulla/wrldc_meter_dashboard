@@ -1,0 +1,72 @@
+﻿@page
+@model MeterDataDashboard.Web.Pages.ScadaArchiveMeasurements.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ScadaArchiveMeasurement[0].MeasTag)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ScadaArchiveMeasurement[0].Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ScadaArchiveMeasurement[0].MeasType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ScadaArchiveMeasurement[0].CreatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ScadaArchiveMeasurement[0].Created)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ScadaArchiveMeasurement[0].LastModifiedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ScadaArchiveMeasurement[0].LastModified)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.ScadaArchiveMeasurement) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.MeasTag)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MeasType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Created)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastModifiedBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastModified)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

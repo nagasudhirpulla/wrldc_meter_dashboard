@@ -19,12 +19,13 @@ namespace MeterDataDashboard.Infra.Persistence.Configurations
             .IsUnique();
 
             // Measurement Description is required
-            builder.Property(b => b.Description)
-                .IsRequired();
+            //builder.Property(b => b.Description)
+            //    .IsRequired();
 
             // Measurement type is required
             builder.Property(b => b.MeasType)
-                .IsRequired();
+                .IsRequired()
+                .HasMaxLength(250);
         }
     }
 }

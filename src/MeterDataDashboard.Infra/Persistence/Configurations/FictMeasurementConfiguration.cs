@@ -22,8 +22,8 @@ namespace MeterDataDashboard.Infra.Persistence.Configurations
             .IsUnique();
 
             // Description is required
-            builder.Property(b => b.Description)
-                .IsRequired();
+            //builder.Property(b => b.Description)
+            //    .IsRequired();
         }
     }
 }

@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MeterDataDashboard.Infra.Migrations.MeterDb
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20191210102803_initMeter")]
-    partial class initMeter
+    [Migration("20191213090657_scadaMeasInit")]
+    partial class scadaMeasInit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -55,6 +55,46 @@ namespace MeterDataDashboard.Infra.Migrations.MeterDb
                         .IsUnique();
 
                     b.ToTable("FictMeasurements");
+                });
+
+            modelBuilder.Entity("MeterDataDashboard.Core.Entities.ScadaArchiveMeasurement", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("text");
+
+                    b.Property<string>("MeasTag")
+                        .IsRequired()
+                        .HasColumnType("character varying(250)")
+                        .HasMaxLength(250);
+
+                    b.Property<string>("MeasType")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MeasTag")
+                        .IsUnique();
+
+                    b.ToTable("ScadaArchiveMeasurements");
                 });
 #pragma warning restore 612, 618
         }

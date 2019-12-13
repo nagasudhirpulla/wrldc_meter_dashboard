@@ -22,7 +22,7 @@ namespace MeterDataDashboard.Infra
             if (environment.IsEnvironment("Testing"))
             {
                 // Add Persistence Infra
-                services.AddDbContext<MeterDbContext>(options =>
+                services.AddDbContext<AppDbContext>(options =>
                 options.UseInMemoryDatabase(databaseName: "MeterData"));
                 // Add Identity Infra
                 services.AddDbContext<AppIdentityDbContext>(options =>
@@ -31,7 +31,7 @@ namespace MeterDataDashboard.Infra
             else
             {
                 // Add Persistence Infra
-                services.AddDbContext<MeterDbContext>(options =>
+                services.AddDbContext<AppDbContext>(options =>
                     options.UseNpgsql(
                         configuration.GetConnectionString("DefaultConnection")));
 

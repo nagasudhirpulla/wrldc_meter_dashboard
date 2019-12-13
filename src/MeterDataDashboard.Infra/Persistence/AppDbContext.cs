@@ -9,15 +9,16 @@ using System.Threading.Tasks;
 
 namespace MeterDataDashboard.Infra.Persistence
 {
-    public class MeterDbContext : DbContext
+    public class AppDbContext : DbContext
     {
         private readonly ICurrentUserService _currentUserService;
-        public MeterDbContext(DbContextOptions<MeterDbContext> options, ICurrentUserService currentUserService)
+        public AppDbContext(DbContextOptions<AppDbContext> options, ICurrentUserService currentUserService)
             : base(options)
         {
             _currentUserService = currentUserService;
         }
         public DbSet<FictMeasurement> FictMeasurements { get; set; }
+        public DbSet<ScadaArchiveMeasurement> ScadaArchiveMeasurements { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

@@ -21,7 +21,7 @@ namespace MeterDataDashboard.Infra.Persistence.Configurations
             .HasIndex(b => b.LocationTag)
             .IsUnique();
 
-            // Description is unique
+            // Description is required
             builder.Property(b => b.Description)
                 .IsRequired();
         }

@@ -13,30 +13,30 @@ using Npgsql;
 using MeterDataDashboard.Core.Entities;
 using MeterDataDashboard.Infra.Persistence;
 using Microsoft.EntityFrameworkCore;
-using MeterDataDashboard.Core.MeterData.Services;
+using MeterDataDashboard.Core.ScadaData.Services;
 
 namespace MeterDataDashboard.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class FictDataController : ControllerBase
+    public class ScadaDataController : ControllerBase
     {
-        private readonly AppDbContext _meterDbContext;
-        private readonly IMeterDataService _meterDataService;
+        private readonly AppDbContext _appDbContext;
+        private readonly IScadaDataService _scadaDataService;
 
-        public FictDataController(AppDbContext appDbContext, IMeterDataService meterDataService)
+        public ScadaDataController(AppDbContext appDbContext, IScadaDataService scadaDataService)
         {
-            _meterDbContext = appDbContext;
-            _meterDataService = meterDataService;
+            _appDbContext = appDbContext;
+            _scadaDataService = scadaDataService;
         }
 
         [HttpGet("GetMeasurements")]
-        public async Task<IEnumerable<FictMeasurement>> GetMeasurements()
+        public async Task<IEnumerable<ScadaArchiveMeasurement>> GetMeasurements()
         {
             // https://localhost:44390/api/fictdata/getmeasurements
-            List<FictMeasurement> fictMeasurements = await _meterDbContext.FictMeasurements.ToListAsync();
-            return fictMeasurements;
+            List<ScadaArchiveMeasurement> scadaMeasurements = await _appDbContext.ScadaArchiveMeasurements.ToListAsync();
+            return scadaMeasurements;
         }
 
         [HttpGet("{tag}/{start_date}/{end_date}")]
@@ -48,7 +48,7 @@ namespace MeterDataDashboard.Web.Controllers
             DateTime endDate = DateTime.ParseExact(end_date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
             try
             {
-                res = _meterDataService.FetchFictData(tag, startDate, endDate);
+                res = _scadaDataService.FetchScadaData(tag, startDate, endDate);
             }
             catch (Exception ex)
             {

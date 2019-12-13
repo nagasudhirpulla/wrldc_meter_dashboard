@@ -1,10 +1,14 @@
 const path = require('path');
 
 module.exports = {
-    entry: ['babel-polyfill', path.resolve(__dirname, 'src/index.ts')],
+    // multiple entry points - https://github.com/webpack/docs/wiki/multiple-entry-points
+    entry: {
+        main: ['babel-polyfill', path.resolve(__dirname, 'src/index.ts')],
+        scada: ['babel-polyfill', path.resolve(__dirname, 'src/scada.ts')]
+    },
 
     output: {
-        filename: "main.js"
+        filename: "[name].js"
     },
 
     // https://webpack.js.org/configuration/externals/

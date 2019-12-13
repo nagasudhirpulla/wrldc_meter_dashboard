@@ -1,4 +1,5 @@
 ﻿using MeterDataDashboard.Core.MeterData.Services;
+using MeterDataDashboard.Core.ScadaData.Services;
 using MeterDataDashboard.Infra.Identity;
 using MeterDataDashboard.Infra.Persistence;
 using MeterDataDashboard.Infra.Services;
@@ -63,6 +64,7 @@ namespace MeterDataDashboard.Infra
 
             // Add meter data fetch service
             services.AddSingleton<IMeterDataService, MeterDataService>();
+            services.AddSingleton<IScadaDataService, ScadaDataService>();
             // Add Infra services
             services.AddTransient<IEmailSender, EmailSender>();
             return services;

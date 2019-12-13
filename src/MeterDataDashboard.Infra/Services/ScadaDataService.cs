@@ -1,5 +1,5 @@
 ﻿using MeterDataDashboard.Application;
-using MeterDataDashboard.Core.MeterData.Services;
+using MeterDataDashboard.Core.ScadaData.Services;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
 using System;
@@ -7,15 +7,15 @@ using System.Collections.Generic;
 
 namespace MeterDataDashboard.Infra.Services
 {
-    public class ScadaArchiveService : IMeterDataService
+    public class ScadaDataService : IScadaDataService
     {
         private readonly IConfiguration _configuration;
-        public ScadaArchiveService(IConfiguration configuration)
+        public ScadaDataService(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
-        public IEnumerable<double> FetchFictData(string tag, DateTime startDate, DateTime endDate)
+        public IEnumerable<double> FetchScadaData(string tag, DateTime startDate, DateTime endDate)
         {
             List<double> res = new List<double>();
             // Connect to a PostgreSQL database

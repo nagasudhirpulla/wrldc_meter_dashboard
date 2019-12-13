@@ -7,10 +7,16 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MeterDataDashboard.Web.Controllers
 {
+    [Authorize]
     public class DashBoardController : Controller
     {
-        [Authorize]
+        
         public IActionResult Index()
+        {
+            return View();
+        }
+
+        public IActionResult Scada()
         {
             return View();
         }

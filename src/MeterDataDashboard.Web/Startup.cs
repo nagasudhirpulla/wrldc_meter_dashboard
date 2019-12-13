@@ -40,7 +40,10 @@ namespace MeterDataDashboard.Web
             services
                 .AddControllersWithViews()
                 .AddRazorRuntimeCompilation();
-            services.AddRazorPages();
+            services.AddRazorPages(options =>
+            {
+                options.Conventions.AuthorizeFolder("/ScadaArchiveMeasurements");
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

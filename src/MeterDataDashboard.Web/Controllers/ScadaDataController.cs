@@ -31,11 +31,19 @@ namespace MeterDataDashboard.Web.Controllers
             _scadaDataService = scadaDataService;
         }
 
-        [HttpGet("GetMeasurements")]
-        public async Task<IEnumerable<ScadaArchiveMeasurement>> GetMeasurements()
+        [HttpGet("GetMeasTypes")]
+        public async Task<IEnumerable<string>> GetMeasTypes()
         {
-            // https://localhost:44390/api/fictdata/getmeasurements
-            List<ScadaArchiveMeasurement> scadaMeasurements = await _appDbContext.ScadaArchiveMeasurements.ToListAsync();
+            // https://localhost:44390/api/scadadata/getmeastypes
+            List<string> scadaMeasTypes = await _appDbContext.ScadaArchiveMeasurements.Select(ms => ms.MeasType).Distinct().ToListAsync();
+            return scadaMeasTypes;
+        }
+
+        [HttpGet("GetMeasurements/{measType}")]
+        public async Task<IEnumerable<ScadaArchiveMeasurement>> GetMeasurements(string measType)
+        {
+            // https://localhost:44390/api/scadadata/GetMeasurements/ict
+            List<ScadaArchiveMeasurement> scadaMeasurements = await _appDbContext.ScadaArchiveMeasurements.Where(sm => sm.MeasType == measType).ToListAsync();
             return scadaMeasurements;
         }
 

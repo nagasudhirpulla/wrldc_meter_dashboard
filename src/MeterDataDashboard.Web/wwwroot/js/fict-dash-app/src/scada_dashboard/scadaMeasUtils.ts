@@ -1,6 +1,21 @@
-﻿export const loadScadaMeasurements = async () => {
+﻿export const loadScadaMeasTypes = async () => {
     try {
-        const resp = await fetch(`${window.location.origin}/api/scadadata/getMeasurements`, {
+        const resp = await fetch(`${window.location.origin}/api/scadadata/getMeasTypes`, {
+            method: 'get'
+        });
+        const respJSON = await resp.json() as string[];
+        // console.log(respJSON);
+        return respJSON;
+    } catch (e) {
+        console.error(e);
+        return [];
+        //return { success: false, message: `Could not retrieve measurements data due to error ${JSON.stringify(e)}` };
+    }
+};
+
+export const loadScadaMeasurements = async (measType: string) => {
+    try {
+        const resp = await fetch(`${window.location.origin}/api/scadadata/getMeasurements/${measType}`, {
             method: 'get'
         });
         const respJSON = await resp.json() as { measTag: string, description: string, [key: string]: any }[];

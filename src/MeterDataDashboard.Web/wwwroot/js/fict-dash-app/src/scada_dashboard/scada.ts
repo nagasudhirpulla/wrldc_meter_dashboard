@@ -60,9 +60,10 @@ const populateScadaMeasurements = async (measType: string) => {
         return;
     }
     const measList = await loadScadaMeasurements(measType);
+    // Update options
     const scadaMeasSelect = document.getElementById("scadaMeasSelect");
     scadaMeasSelect.innerHTML = "";
-    //Create and append the options
+    // Create and append options
     for (let i = 0; i < measList.length; i++) {
         var option = document.createElement("option");
         option.value = measList[i].measTag;
@@ -70,8 +71,5 @@ const populateScadaMeasurements = async (measType: string) => {
         scadaMeasSelect.appendChild(option);
     }
     // https://harvesthq.github.io/chosen/options.html
-    $(scadaMeasSelect).chosen({
-        placeholder_text_multiple: "Select Measurements",
-        no_results_text: "Oops, nothing found!"
-    });
+    $(scadaMeasSelect).trigger("chosen:updated");
 }

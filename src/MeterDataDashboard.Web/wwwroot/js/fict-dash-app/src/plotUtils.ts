@@ -13,7 +13,9 @@ const getPlotXYArrays = (measData: number[]): { timestamps: Date[], vals: number
 export const setPlot = (divId: string, measDataList: { data: number[], title: string }[], plotTitle:string) => {
     let traceData = [];
     const layout = {
-        title: plotTitle
+        title: plotTitle,
+        showlegend: true,
+        legend: { "orientation": "h" }
     };
 
     for (var measIter = 0; measIter < measDataList.length; measIter++) {

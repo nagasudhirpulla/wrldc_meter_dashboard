@@ -1,6 +1,6 @@
 ﻿export const loadScadaMeasTypes = async () => {
     try {
-        const resp = await fetch(`${window.location.origin}/api/scadadata/getMeasTypes`, {
+        const resp = await fetch(`../api/scadadata/getMeasTypes`, {
             method: 'get'
         });
         const respJSON = await resp.json() as string[];
@@ -15,7 +15,7 @@
 
 export const loadScadaMeasurements = async (measType: string) => {
     try {
-        const resp = await fetch(`${window.location.origin}/api/scadadata/getMeasurements/${measType}`, {
+        const resp = await fetch(`../api/scadadata/getMeasurements/${measType}`, {
             method: 'get'
         });
         const respJSON = await resp.json() as { measTag: string, description: string, [key: string]: any }[];
@@ -31,7 +31,7 @@ export const loadScadaMeasurements = async (measType: string) => {
 export const getScadaMeasData = async (measTag: string, startDate: string, endDate: string) => {
 
     try {
-        const resp = await fetch(`${window.location.origin}/api/scadadata/${measTag}/${startDate}/${endDate}`, {
+        const resp = await fetch(`../api/scadadata/${measTag}/${startDate}/${endDate}`, {
             method: 'get'
         });
         const respJSON = await resp.json() as number[];

@@ -10,8 +10,7 @@ namespace MeterDataDashboard.Web.Controllers
     [Authorize]
     public class DashBoardController : Controller
     {
-        
-        public IActionResult Index()
+        public IActionResult Meter()
         {
             return View();
         }

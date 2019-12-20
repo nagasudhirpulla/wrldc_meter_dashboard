@@ -10,7 +10,7 @@ const getPlotXYArrays = (measData: number[]): { timestamps: Date[], vals: number
     return { timestamps: timestamps, vals: vals }
 }
 
-export const setPlot = (divId: string, measDataList: { data: number[], title: string }[], plotTitle:string) => {
+export const setPlot = (divId: string, measDataList: { data: number[], title: string }[], plotTitle: string) => {
     let traceData = [];
     const layout = {
         title: plotTitle,
@@ -32,3 +32,11 @@ export const setPlot = (divId: string, measDataList: { data: number[], title: st
     // https://stackoverflow.com/questions/39084438/how-to-import-plotly-js-into-typescript
     Plotly.newPlot(divId, traceData, layout);
 };
+
+export const getPlotData = (divId: string) => {
+    const plotData = (document.getElementById(divId) as any).data as { mode: string, name: string, x: Date[], y: number[] }[];
+    var csvString: string = "";
+    for (var seriesIter = 0; seriesIter < plotData.length; seriesIter++) {
+
+    }
+}

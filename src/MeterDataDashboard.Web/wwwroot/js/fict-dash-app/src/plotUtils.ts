@@ -37,19 +37,22 @@ export const getPlotData = (divId: string): string => {
     const plotData = (document.getElementById(divId) as any).data as { mode: string, name: string, x: Date[], y: number[] }[];
     var csvStr: string = "";
     if (plotData.length > 0) {
-        for (var timeIter = 0; timeIter < plotData[0].x.length; timeIter++) {
-            csvStr += `Time,${plotData[0].x.map((ts) => ts.toString()).join(',')}\n`
+        const makeTwoDigits = (num: number): string => {
+            if (num < 10) {
+                return `0${num}`;
+            } else {
+                return `${num}`;
+            }
         }
+        csvStr += `Time,${plotData[0].x.map((ts) => `${ts.getFullYear()}-${makeTwoDigits(ts.getMonth() + 1)}-${makeTwoDigits(ts.getDate())} ${makeTwoDigits(ts.getHours())}:${makeTwoDigits(ts.getMinutes())}:${makeTwoDigits(ts.getSeconds())}`).join(',')}\n`
     }
     else {
         return csvStr;
     }
     for (var seriesIter = 0; seriesIter < plotData.length; seriesIter++) {
-        for (var timeIter = 0; timeIter < plotData[seriesIter].y.length; timeIter++) {
-            csvStr += `Time,${plotData[seriesIter].y.map((val) => val.toString()).join(',')}\n`
-        }
+        csvStr += `${plotData[seriesIter].name},${plotData[seriesIter].y.map((val) => val.toString()).join(',')}\n`
     }
-    return csvStr;    
+    return csvStr;
 }
 
 export const exportPlotData = (divId: string): void => {

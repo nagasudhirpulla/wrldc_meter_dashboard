@@ -1,5 +1,5 @@
 ﻿import { loadFictMeasurements, getFictMeasData } from "./fictMeasUtils";
-import { setPlot } from "../plotUtils";
+import { setPlot, exportPlotData } from "../plotUtils";
 import $ from 'jquery';
 
 window.onload = async () => {
@@ -38,4 +38,8 @@ document.getElementById("plotBtn").onclick = async () => {
 
     // render plot data
     setPlot("plotDiv", measDataList, `Meter Data from ${startDate} to ${endDate}`);
+}
+
+document.getElementById("plotExportBtn").onclick = () => {
+    exportPlotData("plotDiv");
 }

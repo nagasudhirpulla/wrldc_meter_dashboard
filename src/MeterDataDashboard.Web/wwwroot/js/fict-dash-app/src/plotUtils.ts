@@ -33,10 +33,30 @@ export const setPlot = (divId: string, measDataList: { data: number[], title: st
     Plotly.newPlot(divId, traceData, layout);
 };
 
-export const getPlotData = (divId: string) => {
+export const getPlotData = (divId: string): string => {
     const plotData = (document.getElementById(divId) as any).data as { mode: string, name: string, x: Date[], y: number[] }[];
-    var csvString: string = "";
-    for (var seriesIter = 0; seriesIter < plotData.length; seriesIter++) {
-
+    var csvStr: string = "";
+    if (plotData.length > 0) {
+        for (var timeIter = 0; timeIter < plotData[0].x.length; timeIter++) {
+            csvStr += `Time,${plotData[0].x.map((ts) => ts.toString()).join(',')}\n`
+        }
     }
+    else {
+        return csvStr;
+    }
+    for (var seriesIter = 0; seriesIter < plotData.length; seriesIter++) {
+        for (var timeIter = 0; timeIter < plotData[seriesIter].y.length; timeIter++) {
+            csvStr += `Time,${plotData[seriesIter].y.map((val) => val.toString()).join(',')}\n`
+        }
+    }
+    return csvStr;    
+}
+
+export const exportPlotData = (divId: string): void => {
+    const csvStr: string = getPlotData(divId);
+    var hiddenElement = document.createElement('a');
+    hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csvStr);
+    hiddenElement.target = '_blank';
+    hiddenElement.download = 'plotData.csv';
+    hiddenElement.click();
 }

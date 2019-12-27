@@ -44,6 +44,17 @@ namespace MeterDataDashboard.Web
             {
                 options.Conventions.AuthorizeFolder("/ScadaArchiveMeasurements");
             });
+
+            // add identity server authentication
+            // https://stackoverflow.com/questions/39864550/how-to-get-base-url-without-accessing-a-request
+            services.AddAuthentication("Bearer")
+                .AddJwtBearer("Bearer", options =>
+                {
+                    options.Authority = "http://localhost:58280/";
+                    options.RequireHttpsMetadata = false;
+
+                    options.Audience = "scada_archive";
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -60,12 +71,13 @@ namespace MeterDataDashboard.Web
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
 
-            app.UseAuthentication();
+            app.UseAuthentication(); 
+            app.UseIdentityServer();
             app.UseAuthorization();
 
             // seed Users and Roles

@@ -19,7 +19,7 @@ namespace MeterDataDashboard.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(AuthenticationSchemes = Startup.ApiAuthSchemes)]
     public class FictDataController : ControllerBase
     {
         private readonly AppDbContext _meterDbContext;

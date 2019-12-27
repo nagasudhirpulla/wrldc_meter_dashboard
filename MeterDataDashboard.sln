@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeterDataDashboard.Core", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeterDataDashboard.Infra", "src\MeterDataDashboard.Infra\MeterDataDashboard.Infra.csproj", "{69736005-7811-4CC6-87CB-F333A7CB8C0D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeterDataDashboard.Application", "src\MeterDataDashboard.Application\MeterDataDashboard.Application.csproj", "{53E8E9F2-D7DE-4756-A01B-0CD8E17D0B0D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MeterDataDashboard.Application", "src\MeterDataDashboard.Application\MeterDataDashboard.Application.csproj", "{53E8E9F2-D7DE-4756-A01B-0CD8E17D0B0D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeterDataDashboard.AuthServer", "src\MeterDataDashboard.AuthServer\MeterDataDashboard.AuthServer.csproj", "{8689C3FF-E92D-4C9A-931C-01E7BAF62018}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{53E8E9F2-D7DE-4756-A01B-0CD8E17D0B0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{53E8E9F2-D7DE-4756-A01B-0CD8E17D0B0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{53E8E9F2-D7DE-4756-A01B-0CD8E17D0B0D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8689C3FF-E92D-4C9A-931C-01E7BAF62018}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8689C3FF-E92D-4C9A-931C-01E7BAF62018}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8689C3FF-E92D-4C9A-931C-01E7BAF62018}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8689C3FF-E92D-4C9A-931C-01E7BAF62018}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

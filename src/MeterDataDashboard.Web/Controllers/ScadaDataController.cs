@@ -19,9 +19,9 @@ namespace MeterDataDashboard.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    [Authorize(AuthenticationSchemes = Startup.ApiAuthSchemes)]
     public class ScadaDataController : ControllerBase
-    {
+    {     
         private readonly AppDbContext _appDbContext;
         private readonly IScadaDataService _scadaDataService;
 

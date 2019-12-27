@@ -18,6 +18,7 @@ using MeterDataDashboard.Infra.Services;
 using MeterDataDashboard.Infra;
 using MeterDataDashboard.Application.Common;
 using MeterDataDashboard.Web.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace MeterDataDashboard.Web
 {
@@ -32,6 +33,8 @@ namespace MeterDataDashboard.Web
         public IConfiguration Configuration { get; }
         public IWebHostEnvironment Environment { get; }
 
+        public const string ApiAuthSchemes = "Identity.Application," + JwtBearerDefaults.AuthenticationScheme;
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -45,16 +48,18 @@ namespace MeterDataDashboard.Web
                 options.Conventions.AuthorizeFolder("/ScadaArchiveMeasurements");
             });
 
-            // add identity server authentication
-            // https://stackoverflow.com/questions/39864550/how-to-get-base-url-without-accessing-a-request
-            services.AddAuthentication("Bearer")
-                .AddJwtBearer("Bearer", options =>
-                {
-                    options.Authority = "http://localhost:58280/";
-                    options.RequireHttpsMetadata = false;
+            //// add identity server authentication
+            //// https://stackoverflow.com/questions/39864550/how-to-get-base-url-without-accessing-a-request
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                // base-address of your identityserver
+                options.Authority = Configuration["IdentityServer:Authority"];
+                options.RequireHttpsMetadata = false;
 
-                    options.Audience = "scada_archive";
-                });
+                // name of the API resource
+                options.Audience = "scada_archive";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -71,13 +76,12 @@ namespace MeterDataDashboard.Web
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            // app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
 
-            app.UseAuthentication(); 
-            app.UseIdentityServer();
+            app.UseAuthentication();
             app.UseAuthorization();
 
             // seed Users and Roles

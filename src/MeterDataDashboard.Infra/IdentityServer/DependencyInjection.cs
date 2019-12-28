@@ -38,7 +38,7 @@ namespace MeterDataDashboard.Infra.IdentityServer
                     }
                 })
                 //.AddDeveloperSigningCredential();
-                .LoadSigningCredentialFrom(configuration["Certificates:Signing"]);
+                .LoadSigningCredentialFrom(configuration["Certificates:Signing"], configuration["Certificates:Password"]);
 
             services.AddAuthentication()
                     .AddIdentityServerJwt();

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace MeterDataDashboard.Infra.IdentityServer.Extensions
@@ -13,11 +14,12 @@ namespace MeterDataDashboard.Infra.IdentityServer.Extensions
         // openssl req -x509 -newkey rsa:4096 -sha256 -nodes -keyout example.key -out example.crt -subj "/CN=example.com" -days 3650
         // openssl pkcs12 -export -out example.pfx -inkey example.key -in example.crt -certfile example.crt
         // use certlm.msc to manage certificates and trusted certificates - http://woshub.com/how-to-create-self-signed-certificate-with-powershell/
-        public static IIdentityServerBuilder LoadSigningCredentialFrom(this IIdentityServerBuilder builder, string certName)
+        public static IIdentityServerBuilder LoadSigningCredentialFrom(this IIdentityServerBuilder builder, string certPath, string certPass)
         {
-            if (!string.IsNullOrWhiteSpace(certName))
+            if (!string.IsNullOrWhiteSpace(certPath))
             {
-                builder.AddSigningCredential(certName);
+                //builder.AddSigningCredential(new X509Certificate2(certPath, certPass, X509KeyStorageFlags.MachineKeySet));
+                builder.AddSigningCredential(certPath);
             }
             else
             {

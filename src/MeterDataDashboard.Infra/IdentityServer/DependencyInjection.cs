@@ -6,6 +6,7 @@ using IdentityServer4.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Hosting;
+using MeterDataDashboard.Infra.IdentityServer.Extensions;
 
 namespace MeterDataDashboard.Infra.IdentityServer
 {
@@ -13,7 +14,6 @@ namespace MeterDataDashboard.Infra.IdentityServer
     {
         public static IServiceCollection AddIdentityServerInfra(this IServiceCollection services, IConfiguration configuration)
         {
-            // setup identity server for electron dashboard scada archive data access
             // https://demo.identityserver.io/.well-known/openid-configuration
             // https://medium.com/all-technology-feeds/testing-your-asp-net-core-webapi-secured-with-identityserver4-in-postman-97eee976aa16
             services.AddIdentityServer()
@@ -37,7 +37,8 @@ namespace MeterDataDashboard.Infra.IdentityServer
                         AllowedScopes = { "scada_archive" }
                     }
                 })
-                .AddDeveloperSigningCredential();
+                //.AddDeveloperSigningCredential();
+                .LoadSigningCredentialFrom(configuration["Certificates:Signing"]);
 
             services.AddAuthentication()
                     .AddIdentityServerJwt();

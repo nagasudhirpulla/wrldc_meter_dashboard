@@ -21,7 +21,7 @@ namespace MeterDataDashboard.Web.Controllers
     [ApiController]
     [Authorize(AuthenticationSchemes = Startup.ApiAuthSchemes)]
     public class ScadaDataController : ControllerBase
-    {     
+    {
         private readonly AppDbContext _appDbContext;
         private readonly IScadaDataService _scadaDataService;
 
@@ -36,6 +36,7 @@ namespace MeterDataDashboard.Web.Controllers
         {
             // https://localhost:44390/api/scadadata/getmeastypes
             List<string> scadaMeasTypes = await _appDbContext.ScadaArchiveMeasurements.Select(ms => ms.MeasType).Distinct().ToListAsync();
+            scadaMeasTypes.Add("all");
             return scadaMeasTypes;
         }
 
@@ -43,7 +44,8 @@ namespace MeterDataDashboard.Web.Controllers
         public async Task<IEnumerable<ScadaArchiveMeasurement>> GetMeasurements(string measType)
         {
             // https://localhost:44390/api/scadadata/GetMeasurements/ict
-            List<ScadaArchiveMeasurement> scadaMeasurements = await _appDbContext.ScadaArchiveMeasurements.Where(sm => sm.MeasType == measType).ToListAsync();
+            bool isGetAll = string.IsNullOrWhiteSpace(measType) || (measType.ToLower() == "all");
+            List<ScadaArchiveMeasurement> scadaMeasurements = await _appDbContext.ScadaArchiveMeasurements.Where(sm => isGetAll || (sm.MeasType == measType)).ToListAsync();
             return scadaMeasurements;
         }
 

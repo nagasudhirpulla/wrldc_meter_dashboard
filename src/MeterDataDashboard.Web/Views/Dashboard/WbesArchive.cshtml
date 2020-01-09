@@ -1,0 +1,33 @@
+﻿@{
+    ViewData["Title"] = "WBES Archive";
+}
+
+<div class="row align-content-center">
+    <input id="start_date" class="form-inline bg-light border-1" type="date" />
+    <input id="end_date" class="form-inline bg-light border-1" type="date" />
+    <button id="plotBtn" class="btn btn-success btn-icon-split">
+        <span class="icon text-white-50">
+            <i class="fas fa-sync"></i>
+        </span>
+        <span class="text">Plot Data</span>
+    </button>
+</div>
+<br />
+<div class="row align-content-center">
+    <label>Schedule Type - </label><select id="schTypeSelect" class="form-inline"></select>
+    <select multiple id="wbesUtilSelect" class="chzen-select col-md-11"></select>
+</div>
+<div class="row">
+    <div id="plotDiv" class="col-md-12"></div>
+</div>
+<div class="row">
+    <button class="btn btn-sm btn-outline-info" id="plotExportBtn">Export Data</button>
+</div>
+
+@section Scripts {
+    @*<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>*@
+    <script src="~/js/fict-dash-app/node_modules/plotly.js-dist/plotly.js"></script>
+    <script src="~/js/fict-dash-app/dist/wbes_archive.js"></script>
+    <link rel="stylesheet" href="~/js/fict-dash-app/node_modules/chosen-js/chosen.min.css">
+    <script src="~/js/fict-dash-app/node_modules/chosen-js/chosen.jquery.min.js"></script>
+}

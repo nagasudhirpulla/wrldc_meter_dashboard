@@ -19,5 +19,10 @@ namespace MeterDataDashboard.Web.Controllers
         {
             return View();
         }
+
+        public IActionResult WbesArchive()
+        {
+            return View();
+        }
     }
 }

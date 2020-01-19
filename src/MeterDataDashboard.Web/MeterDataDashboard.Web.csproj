@@ -6,6 +6,15 @@
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Content Include="wwwroot\js\fict-dash-app\node_modules\%40fortawesome\fontawesome-free\css\all.min.css" />
+    <Content Include="wwwroot\js\fict-dash-app\node_modules\startbootstrap-sb-admin-2\css\sb-admin-2.min.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\js\fict-dash-app\node_modules\startbootstrap-sb-admin-2\js\sb-admin-2.min.js" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />

@@ -14,7 +14,7 @@ namespace MeterDataDashboard.Infra.Services
         public static Dictionary<string, string> StationAliasDict_ = new Dictionary<string, string> { { "MAUDA2", "MOUDA_II" }, { "MAUDA", "MOUDA" } };
         public List<UtilSchRow> ParseAgcCsv(StreamReader sreader)
         {
-            string dateFormat = "M/d/yyyy";
+            string dateFormat = "d/M/yyyy";
             List<UtilSchRow> rows = new List<UtilSchRow>();
             string[] headers = sreader.ReadLine().Split(',');
             // there should be atleast 99 headers

@@ -68,8 +68,9 @@ namespace MeterDataDashboard.Infra
             services.AddSingleton<IMeterDataService, MeterDataService>();
             services.AddSingleton<IScadaDataService, ScadaDataService>();
             services.AddSingleton<IWbesArchiveDataService, WbesArchiveDataService>();
+            services.AddSingleton<IAgcFileUtilsService, AgcFileUtilsService>();
             // Add Infra services
-            services.AddTransient<IEmailSender, EmailSender>();            
+            services.AddTransient<IEmailSender, EmailSender>();
 
             return services;
         }

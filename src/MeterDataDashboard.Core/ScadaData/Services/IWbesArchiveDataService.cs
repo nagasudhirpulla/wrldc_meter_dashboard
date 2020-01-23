@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MeterDataDashboard.Core.ScheduleData;
+using System;
 using System.Collections.Generic;
 
 namespace MeterDataDashboard.Core.ScadaData.Services
@@ -7,5 +8,6 @@ namespace MeterDataDashboard.Core.ScadaData.Services
     {
         IEnumerable<double> FetchData(string utilName, string schType, DateTime startDate, DateTime endDate);
         IEnumerable<string> FetchSchUtils();
+        void PushSchRowsToArchive(List<UtilSchRow> rows);
     }
 }

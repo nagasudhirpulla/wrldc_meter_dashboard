@@ -1,0 +1,20 @@
+﻿@model MeterDataDashboard.Web.Models.AgcUploadVm
+@{
+    ViewData["Title"] = "Upload AGC files";
+}
+
+<div class="row justify-content-center align-items-center">
+    <div class="col col-md-8 col-lg-8 col-xl-6">
+        <h2>@ViewData["Title"]</h2>
+        <form method="post" enctype="multipart/form-data">
+            <hr />
+            <div class="form-group">
+                <label asp-for="DataFiles" class="question"></label>
+                <input asp-for="DataFiles" class="form-control" type="file" multiple />
+                <span asp-validation-for="DataFiles" class="text-danger"></span>
+            </div>
+            <hr />
+            <button type="submit" class="btn btn-success">Upload</button>
+        </form>
+    </div>
+</div>

@@ -1,10 +1,12 @@
 ﻿using MeterDataDashboard.Application;
 using MeterDataDashboard.Core.Entities;
 using MeterDataDashboard.Core.ScadaData.Services;
+using MeterDataDashboard.Core.ScheduleData;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MeterDataDashboard.Infra.Services
 {
@@ -76,6 +78,35 @@ namespace MeterDataDashboard.Infra.Services
 
             conn.Close();
             return res;
+        }
+
+        public void PushSchRowsToArchive(List<UtilSchRow> rows)
+        {
+            // Connect to a PostgreSQL database
+            NpgsqlConnection conn = new NpgsqlConnection(_configuration["ConnectionStrings:WBESArchiveConnection"]);
+            conn.Open();
+            int batchSize = 100;
+            // insert in batches of 100 rows
+            for (int batchStart = 0; batchStart < rows.Count; batchStart += batchSize)
+            {
+                int batchEnd = batchStart + batchSize - 1;
+                if (batchEnd >= rows.Count)
+                {
+                    batchEnd = rows.Count - 1;
+                }
+                string valuesSqlStr = rows.Skip(batchStart).Take(batchEnd - batchStart + 1)
+                                          .Select(r => $"('{r.UtilName}', '{r.SchDate.ToString("yyyy-MM-dd")}', {r.Block}, '{r.SchType}', {r.SchVal})")
+                                          .Aggregate((current, next) => current + "," + next);
+                // Define a query
+                NpgsqlCommand command = new NpgsqlCommand(@$"INSERT INTO public.schedules(
+        	                                            sch_utility, sch_date, sch_block, sch_type, sch_val)
+        	                                            VALUES {valuesSqlStr} on conflict (sch_utility, sch_date, sch_block, sch_type) 
+                                                        do update set sch_val = excluded.sch_val", conn);
+                // Execute the query and obtain a result set
+                int insRes = command.ExecuteNonQuery();
+            }
+
+            conn.Close();
         }
     }
 }

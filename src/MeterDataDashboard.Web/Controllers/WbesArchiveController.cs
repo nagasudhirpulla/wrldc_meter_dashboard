@@ -50,7 +50,8 @@ namespace MeterDataDashboard.Web.Controllers
                 new { t = "RRAS", v= "RRAS"},
                 new { t = "SCED", v= "SCED"},
                 new { t = "Ramp Up", v= "rampUp"},
-                new { t = "Ramp Down", v= "rampDn"}
+                new { t = "Ramp Down", v= "rampDn"},
+                new { t = "AGC", v= "AGC"}
             };
             return schTypes;
         }

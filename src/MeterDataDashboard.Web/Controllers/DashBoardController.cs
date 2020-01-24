@@ -24,5 +24,10 @@ namespace MeterDataDashboard.Web.Controllers
         {
             return View();
         }
+
+        public IActionResult AllData()
+        {
+            return View();
+        }
     }
 }

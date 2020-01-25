@@ -1,7 +1,9 @@
-﻿import { IMeas } from "./IMeas";
-import { IMeterMeas } from "./IMeterMeas";
+﻿import { IMeterMeas } from "./IMeterMeas";
 import { IScadaMeas } from "./IScadaMeas";
 import { ISchType } from "./ISchType";
+import { IPlotData } from "./IPlotData";
+
+[]
 
 export interface IDashboardPageState {
     ui: {
@@ -14,7 +16,7 @@ export interface IDashboardPageState {
         schArchUtils: string[],
         schArchMeasTypes: ISchType[],
         // for selected meas list
-        selectedMeasList: IMeas[],
+        plotData: IPlotData,
         startTime: Date,
         endTime: Date
     },

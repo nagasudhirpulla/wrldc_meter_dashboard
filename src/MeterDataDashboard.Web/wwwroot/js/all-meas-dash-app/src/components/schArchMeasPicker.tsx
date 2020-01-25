@@ -3,6 +3,7 @@ import Select from 'react-select'
 import { IMeterMeas } from '../type_defs/IMeterMeas';
 import { ISchArchMeasPickerProps } from '../type_defs/ISchArchMeasPickerProps';
 import { ISchArchMeas } from '../type_defs/ISchArchMeas';
+import { MeasDiscriminator } from '../type_defs/MeasDiscriminator';
 
 function SchArchMeasPicker(props: ISchArchMeasPickerProps) {
     const [selSchType, setSelSchType] = useState(null);
@@ -10,7 +11,7 @@ function SchArchMeasPicker(props: ISchArchMeasPickerProps) {
 
     const onMeasClick = () => {
         const selMeas: ISchArchMeas = {
-            discriminator: "schArch",
+            discriminator: MeasDiscriminator.schArch,
             schType: selSchType,
             utilName: selUtil
         }

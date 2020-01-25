@@ -7,7 +7,7 @@ const initState: IDashboardPageState = {
         scadaMeasTypes: [],
         schArchUtils: [],
         schArchMeasTypes: [],
-        selectedMeasList: [],
+        plotData: [],
         startTime: new Date(),
         endTime: new Date()
     },

@@ -1,39 +1,71 @@
 ﻿import { IDashboardPageState } from "../type_defs/IDashboardPageState";
 import { getMeterMeasList } from "../server_mediators/meterData";
-import * as actionTypes from '../actions/actionTypes';
+import { ActionType } from '../actions/ActionType';
 import { IAction } from "../type_defs/IAction";
 import { useReducer, useCallback, useEffect } from "react";
 import { createToast } from "../uitls/toastUtils";
-import { IMeterMeas } from "../type_defs/IMeterMeas";
 import { getSchUtils, getSchTypes } from "../server_mediators/schArchData";
-import { ISchType } from "../type_defs/ISchType";
+import { getScadaMeasList, getScadaMeasTypes } from "../server_mediators/scadaData";
+import { setMeterMeasListAction, ISetMeterMeasListAction } from "../actions/setMeterMeasListAction";
+import { setSchUtilsAction, ISetSchUtilsAction } from "../actions/setSchUtilsAction";
+import { setSchTypesAction, ISetSchTypesAction } from "../actions/setSchTypesAction";
+import { setScadaMeasTypesAction } from "../actions/setScadaMeasTypesAction";
+import { IGetScadaMeasListAction } from "../actions/GetScadaMeasListAction";
+import { setScadaMeasListAction, ISetScadaMeasListAction } from "../actions/setScadaMeasListAction";
+import { getMeasDataAction, IGetMeasDataAction } from "../actions/getMeasDataAction";
+import { getMeasData } from "../server_mediators/measDataFetcher";
+import { setPlotDataAction, ISetPlotDataAction } from "../actions/setPlotDataAction";
+import { getPlotXYArrays } from "../uitls/plotUtils";
 
 export const useDashboardPageReducer = (initState: IDashboardPageState): [IDashboardPageState, React.Dispatch<IAction>] => {
     // create the reducer function
     const reducer = (state: IDashboardPageState, action: IAction) => {
         switch (action.type) {
-            case actionTypes.setMeterMeasListAction:
+            case ActionType.setMeterMeasList:
                 return {
                     ...state,
                     ui: {
                         ...state.ui,
-                        meterMeasList: action.payload as IMeterMeas[]
+                        meterMeasList: (action as ISetMeterMeasListAction).payload
                     }
                 } as IDashboardPageState;
-            case actionTypes.setSchUtilsListAction:
+            case ActionType.setSchUtils:
                 return {
                     ...state,
                     ui: {
                         ...state.ui,
-                        schArchUtils: action.payload as string[]
+                        schArchUtils: (action as ISetSchUtilsAction).payload
                     }
                 } as IDashboardPageState;
-            case actionTypes.setSchTypesListAction:
+            case ActionType.setSchTypes:
                 return {
                     ...state,
                     ui: {
                         ...state.ui,
-                        schArchMeasTypes: action.payload as ISchType[]
+                        schArchMeasTypes: (action as ISetSchTypesAction).payload
+                    }
+                } as IDashboardPageState;
+            case ActionType.setScadaMeasList:
+                return {
+                    ...state,
+                    ui: {
+                        ...state.ui,
+                        scadaMeasList: (action as ISetScadaMeasListAction).payload
+                    }
+                } as IDashboardPageState;
+            case ActionType.setPlotData:
+                const setPlotDataActionObj = action as ISetPlotDataAction
+                const measIter = setPlotDataActionObj.payload.measIter
+                const seriesData = getPlotXYArrays(setPlotDataActionObj.payload.data)
+                return {
+                    ...state,
+                    ui: {
+                        ...state.ui,
+                        plotData: [
+                            ...state.ui.plotData.splice(0, measIter),
+                            { meas: state.ui.plotData[measIter].meas, data: seriesData },
+                            ...state.ui.plotData.splice(measIter + 1)
+                        ]
                     }
                 } as IDashboardPageState;
             default:
@@ -48,28 +80,46 @@ export const useDashboardPageReducer = (initState: IDashboardPageState): [IDashb
     // set comment tag types from server
     useEffect(() => {
         (async function () {
-            const measList = await getMeterMeasList(pageState.urls.meterServiceBaseAddress);
-            pageStateDispatch({
-                type: actionTypes.setMeterMeasListAction,
-                payload: measList
-            });
-            const schUtilsList = await getSchUtils(pageState.urls.schArchServiceBaseAddress);
-            pageStateDispatch({
-                type: actionTypes.setSchUtilsListAction,
-                payload: schUtilsList
-            });
-            const schTypesList = await getSchTypes(pageState.urls.schArchServiceBaseAddress);
-            pageStateDispatch({
-                type: actionTypes.setSchTypesListAction,
-                payload: schTypesList
-            });
+            const meterMeasList = await getMeterMeasList(pageState.urls.meterServiceBaseAddress);
+            pageStateDispatch(setMeterMeasListAction(meterMeasList));
+
+            const schUtils = await getSchUtils(pageState.urls.schArchServiceBaseAddress);
+            pageStateDispatch(setSchUtilsAction(schUtils));
+
+            const schTypes = await getSchTypes(pageState.urls.schArchServiceBaseAddress);
+            pageStateDispatch(setSchTypesAction(schTypes));
+
+            const scadaMeasTypes = await getScadaMeasTypes(pageState.urls.scadaServiceBaseAddress);
+            pageStateDispatch(setScadaMeasTypesAction(scadaMeasTypes));
         })();
     }, [pageState.urls.meterServiceBaseAddress]);
 
     // created middleware to intercept dispatch calls that require async operations
     const asyncDispatch: React.Dispatch<IAction> = useCallback(async (action) => {
         switch (action.type) {
-            case actionTypes.getMeasDataAction: {
+            case ActionType.getScadaMeasList: {
+                const scadaMeasList = await getScadaMeasList(pageState.urls.scadaServiceBaseAddress, (action as IGetScadaMeasListAction).payload.measType)
+                pageStateDispatch(setScadaMeasListAction(scadaMeasList));
+                break;
+            }
+            case ActionType.getMeasData: {
+                const getMeasDataActionObj = action as IGetMeasDataAction;
+                const measIter = getMeasDataActionObj.payload.measIter
+                if (measIter < 0 || measIter >= pageState.ui.plotData.length) {
+                    break;
+                }
+                const meas = pageState.ui.plotData[measIter].meas
+                const measData = await getMeasData(pageState.urls, meas, getMeasDataActionObj.payload.startDate, getMeasDataActionObj.payload.endDate)
+                pageStateDispatch(setPlotDataAction(measIter, measData));
+                break;
+            }
+            case ActionType.getAllMeasData: {
+                const getMeasDataActionObj = action as IGetMeasDataAction;
+                for (let measIter = 0; measIter < pageState.ui.plotData.length; measIter++) {
+                    const meas = pageState.ui.plotData[measIter].meas
+                    const measData = await getMeasData(pageState.urls, meas, getMeasDataActionObj.payload.startDate, getMeasDataActionObj.payload.endDate)
+                    pageStateDispatch(setPlotDataAction(measIter, measData));
+                }
                 break;
             }
             default:

@@ -6,12 +6,18 @@ import MeterMeasPicker from './meterMeasPicker';
 import { useDashboardPageReducer } from '../reducers/dashBoardPageReducer';
 import { IMeas } from '../type_defs/IMeas';
 import SchArchMeasPicker from './schArchMeasPicker';
+import ScadaArchMeasPicker from './scadaArchMeasPicker';
+import { getScadaMeasListAction } from '../actions/GetScadaMeasListAction';
 
 function DashboardPage() {
     let [pageState, pageStateDispatch] = useDashboardPageReducer(pageInitState);
     const onMeasSelected = (meas: IMeas) => {
         console.log("Selected measurement = ")
         console.log(JSON.stringify(meas))
+    }
+    const onScadaMeasTypeChanged = (measType: string) => {
+        console.log("Selected type = ")
+        pageStateDispatch(getScadaMeasListAction(measType))
     }
     return (
         <>
@@ -22,6 +28,13 @@ function DashboardPage() {
                 schTypesList={pageState.ui.schArchMeasTypes}
                 utilNamesList={pageState.ui.schArchUtils}
                 onMeasSelected={onMeasSelected} />
+            <h3>SCADA Archive Measurement</h3>
+            <ScadaArchMeasPicker
+                measList={pageInitState.ui.scadaMeasList}
+                measTypes={pageState.ui.scadaMeasTypes}
+                onMeasTypeChanged={onScadaMeasTypeChanged}
+                onMeasSelected={onMeasSelected}
+            />
         </>
     );
 }

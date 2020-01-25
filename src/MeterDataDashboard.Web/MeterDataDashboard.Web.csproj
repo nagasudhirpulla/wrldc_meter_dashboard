@@ -7,11 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\js\all-meas-dash-app\src\actions\actionTypes.tsx" />
+    <Content Remove="wwwroot\js\all-meas-dash-app\src\actions\ActionType.tsx" />
     <Content Remove="wwwroot\js\all-meas-dash-app\src\components\dashboardPage.tsx" />
     <Content Remove="wwwroot\js\all-meas-dash-app\src\components\meterMeasPicker.tsx" />
+    <Content Remove="wwwroot\js\all-meas-dash-app\src\components\scadaArchMeasPicker.tsx" />
     <Content Remove="wwwroot\js\all-meas-dash-app\src\components\schArchMeasPicker.tsx" />
     <Content Remove="wwwroot\js\all-meas-dash-app\src\reducers\dashBoardPageReducer.tsx" />
+    <Content Remove="wwwroot\js\all-meas-dash-app\src\server_mediators\measDataFetcher.tsx" />
     <Content Remove="wwwroot\js\all-meas-dash-app\src\server_mediators\meterData.tsx" />
     <Content Remove="wwwroot\js\all-meas-dash-app\src\server_mediators\scadaData.tsx" />
     <Content Remove="wwwroot\js\all-meas-dash-app\src\server_mediators\schArchData.tsx" />
@@ -54,13 +56,15 @@
 
 
   <ItemGroup>
-    <TypeScriptCompile Include="wwwroot\js\all-meas-dash-app\src\actions\actionTypes.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\all-meas-dash-app\src\actions\ActionType.tsx" />
     <TypeScriptCompile Include="wwwroot\js\all-meas-dash-app\src\components\dashboardPage.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\all-meas-dash-app\src\components\scadaArchMeasPicker.tsx" />
     <TypeScriptCompile Include="wwwroot\js\all-meas-dash-app\src\components\schArchMeasPicker.tsx">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="wwwroot\js\all-meas-dash-app\src\components\meterMeasPicker.tsx" />
     <TypeScriptCompile Include="wwwroot\js\all-meas-dash-app\src\reducers\dashBoardPageReducer.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\all-meas-dash-app\src\server_mediators\measDataFetcher.tsx" />
     <TypeScriptCompile Include="wwwroot\js\all-meas-dash-app\src\server_mediators\schArchData.tsx">
       <SubType>Code</SubType>
     </TypeScriptCompile>

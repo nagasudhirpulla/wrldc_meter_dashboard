@@ -29,3 +29,18 @@ export const getSchTypes = async (baseAddr: string): Promise<ISchType[]> => {
         return null;
     }
 }
+
+export const getSchArchMeasData = async (baseAddr: string, utilName: string, schType: string, startDate: string, endDate: string): Promise<number[]> => {
+    try {
+        const resp = await fetch(`${baseAddr}/${utilName}/${schType}/${startDate}/${endDate}`, {
+            method: 'get'
+        });
+        const respJSON = await resp.json() as number[];
+        //console.log(respJSON);
+        return respJSON;
+    } catch (e) {
+        console.error(e);
+        return [];
+        //return { success: false, message: `Could not retrieve measurements data due to error ${JSON.stringify(e)}` };
+    }
+};

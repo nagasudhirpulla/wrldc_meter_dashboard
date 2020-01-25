@@ -1,7 +1,6 @@
-﻿//export enum MeasDiscriminator {
-//    meter = "meter",
-//    scada = "scada",
-//    schArch = "schArch"
-//}
-
-export type MeasDiscriminator = "meter" | "scada" | "schArch";
+﻿export enum MeasDiscriminator {
+    meter = "meter",
+    scadaArch = "scadaArch",
+    schArch = "schArch"
+}
+//export type MeasDiscriminator = "meter" | "scadaArch" | "schArch";

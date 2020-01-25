@@ -17,7 +17,7 @@ function ScadaArchMeasPicker(props: IScadaArchMeasPickerProps) {
 
     const handleMeasTypeChange = (selectedOption: { value: string, label: string }) => {
         setSelMeasType(selectedOption.value)
-        props.onMeasTypeChanged(selectedOption.value);
+        props.onMeasTypeChanged(selMeasType);
     }
 
     return (
@@ -35,4 +35,4 @@ function ScadaArchMeasPicker(props: IScadaArchMeasPickerProps) {
     );
 }
 
-export default MeterMeasPicker;
+export default ScadaArchMeasPicker;

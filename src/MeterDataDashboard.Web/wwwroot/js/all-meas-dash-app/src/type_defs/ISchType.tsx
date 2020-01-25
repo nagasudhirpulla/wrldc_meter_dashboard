@@ -1,5 +1,4 @@
-﻿
-export interface ISchType {
+﻿export interface ISchType {
     t: string;
     v: string;
 }

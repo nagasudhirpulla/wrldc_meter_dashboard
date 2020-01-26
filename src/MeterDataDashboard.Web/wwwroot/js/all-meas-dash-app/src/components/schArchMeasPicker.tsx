@@ -29,10 +29,12 @@ function SchArchMeasPicker(props: ISchArchMeasPickerProps) {
     return (
         <>
             <Select
+                placeholder="Select Schedule Type..."
                 options={props.schTypesList.map((st) => { return { label: st.t, value: st.v } })}
                 onChange={handleSchTypeChange}
             ></Select>
             <Select
+                placeholder="Select Schedule Utility..."
                 options={props.utilNamesList.map((st) => { return { label: st, value: st } })}
                 onChange={handleUtilChange}
             ></Select>

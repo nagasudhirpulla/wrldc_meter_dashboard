@@ -7,5 +7,7 @@
     setScadaMeasTypes,
     getMeasData,
     getAllMeasData,
-    setPlotData
+    setPlotData,
+    addPlotMeasurement,
+    deletePlotMeasurement
 }

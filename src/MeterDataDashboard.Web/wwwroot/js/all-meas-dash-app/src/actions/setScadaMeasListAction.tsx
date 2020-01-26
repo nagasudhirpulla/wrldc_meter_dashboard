@@ -8,6 +8,8 @@ export interface ISetScadaMeasListAction extends IAction {
 }
 
 export function setScadaMeasListAction(measList: IScadaMeas[]): ISetScadaMeasListAction {
+    //console.log(new Date());
+    //console.log(measList);
     return {
         type: ActionType.setScadaMeasList,
         payload: measList

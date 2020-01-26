@@ -1,5 +1,10 @@
 ﻿import { IDashboardPageState } from '../type_defs/IDashboardPageState';
 import { IPlotData } from '../type_defs/IPlotData';
+import { IMeas } from '../type_defs/IMeas';
+import { MeasDiscriminator } from '../type_defs/MeasDiscriminator';
+import { IMeterMeas } from '../type_defs/IMeterMeas';
+import { IScadaMeas } from '../type_defs/IScadaMeas';
+import { ISchArchMeas } from '../type_defs/ISchArchMeas';
 
 export const getPlotXYArrays = (measData: number[]): { timestamps: Date[], vals: number[] } => {
     let timestamps: Date[] = [];
@@ -39,4 +44,17 @@ export const exportPlotData = (plotData: IDashboardPageState['ui']['plotData']):
     hiddenElement.target = '_blank';
     hiddenElement.download = 'plotData.csv';
     hiddenElement.click();
+}
+
+export const getPlotTitle = (meas: IMeas): string => {
+    let plotTitle: string = "";
+    if (meas.discriminator == MeasDiscriminator.meter) {
+        plotTitle = (meas as IMeterMeas).description
+    } else if (meas.discriminator == MeasDiscriminator.scadaArch) {
+        plotTitle = (meas as IScadaMeas).description
+    } else if (meas.discriminator == MeasDiscriminator.schArch) {
+        const schMeas = meas as ISchArchMeas
+        plotTitle = `${schMeas.utilName}|${schMeas.schType}`
+    }
+    return plotTitle;
 }

@@ -23,13 +23,15 @@ function ScadaArchMeasPicker(props: IScadaArchMeasPickerProps) {
     return (
         <>
             <Select
+                placeholder="Select Type..."
+                options={props.measTypes.map((mt) => { return { label: mt, value: mt } })}
+                onChange={handleMeasTypeChange} />
+            <Select
+                placeholder="Select SCADA Measurement..."
                 options={props.measList}
                 onChange={handleChange}
                 getOptionLabel={option => option.description}
                 getOptionValue={option => option.measTag} />
-            <Select
-                options={props.measTypes.map((mt) => { return { label: mt, value: mt } })}
-                onChange={handleMeasTypeChange} />
             <button onClick={onMeasClick}>Select</button>
         </>
     );

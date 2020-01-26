@@ -17,6 +17,7 @@ function MeterMeasPicker(props: IMeterMeasPickerProps) {
     return (
         <>
             <Select
+                placeholder="Select Meter Measurement..."
                 options={props.measList}
                 onChange={handleChange}
                 getOptionLabel={option => option.description}

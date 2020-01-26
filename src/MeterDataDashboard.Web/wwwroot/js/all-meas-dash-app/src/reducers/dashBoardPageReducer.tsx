@@ -9,13 +9,15 @@ import { getScadaMeasList, getScadaMeasTypes } from "../server_mediators/scadaDa
 import { setMeterMeasListAction, ISetMeterMeasListAction } from "../actions/setMeterMeasListAction";
 import { setSchUtilsAction, ISetSchUtilsAction } from "../actions/setSchUtilsAction";
 import { setSchTypesAction, ISetSchTypesAction } from "../actions/setSchTypesAction";
-import { setScadaMeasTypesAction } from "../actions/setScadaMeasTypesAction";
-import { IGetScadaMeasListAction } from "../actions/GetScadaMeasListAction";
+import { setScadaMeasTypesAction, ISetScadaMeasTypesAction } from "../actions/setScadaMeasTypesAction";
+import { IGetScadaMeasListAction } from "../actions/getScadaMeasListAction";
 import { setScadaMeasListAction, ISetScadaMeasListAction } from "../actions/setScadaMeasListAction";
 import { getMeasDataAction, IGetMeasDataAction } from "../actions/getMeasDataAction";
 import { getMeasData } from "../server_mediators/measDataFetcher";
 import { setPlotDataAction, ISetPlotDataAction } from "../actions/setPlotDataAction";
-import { getPlotXYArrays } from "../uitls/plotUtils";
+import { getPlotXYArrays, getPlotTitle } from "../uitls/plotUtils";
+import { IAddPlotMeasurementAction } from "../actions/addPlotMeasurementAction";
+import { IDeletePlotMeasurementAction } from "../actions/deletePlotMeasurementAction";
 
 export const useDashboardPageReducer = (initState: IDashboardPageState): [IDashboardPageState, React.Dispatch<IAction>] => {
     // create the reducer function
@@ -29,6 +31,7 @@ export const useDashboardPageReducer = (initState: IDashboardPageState): [IDashb
                         meterMeasList: (action as ISetMeterMeasListAction).payload
                     }
                 } as IDashboardPageState;
+                break;
             case ActionType.setSchUtils:
                 return {
                     ...state,
@@ -37,6 +40,7 @@ export const useDashboardPageReducer = (initState: IDashboardPageState): [IDashb
                         schArchUtils: (action as ISetSchUtilsAction).payload
                     }
                 } as IDashboardPageState;
+                break;
             case ActionType.setSchTypes:
                 return {
                     ...state,
@@ -45,6 +49,7 @@ export const useDashboardPageReducer = (initState: IDashboardPageState): [IDashb
                         schArchMeasTypes: (action as ISetSchTypesAction).payload
                     }
                 } as IDashboardPageState;
+                break;
             case ActionType.setScadaMeasList:
                 return {
                     ...state,
@@ -53,6 +58,16 @@ export const useDashboardPageReducer = (initState: IDashboardPageState): [IDashb
                         scadaMeasList: (action as ISetScadaMeasListAction).payload
                     }
                 } as IDashboardPageState;
+                break;
+            case ActionType.setScadaMeasTypes:
+                return {
+                    ...state,
+                    ui: {
+                        ...state.ui,
+                        scadaMeasTypes: (action as ISetScadaMeasTypesAction).payload
+                    }
+                } as IDashboardPageState;
+                break;
             case ActionType.setPlotData:
                 const setPlotDataActionObj = action as ISetPlotDataAction
                 const measIter = setPlotDataActionObj.payload.measIter
@@ -62,13 +77,42 @@ export const useDashboardPageReducer = (initState: IDashboardPageState): [IDashb
                     ui: {
                         ...state.ui,
                         plotData: [
-                            ...state.ui.plotData.splice(0, measIter),
+                            ...state.ui.plotData.slice(0, measIter),
                             { meas: state.ui.plotData[measIter].meas, data: seriesData },
-                            ...state.ui.plotData.splice(measIter + 1)
+                            ...state.ui.plotData.slice(measIter + 1)
                         ]
                     }
                 } as IDashboardPageState;
+                break;
+            case ActionType.addPlotMeasurement:
+                const actionMeas = (action as IAddPlotMeasurementAction).payload
+                return {
+                    ...state,
+                    ui: {
+                        ...state.ui,
+                        plotData: [
+                            ...state.ui.plotData,
+                            { meas: actionMeas, data: { timestamps: [], vals: [], title: getPlotTitle(actionMeas) } }
+                        ]
+                    }
+                } as IDashboardPageState;
+                break;
+            case ActionType.deletePlotMeasurement:
+                const deleteMeasIter = (action as IDeletePlotMeasurementAction).payload;
+                return {
+                    ...state,
+                    ui: {
+                        ...state.ui,
+                        plotData: [
+                            ...state.ui.plotData.slice(0, deleteMeasIter),
+                            ...state.ui.plotData.slice(deleteMeasIter + 1),
+                        ]
+                    }
+                } as IDashboardPageState;
+                break;
             default:
+                console.log("unwanted action detected");
+                console.log(JSON.stringify(action));
                 throw new Error();
             // return state also works
         }

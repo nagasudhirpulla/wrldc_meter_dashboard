@@ -22,7 +22,7 @@ function MeterMeasPicker(props: IMeterMeasPickerProps) {
                 onChange={handleChange}
                 getOptionLabel={option => option.description}
                 getOptionValue={option => option.locationTag} />
-            <button onClick={onMeasClick}>Select</button>
+            <button onClick={onMeasClick}>Add Meter Measurement</button>
         </>
     );
 }

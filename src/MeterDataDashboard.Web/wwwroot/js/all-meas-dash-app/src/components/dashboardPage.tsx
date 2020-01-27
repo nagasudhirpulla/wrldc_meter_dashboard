@@ -41,6 +41,12 @@ function DashboardPage() {
             </div>);
         plotMeasBucketItems.push(plotMeasBucketItem);
     }
+
+    const onPlotDataClick = () => {
+        // https://github.com/nagasudhirpulla/electron_react_dashboard/blob/master/src/components/TimeSeriesLinePlot.tsx
+        // todo complete this
+    }
+
     return (
         <>
             <h3>Meter Measurement</h3>
@@ -60,6 +66,8 @@ function DashboardPage() {
             <div>
                 {plotMeasBucketItems}
             </div>
+            <br />
+            <button onClick={onPlotDataClick}>Plot Data</button>
         </>
     );
 }

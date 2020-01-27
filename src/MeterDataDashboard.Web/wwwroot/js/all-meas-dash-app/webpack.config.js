@@ -15,7 +15,8 @@ module.exports = {
         "react": "React",
         "react-dom": "ReactDOM",
         jquery: 'jQuery',
-        "toastr": "toastr"
+        "toastr": "toastr",
+        "react-plotly.js":"react-plotly.js"
     },
 
     // Enable sourcemaps for debugging webpack's output.

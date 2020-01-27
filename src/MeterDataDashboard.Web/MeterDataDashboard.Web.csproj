@@ -12,6 +12,7 @@
     <Content Remove="wwwroot\js\all-meas-dash-app\src\components\meterMeasPicker.tsx" />
     <Content Remove="wwwroot\js\all-meas-dash-app\src\components\scadaArchMeasPicker.tsx" />
     <Content Remove="wwwroot\js\all-meas-dash-app\src\components\schArchMeasPicker.tsx" />
+    <Content Remove="wwwroot\js\all-meas-dash-app\src\components\timeSeriesLinePlot.tsx" />
     <Content Remove="wwwroot\js\all-meas-dash-app\src\reducers\dashBoardPageReducer.tsx" />
     <Content Remove="wwwroot\js\all-meas-dash-app\src\server_mediators\measDataFetcher.tsx" />
     <Content Remove="wwwroot\js\all-meas-dash-app\src\server_mediators\meterData.tsx" />
@@ -58,6 +59,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="wwwroot\js\all-meas-dash-app\src\actions\ActionType.tsx" />
     <TypeScriptCompile Include="wwwroot\js\all-meas-dash-app\src\components\dashboardPage.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\all-meas-dash-app\src\components\timeSeriesLinePlot.tsx" />
     <TypeScriptCompile Include="wwwroot\js\all-meas-dash-app\src\components\scadaArchMeasPicker.tsx" />
     <TypeScriptCompile Include="wwwroot\js\all-meas-dash-app\src\components\schArchMeasPicker.tsx">
       <SubType>Code</SubType>

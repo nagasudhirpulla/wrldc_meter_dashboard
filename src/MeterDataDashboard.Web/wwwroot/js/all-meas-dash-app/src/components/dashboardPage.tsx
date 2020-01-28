@@ -10,6 +10,8 @@ import ScadaArchMeasPicker from './scadaArchMeasPicker';
 import { getScadaMeasListAction } from '../actions/GetScadaMeasListAction';
 import { addPlotMeasurementAction } from '../actions/addPlotMeasurementAction';
 import { deletePlotMeasurementAction } from '../actions/deletePlotMeasurementAction';
+import { getAllMeasDataAction } from '../actions/getAllMeasDataAction';
+import TimeSeriesLinePlot from './timeSeriesLinePlot';
 
 function DashboardPage() {
     let [pageState, pageStateDispatch] = useDashboardPageReducer(pageInitState);
@@ -44,7 +46,7 @@ function DashboardPage() {
 
     const onPlotDataClick = () => {
         // https://github.com/nagasudhirpulla/electron_react_dashboard/blob/master/src/components/TimeSeriesLinePlot.tsx
-        // todo complete this
+        pageStateDispatch(getAllMeasDataAction("", ""))
     }
 
     return (
@@ -68,6 +70,9 @@ function DashboardPage() {
             </div>
             <br />
             <button onClick={onPlotDataClick}>Plot Data</button>
+            <br />
+            <br />
+            <TimeSeriesLinePlot seriesList={pageState.ui.plotData} />
         </>
     );
 }

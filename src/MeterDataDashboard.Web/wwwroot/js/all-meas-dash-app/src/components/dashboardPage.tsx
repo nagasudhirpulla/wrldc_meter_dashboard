@@ -1,7 +1,5 @@
 ﻿import pageInitState from '../initial_states/dashboardPageInitState';
-import React, { useReducer } from 'react';
-import { useForm, Controller } from "react-hook-form";
-import * as dateFormat from 'dateformat';
+import React from 'react';
 import MeterMeasPicker from './meterMeasPicker';
 import { useDashboardPageReducer } from '../reducers/dashBoardPageReducer';
 import { IMeas } from '../type_defs/IMeas';
@@ -12,6 +10,10 @@ import { addPlotMeasurementAction } from '../actions/addPlotMeasurementAction';
 import { deletePlotMeasurementAction } from '../actions/deletePlotMeasurementAction';
 import { getAllMeasDataAction } from '../actions/getAllMeasDataAction';
 import TimeSeriesLinePlot from './timeSeriesLinePlot';
+import DateTime from 'react-datetime';
+import moment from 'moment';
+import { setStartTimeAction } from '../actions/setStartTimeAction';
+import { setEndTimeAction } from '../actions/setEndTimeAction';
 
 function DashboardPage() {
     let [pageState, pageStateDispatch] = useDashboardPageReducer(pageInitState);
@@ -34,6 +36,20 @@ function DashboardPage() {
         pageStateDispatch(getScadaMeasListAction(measType))
     }
 
+    const onStartTimeChanged = (timeObj) => {
+        if (timeObj instanceof moment) {
+            let dateObj = moment(timeObj).toDate();
+            pageStateDispatch(setStartTimeAction(dateObj))
+        }
+    }
+
+    const onEndTimeChanged = (timeObj) => {
+        if (timeObj instanceof moment) {
+            let dateObj = moment(timeObj).toDate();
+            pageStateDispatch(setEndTimeAction(dateObj))
+        }
+    }
+
     let plotMeasBucketItems = []
     for (var plotMeasIter = 0; plotMeasIter < pageState.ui.plotData.length; plotMeasIter++) {
         let plotMeasBucketItem = (
@@ -46,7 +62,7 @@ function DashboardPage() {
 
     const onPlotDataClick = () => {
         // https://github.com/nagasudhirpulla/electron_react_dashboard/blob/master/src/components/TimeSeriesLinePlot.tsx
-        pageStateDispatch(getAllMeasDataAction("", ""))
+        pageStateDispatch(getAllMeasDataAction())
     }
 
     return (
@@ -66,6 +82,27 @@ function DashboardPage() {
                 onMeasSelected={onPlotMeasAdded}
             />
             <div>
+                <span>Start Time{" "}</span>
+                <DateTime
+                    value={pageState.ui.startTime}
+                    dateFormat={'DD-MM-YYYY'}
+                    timeFormat={'HH:mm:ss'}
+                    onChange={onStartTimeChanged}
+                    className={"timePicker"}
+                />
+            </div>
+            <div>
+                <span>End Time{"  "}</span>
+                <DateTime
+                    value={pageState.ui.endTime}
+                    dateFormat={'DD-MM-YYYY'}
+                    timeFormat={'HH:mm:ss'}
+                    onChange={onEndTimeChanged}
+                    className={"timePicker"}
+                />
+            </div>
+            <br />
+            <div>
                 {plotMeasBucketItems}
             </div>
             <br />
@@ -73,6 +110,8 @@ function DashboardPage() {
             <br />
             <br />
             <TimeSeriesLinePlot seriesList={pageState.ui.plotData} />
+            {/*<br />
+            <pre>{JSON.stringify(pageState.ui.plotData, null, 2)}</pre>*/}
         </>
     );
 }

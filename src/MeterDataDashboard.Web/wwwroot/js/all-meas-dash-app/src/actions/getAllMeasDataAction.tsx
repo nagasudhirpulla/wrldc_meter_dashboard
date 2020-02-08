@@ -1,15 +1,14 @@
 ﻿import { IAction } from "../type_defs/IAction";
 import { ActionType } from "./ActionType";
-import { IMeas } from "../type_defs/IMeas";
 
 export interface IGetAllMeasDataAction extends IAction {
     type: ActionType.getAllMeasData,
-    payload: { startDate: string, endDate: string }
+    payload: {}
 }
 
-export function getAllMeasDataAction(startDate: string, endDate: string): IGetAllMeasDataAction {
+export function getAllMeasDataAction(): IGetAllMeasDataAction {
     return {
         type: ActionType.getAllMeasData,
-        payload: { startDate: startDate, endDate: startDate }
+        payload: {}
     };
 }

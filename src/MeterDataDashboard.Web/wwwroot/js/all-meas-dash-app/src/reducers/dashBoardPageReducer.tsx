@@ -18,6 +18,8 @@ import { setPlotDataAction, ISetPlotDataAction } from "../actions/setPlotDataAct
 import { getPlotXYArrays, getPlotTitle } from "../uitls/plotUtils";
 import { IAddPlotMeasurementAction } from "../actions/addPlotMeasurementAction";
 import { IDeletePlotMeasurementAction } from "../actions/deletePlotMeasurementAction";
+import { ISetStartTimeAction } from "../actions/setStartTimeAction";
+import { ISetEndTimeAction } from "../actions/setEndTimeAction";
 
 export const useDashboardPageReducer = (initState: IDashboardPageState): [IDashboardPageState, React.Dispatch<IAction>] => {
     // create the reducer function
@@ -78,7 +80,9 @@ export const useDashboardPageReducer = (initState: IDashboardPageState): [IDashb
                         ...state.ui,
                         plotData: [
                             ...state.ui.plotData.slice(0, measIter),
-                            { meas: state.ui.plotData[measIter].meas, data: seriesData },
+                            {
+                                meas: state.ui.plotData[measIter].meas, data: { ...seriesData, title: state.ui.plotData[measIter].data.title }
+                            },
                             ...state.ui.plotData.slice(measIter + 1)
                         ]
                     }
@@ -107,6 +111,24 @@ export const useDashboardPageReducer = (initState: IDashboardPageState): [IDashb
                             ...state.ui.plotData.slice(0, deleteMeasIter),
                             ...state.ui.plotData.slice(deleteMeasIter + 1),
                         ]
+                    }
+                } as IDashboardPageState;
+                break;
+            case ActionType.setStartTime:
+                return {
+                    ...state,
+                    ui: {
+                        ...state.ui,
+                        startTime: (action as ISetStartTimeAction).payload
+                    }
+                } as IDashboardPageState;
+                break;
+            case ActionType.setEndTime:
+                return {
+                    ...state,
+                    ui: {
+                        ...state.ui,
+                        endTime: (action as ISetEndTimeAction).payload
                     }
                 } as IDashboardPageState;
                 break;
@@ -153,15 +175,15 @@ export const useDashboardPageReducer = (initState: IDashboardPageState): [IDashb
                     break;
                 }
                 const meas = pageState.ui.plotData[measIter].meas
-                const measData = await getMeasData(pageState.urls, meas, getMeasDataActionObj.payload.startDate, getMeasDataActionObj.payload.endDate)
+                const measData = await getMeasData(pageState.urls, meas, pageState.ui.startTime, pageState.ui.endTime)
                 pageStateDispatch(setPlotDataAction(measIter, measData));
                 break;
             }
             case ActionType.getAllMeasData: {
-                const getMeasDataActionObj = action as IGetMeasDataAction;
+                //console.log(pageState);
                 for (let measIter = 0; measIter < pageState.ui.plotData.length; measIter++) {
                     const meas = pageState.ui.plotData[measIter].meas
-                    const measData = await getMeasData(pageState.urls, meas, getMeasDataActionObj.payload.startDate, getMeasDataActionObj.payload.endDate)
+                    const measData = await getMeasData(pageState.urls, meas, pageState.ui.startTime, pageState.ui.endTime)
                     pageStateDispatch(setPlotDataAction(measIter, measData));
                 }
                 break;
@@ -169,7 +191,7 @@ export const useDashboardPageReducer = (initState: IDashboardPageState): [IDashb
             default:
                 pageStateDispatch(action);
         }
-    }, [pageState.urls.meterServiceBaseAddress]); // The empty array causes this callback to only be created once per component instance
+    }, [pageState.urls.meterServiceBaseAddress, pageState.ui.plotData, pageState.ui.startTime, pageState.ui.endTime]); // The empty array causes this callback to only be created once per component instance
 
     return [pageState, asyncDispatch];
 }

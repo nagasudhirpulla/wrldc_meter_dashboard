@@ -9,5 +9,7 @@
     getAllMeasData,
     setPlotData,
     addPlotMeasurement,
-    deletePlotMeasurement
+    deletePlotMeasurement,
+    setStartTime,
+    setEndTime
 }

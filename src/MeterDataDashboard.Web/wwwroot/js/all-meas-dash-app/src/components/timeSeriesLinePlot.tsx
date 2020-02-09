@@ -1,9 +1,12 @@
 ﻿import React from 'react';
-import Plot from 'react-plotly.js';
+import createPlotlyComponent from 'react-plotly.js';
 import { Data, Datum, Config, Layout } from 'plotly.js';
+// https://www.npmjs.com/package/react-plotlyjs
+import Plotly from 'plotly.js-cartesian-dist';
 import { ITimeSeriesLinePlotProps } from '../type_defs/ITimeSeriesLinePlotProps';
 
 function TimeSeriesLinePlot(props: ITimeSeriesLinePlotProps) {
+    const PlotlyComponent = createPlotlyComponent(Plotly);
     const generateSeriesData = (seriesIter: number): Data => {
         let series_data_template: Data = {
             name: props.seriesList[seriesIter].data.title,
@@ -39,7 +42,7 @@ function TimeSeriesLinePlot(props: ITimeSeriesLinePlotProps) {
 
     return (
         <>
-            <Plot
+            <PlotlyComponent
                 data={plot_data}
                 layout={plot_layout}
                 frames={plot_frames}

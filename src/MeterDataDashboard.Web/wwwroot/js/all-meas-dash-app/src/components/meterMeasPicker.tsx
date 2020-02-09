@@ -22,7 +22,12 @@ function MeterMeasPicker(props: IMeterMeasPickerProps) {
                 onChange={handleChange}
                 getOptionLabel={option => option.description}
                 getOptionValue={option => option.locationTag} />
-            <button onClick={onMeasClick}>Add Meter Measurement</button>
+            <button onClick={onMeasClick} className={"btn btn-primary btn-sm btn-icon-split"}>
+                <span className={"icon text-white-50"}>
+                    <i className={"fas fa-plus"}></i>
+                </span>
+                <span className={"text"}>Add Meter Measurement</span>
+            </button>
         </>
     );
 }

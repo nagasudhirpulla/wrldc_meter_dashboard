@@ -14,6 +14,7 @@ import DateTime from 'react-datetime';
 import moment from 'moment';
 import { setStartTimeAction } from '../actions/setStartTimeAction';
 import { setEndTimeAction } from '../actions/setEndTimeAction';
+import { exportPlotData } from '../uitls/plotUtils';
 
 function DashboardPage() {
     let [pageState, pageStateDispatch] = useDashboardPageReducer(pageInitState);
@@ -65,15 +66,21 @@ function DashboardPage() {
         pageStateDispatch(getAllMeasDataAction())
     }
 
+    const onExportDataClick = () => {
+        exportPlotData(pageState.ui.plotData)
+    }
+
     return (
         <>
             <h3>Meter Measurement</h3>
             <MeterMeasPicker measList={pageState.ui.meterMeasList} onMeasSelected={onPlotMeasAdded}></MeterMeasPicker>
+            <br/>
             <h3>Schedule Archive Measurement</h3>
             <SchArchMeasPicker
                 schTypesList={pageState.ui.schArchMeasTypes}
                 utilNamesList={pageState.ui.schArchUtils}
                 onMeasSelected={onPlotMeasAdded} />
+            <br/>
             <h3>SCADA Archive Measurement</h3>
             <ScadaArchMeasPicker
                 measList={pageState.ui.scadaMeasList}
@@ -81,6 +88,7 @@ function DashboardPage() {
                 onMeasTypeChanged={onScadaMeasTypeChanged}
                 onMeasSelected={onPlotMeasAdded}
             />
+            <br/>
             <div>
                 <span>Start Time{" "}</span>
                 <DateTime
@@ -106,10 +114,23 @@ function DashboardPage() {
                 {plotMeasBucketItems}
             </div>
             <br />
-            <button onClick={onPlotDataClick}>Plot Data</button>
+            <button onClick={onPlotDataClick} className={"btn btn-success btn-sm btn-icon-split"}>
+                <span className={"icon text-white-50"}>
+                    <i className={"fas fa-sync"}></i>
+                </span>
+                <span className={"text"}>Plot Data</span>
+            </button>
             <br />
             <br />
             <TimeSeriesLinePlot seriesList={pageState.ui.plotData} />
+            <br />
+            <button onClick={onExportDataClick} className={"btn btn-warning btn-sm btn-icon-split"}>
+                <span className={"icon text-white-50"}>
+                    <i className={"fas fa-download"}></i>
+                </span>
+                <span className={"text"}>Download CSV</span>
+            </button>
+
             {/*<br />
             <pre>{JSON.stringify(pageState.ui.plotData, null, 2)}</pre>*/}
         </>

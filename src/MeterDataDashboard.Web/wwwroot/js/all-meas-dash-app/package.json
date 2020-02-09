@@ -6,6 +6,7 @@
   "scripts": {
     "start": "webpack-dev-server --open --mode development",
     "build": "webpack --mode production",
+    "watch": "webpack --mode development -w",
     "dev-build": "webpack --mode development"
   },
   "author": "Nagasudhir",
@@ -15,6 +16,7 @@
     "@babel/plugin-proposal-class-properties": "^7.7.4",
     "@babel/preset-env": "^7.7.7",
     "@babel/preset-react": "^7.7.4",
+    "@types/plotly.js": "^1.44.27",
     "@types/react": "^16.9.17",
     "@types/react-select": "^3.0.8",
     "@types/toastr": "^2.1.37",
@@ -38,6 +40,7 @@
   },
   "dependencies": {
     "plotly.js": "^1.52.1",
+    "plotly.js-cartesian-dist": "^1.52.2",
     "react-datetime": "^2.16.3",
     "react-plotly.js": "^2.4.0",
     "source-loader": "^1.0.0",

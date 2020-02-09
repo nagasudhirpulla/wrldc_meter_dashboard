@@ -32,7 +32,12 @@ function ScadaArchMeasPicker(props: IScadaArchMeasPickerProps) {
                 onChange={handleChange}
                 getOptionLabel={option => option.description}
                 getOptionValue={option => option.measTag} />
-            <button onClick={onMeasClick}>Add SCADA Archive Measurement</button>
+            <button onClick={onMeasClick} className={"btn btn-primary btn-sm btn-icon-split"}>
+                <span className={"icon text-white-50"}>
+                    <i className={"fas fa-plus"}></i>
+                </span>
+                <span className={"text"}>Add SCADA Archive Measurement</span>
+            </button>
         </>
     );
 }

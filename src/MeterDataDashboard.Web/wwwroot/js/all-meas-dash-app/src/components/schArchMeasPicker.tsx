@@ -38,7 +38,12 @@ function SchArchMeasPicker(props: ISchArchMeasPickerProps) {
                 options={props.utilNamesList.map((st) => { return { label: st, value: st } })}
                 onChange={handleUtilChange}
             ></Select>
-            <button onClick={onMeasClick}>Add Schedule Archive Measurement</button>
+            <button onClick={onMeasClick} className={"btn btn-primary btn-sm btn-icon-split"}>
+                <span className={"icon text-white-50"}>
+                    <i className={"fas fa-plus"}></i>
+                </span>
+                <span className={"text"}>Add Schedule Archive Measurement</span>
+            </button>
         </>
     );
 }

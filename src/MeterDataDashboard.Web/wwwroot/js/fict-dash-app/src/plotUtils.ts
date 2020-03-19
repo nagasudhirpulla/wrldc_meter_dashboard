@@ -1,6 +1,6 @@
 ﻿import Plotly from 'plotly.js-dist';
 
-const getPlotXYArrays = (measData: number[]): { timestamps: Date[], vals: number[] } => {
+export const getPlotXYArrays = (measData: number[]): { timestamps: Date[], vals: number[] } => {
     let timestamps: Date[] = [];
     let vals: number[] = [];
     for (var i = 0; i < measData.length; i = i + 2) {
@@ -30,6 +30,45 @@ export const setPlot = (divId: string, measDataList: { data: number[], title: st
     }
 
     // https://stackoverflow.com/questions/39084438/how-to-import-plotly-js-into-typescript
+    Plotly.newPlot(divId, traceData, layout);
+};
+
+export interface PlotTrace {
+    timestamps: Date[], vals: number[], title: string, xaxis: string, yaxis: string, line?: { color?: string, width?: string }
+}
+
+export const setPlotTraces = (divId: string, traces: PlotTrace[], plotTitle: string, axTitles: { name: string, axisStr: string }[], height?: number) => {
+    let traceData = [];
+    const layout = {
+        title: plotTitle,
+        showlegend: false,
+        legend: { "orientation": "h" },
+        grid: { rows: 5, columns: 2, pattern: 'independent' },
+        height: height,
+        autosize: true,
+    }
+
+    for (var axTitleIter = 0; axTitleIter < axTitles.length; axTitleIter++) {
+        layout[axTitles[axTitleIter].axisStr] = { title: axTitles[axTitleIter].name };
+    }
+
+    for (var traceIter = 0; traceIter < traces.length; traceIter++) {
+        const trace = traces[traceIter];
+        let traceObj = {
+            x: trace.timestamps,
+            y: trace.vals,
+            mode: 'lines',
+            name: trace.title,
+            xaxis: trace.xaxis,
+            yaxis: trace.yaxis
+        };
+        if (trace.line != null) {
+            traceObj['line'] = trace.line
+        }
+
+        traceData.push(traceObj);
+    }
+
     Plotly.newPlot(divId, traceData, layout);
 };
 

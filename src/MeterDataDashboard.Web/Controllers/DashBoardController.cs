@@ -29,5 +29,9 @@ namespace MeterDataDashboard.Web.Controllers
         {
             return View();
         }
+        public IActionResult StateDemands()
+        {
+            return View();
+        }
     }
 }

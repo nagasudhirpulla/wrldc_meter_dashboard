@@ -5,7 +5,8 @@ module.exports = {
     entry: {
         main: ['babel-polyfill', path.resolve(__dirname, 'src/meter_dashboard/index.ts')],
         scada: ['babel-polyfill', path.resolve(__dirname, 'src/scada_dashboard/scada.ts')],
-        wbes_archive: ['babel-polyfill', path.resolve(__dirname, 'src/wbes_arch_dashboard/wbes_arch.ts')]
+        wbes_archive: ['babel-polyfill', path.resolve(__dirname, 'src/wbes_arch_dashboard/wbes_arch.ts')],
+        state_demands: ['babel-polyfill', path.resolve(__dirname, 'src/state_demands_dashboard/state_demands.ts')]
     },
 
     output: {

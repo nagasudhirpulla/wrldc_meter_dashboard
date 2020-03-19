@@ -1,0 +1,17 @@
+﻿@{
+    ViewData["Title"] = "State Demands";
+}
+
+<div class="row plotContainer">
+    <div id="plotDiv" class="col-md-12"></div>
+</div>
+<div class="row">
+    <button class="btn btn-sm btn-outline-info" id="plotExportBtn">Export Data</button>
+</div>
+
+@section Scripts {
+    @*<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>*@
+    <script src="~/js/fict-dash-app/node_modules/plotly.js-dist/plotly.js"></script>
+    <script src="~/js/fict-dash-app/dist/state_demands.js"></script>
+    <script src="~/js/fict-dash-app/node_modules/chosen-js/chosen.jquery.min.js"></script>
+}

@@ -37,13 +37,13 @@ export interface PlotTrace {
     timestamps: Date[], vals: number[], title: string, xaxis: string, yaxis: string, line?: { color?: string, width?: string }
 }
 
-export const setPlotTraces = (divId: string, traces: PlotTrace[], plotTitle: string, axTitles: { name: string, axisStr: string }[], height?: number) => {
+export const setPlotTraces = (divId: string, traces: PlotTrace[], plotTitle: string, axTitles: { name: string, axisStr: string }[], nRows:number, nCols:number, height?: number) => {
     let traceData = [];
     const layout = {
         title: plotTitle,
         showlegend: false,
         legend: { "orientation": "h" },
-        grid: { rows: 5, columns: 2, pattern: 'independent' },
+        grid: { rows: nRows, columns: nCols, pattern: 'independent' },
         height: height,
         autosize: true,
     }

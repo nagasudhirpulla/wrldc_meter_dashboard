@@ -19,6 +19,7 @@
     <Content Remove="wwwroot\js\all-meas-dash-app\src\server_mediators\scadaData.tsx" />
     <Content Remove="wwwroot\js\all-meas-dash-app\src\server_mediators\schArchData.tsx" />
     <Content Remove="wwwroot\js\all-meas-dash-app\src\type_defs\IMeterMeas.tsx" />
+    <Content Remove="wwwroot\js\fict-dash-app\src\dem_freq_dashboard\dem_freq.ts" />
     <Content Remove="wwwroot\js\fict-dash-app\src\timeUtils.ts" />
   </ItemGroup>
 
@@ -81,6 +82,7 @@
     <TypeScriptCompile Include="wwwroot\js\all-meas-dash-app\src\server_mediators\meterData.tsx" />
     <TypeScriptCompile Include="wwwroot\js\all-meas-dash-app\src\type_defs\IMeterMeas.tsx" />
     <TypeScriptCompile Include="wwwroot\js\all-meas-dash-app\src\uitls\toastUtils.tsx" />
+    <TypeScriptCompile Include="wwwroot\js\fict-dash-app\src\dem_freq_dashboard\dem_freq.ts" />
     <TypeScriptCompile Include="wwwroot\js\fict-dash-app\src\timeUtils.ts" />
   </ItemGroup>
 

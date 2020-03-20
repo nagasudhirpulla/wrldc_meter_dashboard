@@ -2,17 +2,9 @@
 import { exportPlotData, PlotTrace, getPlotXYArrays, setPlotTraces } from "../plotUtils"
 import { convertDateTimeToUrlDate } from "../timeUtils"
 declare const Plotly: any
-
 let intervalID = null
 const WrDemPnt = { id: 'WRLDCMP.SCADA1.A0047000', name: 'WR Demand' }
 const FreqPnt = { id: 'WRLDCMP.SCADA1.A0036324', name: 'Freq' }
-const GujDemPnt = { id: 'WRLDCMP.SCADA1.A0046957', name: 'Gujarat Demand' }
-const MPDemPnt = { id: 'WRLDCMP.SCADA1.A0046978', name: 'MP Demand' }
-const MahDemPnt = { id: 'WRLDCMP.SCADA1.A0046980', name: 'Mah Demand' }
-const ChhatDemPnt = { id: 'WRLDCMP.SCADA1.A0046945', name: 'Chhattisgarh Demand' }
-const DdDemPnt = { id: 'WRLDCMP.SCADA1.A0046948', name: 'DD Demand' }
-const DnhDemPnt = { id: 'WRLDCMP.SCADA1.A0046953', name: 'DNH Demand' }
-const GoaDemPnt = { id: 'WRLDCMP.SCADA1.A0046962', name: 'GOA Demand' }
 
 window.onload = async () => {
     intervalID = setInterval(refreshData, 1000 * 60 * 10);
@@ -20,7 +12,6 @@ window.onload = async () => {
 }
 
 const refreshData = async () => {
-    // https://plot.ly/javascript/subplots/#stacked-subplots
     const nowTime = new Date()
 
     let tomTime = new Date(nowTime)
@@ -32,7 +23,7 @@ const refreshData = async () => {
     const yestDate = convertDateTimeToUrlDate(yestTime)
     const startDate = convertDateTimeToUrlDate(nowTime)
     const endDate = convertDateTimeToUrlDate(tomTime)
-    const tracePnts = [WrDemPnt, FreqPnt, GujDemPnt, MahDemPnt, MPDemPnt, ChhatDemPnt, DdDemPnt, DnhDemPnt, GoaDemPnt]
+    const tracePnts = [WrDemPnt, FreqPnt]
     let traces = [] as PlotTrace[];
     let axTitles = [];
     // iterate over selected entities
@@ -56,14 +47,11 @@ const refreshData = async () => {
         })
     }
     // render plot data
-    setPlotTraces("plotDiv", traces, 'State Demands', axTitles, 5, 2, 1000);
+    setPlotTraces("plotDiv", traces, 'Demand Frequency', axTitles, 2, 1, 1000);
 
     (document.getElementById("plotDiv") as any).on('plotly_hover', function (eventdata: { xvals: any[]; }) {
-        let axHandles = []
-        for (var i = 2; i <= tracePnts.length; i++) {
-            axHandles.push(`x${i}y${i}`)
-        }
-        Plotly.Fx.hover('plotDiv', { xval: eventdata.xvals[0] }, ['xy', ...axHandles]);
+        // https://codepen.io/duyentnguyen/pen/LRVbyY
+        Plotly.Fx.hover('plotDiv', { xval: eventdata.xvals[0] }, ['xy', 'x2y2']);
     });
 }
 

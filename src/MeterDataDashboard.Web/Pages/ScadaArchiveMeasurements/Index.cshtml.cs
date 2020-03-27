@@ -19,7 +19,7 @@ namespace MeterDataDashboard.Web.Pages.ScadaArchiveMeasurements
             _context = context;
         }
 
-        public IList<ScadaArchiveMeasurement> ScadaArchiveMeasurement { get;set; }
+        public IList<ScadaArchiveMeasurement> ScadaArchiveMeasurement { get; set; }
 
         public async Task OnGetAsync()
         {

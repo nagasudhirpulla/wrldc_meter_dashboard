@@ -43,10 +43,11 @@ namespace MeterDataDashboard.Web
             services
                 .AddControllersWithViews()
                 .AddRazorRuntimeCompilation();
-            services.AddRazorPages(options =>
-            {
-                options.Conventions.AuthorizeFolder("/ScadaArchiveMeasurements");
-            });
+            //services.AddRazorPages(options =>
+            //{
+            //    options.Conventions.AuthorizeFolder("/ScadaArchiveMeasurements");
+            //});
+            services.AddRazorPages();
 
             //// add identity server authentication
             //// https://stackoverflow.com/questions/39864550/how-to-get-base-url-without-accessing-a-request

@@ -8,9 +8,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MeterDataDashboard.Core.Entities;
 using MeterDataDashboard.Infra.Persistence;
+using Microsoft.AspNetCore.Authorization;
+using MeterDataDashboard.Infra.Identity;
 
 namespace MeterDataDashboard.Web.Pages.ScadaArchiveMeasurements
 {
+    [Authorize(Roles = SecurityConstants.AdminRoleString)]
     public class EditModel : PageModel
     {
         private readonly AppDbContext _context;

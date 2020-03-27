@@ -7,9 +7,12 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using MeterDataDashboard.Core.Entities;
 using MeterDataDashboard.Infra.Persistence;
+using Microsoft.AspNetCore.Authorization;
+using MeterDataDashboard.Infra.Identity;
 
 namespace MeterDataDashboard.Web.Pages.ScadaArchiveMeasurements
 {
+    [Authorize(Roles = SecurityConstants.AdminRoleString)]
     public class DeleteModel : PageModel
     {
         private readonly AppDbContext _context;

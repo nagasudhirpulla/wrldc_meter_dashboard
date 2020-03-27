@@ -7,9 +7,12 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using MeterDataDashboard.Core.Entities;
 using MeterDataDashboard.Infra.Persistence;
+using Microsoft.AspNetCore.Authorization;
+using MeterDataDashboard.Infra.Identity;
 
 namespace MeterDataDashboard.Web.Pages.ScadaArchiveMeasurements
 {
+    [Authorize(Roles = SecurityConstants.AdminRoleString)]
     public class CreateModel : PageModel
     {
         private readonly AppDbContext _context;

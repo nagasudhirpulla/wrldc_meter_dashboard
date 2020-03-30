@@ -9,6 +9,10 @@ namespace MeterDataDashboard.Infra.Persistence.Configurations
         public void Configure(EntityTypeBuilder<ScadaArchiveMeasurement> builder)
         {
             // Measurement tag is required and just 250 characters
+            builder.Property(b => b.Id)
+                .HasIdentityOptions(852);
+
+            // Measurement tag is required and just 250 characters
             builder.Property(b => b.MeasTag)
                 .IsRequired()
                 .HasMaxLength(250);

@@ -25,7 +25,13 @@ export const getFictMeasData = async (baseAddr: string, locationTag: string, sta
         const resp = await fetch(`${baseAddr}/${locationTag}/${startDate}/${endDate}`, {
             method: 'get'
         });
-        const respJSON = await resp.json() as number[];
+        const respJSON = (await resp.json() as number[]).map((val, ind) => {
+            // multiplying values by 4 for fict measurements
+            if (ind % 2 != 0) {
+                return val * 4
+            }
+            return val
+        })
         //console.log(respJSON);
         return respJSON;
     } catch (e) {

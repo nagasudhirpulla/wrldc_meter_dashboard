@@ -13,6 +13,7 @@ const ChhatDemPnt = { id: 'WRLDCMP.SCADA1.A0046945', name: 'Chhattisgarh Demand'
 const DdDemPnt = { id: 'WRLDCMP.SCADA1.A0046948', name: 'DD Demand' }
 const DnhDemPnt = { id: 'WRLDCMP.SCADA1.A0046953', name: 'DNH Demand' }
 const GoaDemPnt = { id: 'WRLDCMP.SCADA1.A0046962', name: 'GOA Demand' }
+const MumDemPnt = { id: 'WRLDCMP.SCADA3.A0101733', name: 'Mumbai Demand' }
 
 window.onload = async () => {
     intervalID = setInterval(refreshData, 1000 * 60 * 10);
@@ -32,7 +33,7 @@ const refreshData = async () => {
     const yestDate = convertDateTimeToUrlDate(yestTime)
     const startDate = convertDateTimeToUrlDate(nowTime)
     const endDate = convertDateTimeToUrlDate(tomTime)
-    const tracePnts = [WrDemPnt, FreqPnt, GujDemPnt, MahDemPnt, MPDemPnt, ChhatDemPnt, DdDemPnt, DnhDemPnt, GoaDemPnt]
+    const tracePnts = [WrDemPnt, FreqPnt, GujDemPnt, MahDemPnt, MPDemPnt, ChhatDemPnt, DdDemPnt, DnhDemPnt, GoaDemPnt, MumDemPnt]
     let traces = [] as PlotTrace[];
     let axTitles = [];
     // iterate over selected entities

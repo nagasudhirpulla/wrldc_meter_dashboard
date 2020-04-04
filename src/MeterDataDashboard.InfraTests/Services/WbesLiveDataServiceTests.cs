@@ -85,7 +85,7 @@ namespace MeterDataDashboard.Infra.Services.Tests
             Assert.IsTrue(schData != null);
             Assert.IsTrue(schData.GenNames.Count > 10);
             Assert.IsTrue(schData.Timestamps.Count == 96 * (numDays));
-            Assert.IsTrue(schData.DownMargins.Keys.Count == schData.GenNames.Count);
+            Assert.IsTrue(schData.DownMargins.Count == schData.GenNames.Count);
         }
     }
 }

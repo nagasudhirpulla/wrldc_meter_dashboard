@@ -1,5 +1,6 @@
 ﻿using MeterDataDashboard.Core.MeterData.Services;
 using MeterDataDashboard.Core.ScadaData.Services;
+using MeterDataDashboard.Core.ScheduleData.Services;
 using MeterDataDashboard.Infra.Identity;
 using MeterDataDashboard.Infra.Persistence;
 using MeterDataDashboard.Infra.Services;
@@ -69,6 +70,7 @@ namespace MeterDataDashboard.Infra
             services.AddSingleton<IScadaDataService, ScadaDataService>();
             services.AddSingleton<IWbesArchiveDataService, WbesArchiveDataService>();
             services.AddSingleton<IAgcFileUtilsService, AgcFileUtilsService>();
+            services.AddSingleton<IWbesLiveDataService, WbesLiveDataService>();
             // Add Infra services
             services.AddTransient<IEmailSender, EmailSender>();
 

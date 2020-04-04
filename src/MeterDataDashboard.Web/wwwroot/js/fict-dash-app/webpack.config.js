@@ -7,7 +7,8 @@ module.exports = {
         scada: ['babel-polyfill', path.resolve(__dirname, 'src/scada_dashboard/scada.ts')],
         wbes_archive: ['babel-polyfill', path.resolve(__dirname, 'src/wbes_arch_dashboard/wbes_arch.ts')],
         state_demands: ['babel-polyfill', path.resolve(__dirname, 'src/state_demands_dashboard/state_demands.ts')],
-        dem_freq: ['babel-polyfill', path.resolve(__dirname, 'src/dem_freq_dashboard/dem_freq.ts')]
+        dem_freq: ['babel-polyfill', path.resolve(__dirname, 'src/dem_freq_dashboard/dem_freq.ts')],
+        down_margins: ['babel-polyfill', path.resolve(__dirname, 'src/isgs_down_margins/index.ts')]
     },
 
     output: {

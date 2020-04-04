@@ -37,5 +37,10 @@ namespace MeterDataDashboard.Web.Controllers
         {
             return View();
         }
+
+        public IActionResult DownMargins()
+        {
+            return View();
+        }
     }
 }

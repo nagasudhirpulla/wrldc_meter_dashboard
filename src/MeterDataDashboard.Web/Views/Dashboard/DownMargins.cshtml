@@ -1,0 +1,73 @@
+﻿@{
+    ViewData["Title"] = "WR ISGS Down Reserves";
+}
+
+<h2 style='text-align: center'>WR ISGS Down Reserves</h2>
+<div class="row">
+    <div class="col col-11">
+        <div id="dcPlotsDiv"></div>
+        <div id="genSelectionDiv"></div>
+        <button id="selectAllGenBtn" class="btn btn-sm btn-outline-primary">Select All</button>
+        <button id="deselectAllGenBtn" class="btn btn-sm btn-outline-primary">Deselect All</button>
+        <label><input type="checkbox" name="updateDateCheckbox" id="updateDateCheckbox" checked />Auto set to today date</label>
+        <br>
+        <input type="number" value="10" class="form-control-sm" id="marginFetchPeriodInput" name="marginFetchPeriodInput" />
+        <button id="updateTimerPeriodBtn" class="btn btn-sm btn-outline-primary">Update Margin Fetch Periodicity in Mins</button>
+    </div>
+    <div id="reserveInfoDiv" class="col col-1" style="margin-top: 50px;font-size:small"></div>
+</div>
+
+
+<div class="row" style="clear: both;">
+    <form>
+        <div class="form-row align-items-center">
+            <div class="col-auto">
+                <input type="text" id='start_date_input' value="" class="form-control mb-2" placeholder="Start Date" />
+            </div>
+            <div class="col-auto">
+                <input type="text" id='end_date_input' value="" class="form-control mb-2" placeholder="Start Date" />
+            </div>
+            <div class="col-auto">
+                <label>Line Style</label>
+            </div>
+            <div class="col-auto">
+                <select name="line_style" class="form-control mb-2" id="line_style">
+                    <option value="linear">Linear</option>
+                    <option value="hv">Step</option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <button id="updateMarginsBtn" class="btn btn-sm btn-success">Get Margins</button>
+            </div>
+            <div class="col-auto">
+                <span id='fetchStatusLabel' class="col-form-label"></span>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="row">
+    <div class="table-wrapper-scroll-y my-custom-scrollbar">
+        <table id="dcTable" name="dcTable" style="margin-top: 8px" class="table table-bordered table-hover table-striped mb-0 table-responsive table-fixed"></table>
+    </div>
+</div>
+
+<button id="exportBtn" class="btn btn-sm btn-success">Export Table</button>
+
+
+@section Scripts {
+    @*<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>*@
+    <script src="~/js/fict-dash-app/node_modules/plotly.js-dist/plotly.js"></script>
+    <script src="~/js/fict-dash-app/dist/down_margins.js"></script>
+    <style>
+        .my-custom-scrollbar {
+            position: relative;
+            height: 800px;
+            overflow: auto;
+        }
+
+        .table-wrapper-scroll-y {
+            display: block;
+        }
+    </style>
+}

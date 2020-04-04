@@ -23,7 +23,7 @@ export const createTable = (tableData: IsgsDownMarginsDTO, tableEl: HTMLTableEle
         row.appendChild(cell);
         tableData.genNames.forEach(genName => {
             var cell = document.createElement('td');
-            cell.appendChild(document.createTextNode(tableData.downMargins[genName][tsInd] + ""));
+            cell.appendChild(document.createTextNode(Math.round(tableData.downMargins[genName][tsInd] * 100) / 100 + ""));
             row.appendChild(cell);
         });
         tableEl.appendChild(row);

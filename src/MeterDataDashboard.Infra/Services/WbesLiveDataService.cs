@@ -179,7 +179,7 @@ namespace MeterDataDashboard.Infra.Services
             }
             for (int valIter = 0; valIter < onBarInstCap.SchVals.Count; valIter++)
             {
-                double val = onBarInstCap.SchVals[valIter].Val * 0.55 - fullSch.SchVals[valIter].Val;
+                double val = fullSch.SchVals[valIter].Val - onBarInstCap.SchVals[valIter].Val * 0.55;
                 DateTime timestamp = fullSch.SchVals[valIter].Timestamp;
                 margins.SchVals.Add(new ScheduleValue { Timestamp = timestamp, Val = val > 0 ? val : 0 });
             }

@@ -22,7 +22,7 @@ namespace MeterDataDashboard.Infra.Services
             _oracleConnString = configuration["ConnectionStrings:WBESOracleConnection"];
         }
 
-        public List<(string, string)> GetAllThermalIsgsUtils()
+        public List<(string utilId, string utilName)> GetAllThermalIsgsUtils()
         {
             List<(string, string)> utils = new List<(string, string)>();
             using (OracleConnection con = new OracleConnection(_oracleConnString))
@@ -73,11 +73,11 @@ namespace MeterDataDashboard.Infra.Services
             return rev;
         }
 
-        public async Task<UtilSchData> GetSellerFullSchForDate(DateTime targetDt, string utilId)
+        public async Task<UtilSchData> GetSellerFullSchForDate(string utilId, DateTime targetDt)
         {
             // https://stackoverflow.com/questions/32860666/httpclient-scrape-data-from-website-with-login-c-sharp
             int rev = await GetMaxRevForDate(targetDt);
-            UtilSchData schData = new UtilSchData() { SchVals = new List<ScheduleValue>() };
+            UtilSchData schData = new UtilSchData();
             if (rev == -1) { return null; }
             string url = $"http://scheduling.wrldc.in/wbes/ReportFullSchedule/GetFullInjSummary?scheduleDate={targetDt.ToString("dd-MM-yyyy")}&sellerId={utilId}&revisionNumber={rev}&regionId=2&byDetails=0&isDrawer=0&isBuyer=0";
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
@@ -112,7 +112,7 @@ namespace MeterDataDashboard.Infra.Services
 
         public UtilSchData GetOnbarInstalledCapacityForDates(string utilId, DateTime fromDate, DateTime toDate)
         {
-            UtilSchData utilData = new UtilSchData() { SchVals = new List<ScheduleValue>() };
+            UtilSchData utilData = new UtilSchData();
             string dbName = (DateTime.Now.Date - fromDate.Date).TotalDays > 6 ? "WBES_OLD" : "WBES_NR7";
             using (OracleConnection con = new OracleConnection(_oracleConnString))
             {
@@ -167,6 +167,58 @@ namespace MeterDataDashboard.Infra.Services
                 }
             }
             return utilData;
+        }
+        public async Task<UtilSchData> GetDownMarginsForDate(string utilId, DateTime fromDate)
+        {
+            UtilSchData margins = new UtilSchData();
+            UtilSchData onBarInstCap = GetOnbarInstalledCapacityForDates(utilId, fromDate, fromDate);
+            UtilSchData fullSch = await GetSellerFullSchForDate(utilId, fromDate);
+            if (onBarInstCap == null || fullSch == null || onBarInstCap.SchVals.Count != 96 || fullSch.SchVals.Count != 96)
+            {
+                return margins;
+            }
+            for (int valIter = 0; valIter < onBarInstCap.SchVals.Count; valIter++)
+            {
+                double val = onBarInstCap.SchVals[valIter].Val * 0.55 - fullSch.SchVals[valIter].Val;
+                DateTime timestamp = fullSch.SchVals[valIter].Timestamp;
+                margins.SchVals.Add(new ScheduleValue { Timestamp = timestamp, Val = val > 0 ? val : 0 });
+            }
+            return margins;
+        }
+
+        public async Task<UtilSchData> GetDownMarginsForDates(string utilId, DateTime fromDate, DateTime toDate)
+        {
+            UtilSchData margins = new UtilSchData();
+            for (DateTime currDate = fromDate.Date; currDate <= toDate.Date; currDate = currDate.AddDays(1))
+            {
+                UtilSchData dateMargins = await GetDownMarginsForDate(utilId, currDate);
+                margins.SchVals.AddRange(dateMargins.SchVals);
+            }
+            return margins;
+        }
+
+        public async Task<IsgsDownMarginsDTO> GetIsgsThermalDownMarginsForDates(DateTime fromDate, DateTime toDate)
+        {
+            IsgsDownMarginsDTO margins = new IsgsDownMarginsDTO();
+            List<(string utilId, string utilName)> utils = GetAllThermalIsgsUtils();
+            bool isFirstIter = true;
+            foreach ((string utilId, string utilName) util in utils)
+            {
+                UtilSchData utilMargins = new UtilSchData();
+                for (DateTime currDate = fromDate.Date; currDate <= toDate.Date; currDate = currDate.AddDays(1))
+                {
+                    UtilSchData dateMargins = await GetDownMarginsForDate(util.utilId, currDate);
+                    utilMargins.SchVals.AddRange(dateMargins.SchVals);
+                }
+                margins.DownMargins.Add(util.utilName, utilMargins.SchVals.Select(v => v.Val).ToList());
+                margins.GenNames.Add(util.utilName);
+                if (isFirstIter)
+                {
+                    margins.Timestamps = utilMargins.SchVals.Select(v => v.Timestamp).ToList();
+                    isFirstIter = false;
+                }
+            }
+            return margins;
         }
     }
 }

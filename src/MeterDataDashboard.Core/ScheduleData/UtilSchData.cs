@@ -4,6 +4,6 @@ namespace MeterDataDashboard.Core.ScheduleData
 {
     public class UtilSchData
     {
-        public List<ScheduleValue> SchVals { get; set; }
+        public List<ScheduleValue> SchVals { get; set; } = new List<ScheduleValue>();
     }
 }

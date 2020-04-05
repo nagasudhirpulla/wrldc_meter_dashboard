@@ -24,6 +24,7 @@
   <ItemGroup>
     <ProjectReference Include="..\MeterDataDashboard.Application\MeterDataDashboard.Application.csproj" />
     <ProjectReference Include="..\MeterDataDashboard.Core\MeterDataDashboard.Core.csproj" />
+    <ProjectReference Include="..\PmuDataAdapter\PmuDataAdapter.csproj" />
   </ItemGroup>
 
 </Project>

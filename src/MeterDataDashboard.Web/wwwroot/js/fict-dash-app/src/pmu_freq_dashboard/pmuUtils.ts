@@ -1,4 +1,4 @@
-﻿export const getPmuMeasData = async (measId: number, startDate: string, endDate: string) => {
+﻿export const getPmuMeasData = async (measId: string, startDate: string, endDate: string) => {
     try {
         const resp = await fetch(`../api/pmudata/getdata/${measId}/${startDate}/${endDate}`, {
             method: 'get'

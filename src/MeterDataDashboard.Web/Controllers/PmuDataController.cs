@@ -21,11 +21,12 @@ namespace MeterDataDashboard.Web.Controllers
         }
 
         [HttpGet("GetData/{measId}/{start_date}/{end_date}")]
-        public async Task<List<double>> GetData(int measId, string start_date, string end_date)
+        public string GetData(string measId, string start_date, string end_date)
         {
+            // wrldc.phasor.wrdc0783
             DateTime startDate = DateTime.ParseExact(start_date, "yyyy-MM-dd-HH-mm-ss", CultureInfo.InvariantCulture);
             DateTime endDate = DateTime.ParseExact(end_date, "yyyy-MM-dd-HH-mm-ss", CultureInfo.InvariantCulture);
-            List<double> res = await _pmuDataService.FetchData(measId, startDate, endDate);
+            string res = _pmuDataService.FetchData(measId, startDate, endDate);
             return res;
         }
     }

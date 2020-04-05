@@ -3,7 +3,7 @@ import { convertDateTimeToPmuUrlDate } from "../timeUtils"
 import { getPmuMeasData } from "./pmuUtils"
 declare const Plotly: any
 let intervalID = null
-const FreqPnt = { id: 13206, name: 'Frequency' }
+const FreqPnt = { id: "WRLDC.PHASOR.WRDC0783", name: 'Frequency' }
 
 window.onload = async () => {
     intervalID = setInterval(refreshData, 1000 * 10);

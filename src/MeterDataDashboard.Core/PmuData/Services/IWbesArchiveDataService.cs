@@ -7,6 +7,6 @@ namespace MeterDataDashboard.Core.PmuData.Services
 {
     public interface IPMUHistDataService
     {
-        Task<List<double>> FetchData(int measId, DateTime startTime, DateTime endTime);
+        string FetchData(string measId, DateTime startTime, DateTime endTime);
     }
 }

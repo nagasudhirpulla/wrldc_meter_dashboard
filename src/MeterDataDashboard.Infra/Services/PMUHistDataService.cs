@@ -4,22 +4,33 @@ using System;
 using System.Collections.Generic;
 using MeterDataDashboard.Core.PmuData;
 using System.Threading.Tasks;
+using MeterDataDashboard.Application;
 using PMUDataAdapter;
+using System.Linq;
 
 namespace MeterDataDashboard.Infra.Services
 {
     public class PMUHistDataService : IPMUHistDataService
     {
-        private PmuAdapter PmuAdapter_ { get; set; }
-
-        public PMUHistDataService(PmuConfig pmuConfig)
+        private readonly IConfiguration _configuration;
+        public PMUHistDataService(IConfiguration configuration)
         {
-            PmuAdapter_ = new PmuAdapter();
+            _configuration = configuration;
         }
 
-        public async Task<List<double>> FetchData(int measId, DateTime startTime, DateTime endTime)
+        public string FetchData(string measId, DateTime startTime, DateTime endTime)
         {
-            List<double> res = await PmuAdapter_.FetchData(measId, startTime, endTime);
+            string res;
+            PmuAdapter adapter = new PmuAdapter();
+            try
+            {
+                res = $"[{adapter.FetchData(measId, startTime, endTime, _configuration["pmuAdapterPath"])}]";
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error while fetching history results " + ex.Message);
+                res = "[]";
+            }
             return res;
         }
     }

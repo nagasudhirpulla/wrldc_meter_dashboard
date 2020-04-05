@@ -7,7 +7,7 @@ const WrDemPnt = { id: 'WRLDCMP.SCADA1.A0047000', name: 'WR Demand' }
 const FreqPnt = { id: 'WRLDCMP.SCADA1.A0036324', name: 'Freq' }
 
 window.onload = async () => {
-    intervalID = setInterval(refreshData, 1000 * 60 * 10);
+    intervalID = setInterval(refreshData, 1000 * 60 * 1);
     refreshData()
 }
 

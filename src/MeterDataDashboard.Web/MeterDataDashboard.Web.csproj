@@ -25,6 +25,8 @@
     <Content Remove="wwwroot\js\fict-dash-app\src\isgs_down_margins\plotStuff.ts" />
     <Content Remove="wwwroot\js\fict-dash-app\src\isgs_down_margins\tableExportUtils.ts" />
     <Content Remove="wwwroot\js\fict-dash-app\src\isgs_down_margins\timerStuff.ts" />
+    <Content Remove="wwwroot\js\fict-dash-app\src\pmu_freq_dashboard\index.ts" />
+    <Content Remove="wwwroot\js\fict-dash-app\src\pmu_freq_dashboard\pmuUtils.ts" />
     <Content Remove="wwwroot\js\fict-dash-app\src\timeUtils.ts" />
   </ItemGroup>
 
@@ -99,6 +101,10 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="wwwroot\js\fict-dash-app\src\isgs_down_margins\index.ts" />
+    <TypeScriptCompile Include="wwwroot\js\fict-dash-app\src\pmu_freq_dashboard\pmuUtils.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="wwwroot\js\fict-dash-app\src\pmu_freq_dashboard\index.ts" />
     <TypeScriptCompile Include="wwwroot\js\fict-dash-app\src\timeUtils.ts" />
   </ItemGroup>
 

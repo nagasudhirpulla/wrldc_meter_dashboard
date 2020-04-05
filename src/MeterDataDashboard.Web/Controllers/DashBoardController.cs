@@ -42,5 +42,10 @@ namespace MeterDataDashboard.Web.Controllers
         {
             return View();
         }
+
+        public IActionResult PmuFrequency()
+        {
+            return View();
+        }
     }
 }

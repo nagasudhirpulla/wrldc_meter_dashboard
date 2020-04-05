@@ -8,7 +8,8 @@ module.exports = {
         wbes_archive: ['babel-polyfill', path.resolve(__dirname, 'src/wbes_arch_dashboard/wbes_arch.ts')],
         state_demands: ['babel-polyfill', path.resolve(__dirname, 'src/state_demands_dashboard/state_demands.ts')],
         dem_freq: ['babel-polyfill', path.resolve(__dirname, 'src/dem_freq_dashboard/dem_freq.ts')],
-        down_margins: ['babel-polyfill', path.resolve(__dirname, 'src/isgs_down_margins/index.ts')]
+        down_margins: ['babel-polyfill', path.resolve(__dirname, 'src/isgs_down_margins/index.ts')],
+        pmu_freq: ['babel-polyfill', path.resolve(__dirname, 'src/pmu_freq_dashboard/index.ts')]
     },
 
     output: {

@@ -15,7 +15,8 @@ using IdentityServer4;
 using System;
 using System.Collections.Generic;
 using System.Text;
-
+using MeterDataDashboard.Core.PmuData;
+using MeterDataDashboard.Core.PmuData.Services;
 
 namespace MeterDataDashboard.Infra
 {
@@ -71,6 +72,15 @@ namespace MeterDataDashboard.Infra
             services.AddSingleton<IWbesArchiveDataService, WbesArchiveDataService>();
             services.AddSingleton<IAgcFileUtilsService, AgcFileUtilsService>();
             services.AddSingleton<IWbesLiveDataService, WbesLiveDataService>();
+
+            // add pmu config
+            PmuConfig pmuConfig = new PmuConfig();
+            configuration.Bind("PmuConfig", pmuConfig);
+            services.AddSingleton(pmuConfig);
+
+            // add pmu data service
+            services.AddSingleton<IPMUHistDataService, PMUHistDataService>();
+
             // Add Infra services
             services.AddTransient<IEmailSender, EmailSender>();
 

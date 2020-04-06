@@ -5,8 +5,8 @@ using System.Collections.Generic;
 using MeterDataDashboard.Core.PmuData;
 using System.Threading.Tasks;
 using MeterDataDashboard.Application;
-using PMUDataAdapter;
 using System.Linq;
+using System.Diagnostics;
 
 namespace MeterDataDashboard.Infra.Services
 {
@@ -21,17 +21,29 @@ namespace MeterDataDashboard.Infra.Services
         public string FetchData(string measId, DateTime startTime, DateTime endTime)
         {
             string res;
-            PmuAdapter adapter = new PmuAdapter();
             try
             {
-                res = $"[{adapter.FetchData(measId, startTime, endTime, _configuration["pmuAdapterPath"])}]";
+                // spawn process to get PMU data
+                var process = new Process()
+                {
+                    StartInfo = new ProcessStartInfo
+                    {
+                        FileName = _configuration["pmuAdapterPath"],
+                        RedirectStandardOutput = true,
+                        UseShellExecute = false,
+                        CreateNoWindow = true,
+                    }
+                };
+                process.Start();
+                res = process.StandardOutput.ReadToEnd();
+                process.WaitForExit();
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error while fetching history results " + ex.Message);
-                res = "[]";
+                Console.WriteLine(ex.Message);
+                res = "";
             }
-            return res;
+            return $"[{res}]";
         }
     }
 }

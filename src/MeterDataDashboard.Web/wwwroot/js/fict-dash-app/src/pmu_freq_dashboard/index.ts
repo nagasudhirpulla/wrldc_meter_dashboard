@@ -3,10 +3,10 @@ import { convertDateTimeToPmuUrlDate } from "../timeUtils"
 import { getPmuMeasData } from "./pmuUtils"
 declare const Plotly: any
 let intervalID = null
-const FreqPnt = { id: "WRLDC.PHASOR.WRDC0783", name: 'Frequency' }
+const FreqPnt = { id: "13206", name: 'Frequency' }
 
 window.onload = async () => {
-    intervalID = setInterval(refreshData, 1000 * 10);
+    intervalID = setInterval(refreshData, 1000 * 30);
     refreshData()
 }
 
@@ -26,7 +26,7 @@ const refreshData = async () => {
         let fetchedMeasData = await getPmuMeasData(tracePnt.id, startDate, endDate);
         let traceData = getPlotXYArrays(fetchedMeasData);
         let traceObj: PlotTrace = {
-            timestamps: traceData.timestamps.map(t => { t.setDate(t.getDate() + 1); return t; }), vals: traceData.vals, title: `${tracePnt.name}`, xaxis: `x${traceSuffix}`, yaxis: `y${traceSuffix}`, line: { color: 'magenta' }
+            timestamps: traceData.timestamps, vals: traceData.vals, title: `${tracePnt.name}`, xaxis: `x${traceSuffix}`, yaxis: `y${traceSuffix}`, line: { color: '#7B68EE' }
         }
         traces.push(traceObj)
         axTitles.push({

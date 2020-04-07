@@ -7,6 +7,7 @@ const FreqPnt = { id: "13206", name: 'Frequency' }
 
 window.onload = async () => {
     intervalID = setInterval(refreshData, 1000 * 30);
+    (document.getElementById('refreshBtn') as HTMLButtonElement).click = refreshData;
     refreshData()
 }
 

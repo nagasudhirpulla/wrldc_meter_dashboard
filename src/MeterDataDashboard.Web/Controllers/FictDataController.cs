@@ -31,6 +31,15 @@ namespace MeterDataDashboard.Web.Controllers
             _meterDataService = meterDataService;
         }
 
+        [HttpGet("GetMeasurementsTable")]
+        public async Task<IEnumerable<IEnumerable<string>>> GetMeasurementsTable()
+        {
+            // https://localhost:44390/api/fictdata/GetMeasurementsTable
+            List<List<string>> measTable = await _meterDbContext.FictMeasurements.Select(fm => new List<string> { fm.LocationTag, fm.Description }).ToListAsync();
+            measTable.Insert(0, new List<string>() { "id", "Description" });
+            return measTable;
+        }
+
         [HttpGet("GetMeasurements")]
         public async Task<IEnumerable<FictMeasurement>> GetMeasurements()
         {

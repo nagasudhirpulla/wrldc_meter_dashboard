@@ -49,6 +49,16 @@ namespace MeterDataDashboard.Web.Controllers
             return scadaMeasurements;
         }
 
+        [HttpGet("GetMeasurementsTable")]
+        public async Task<IEnumerable<IEnumerable<string>>> GetMeasurementsTable(string measType)
+        {
+            // https://localhost:44390/api/scadadata/GetMeasurementsTable
+            bool isGetAll = string.IsNullOrWhiteSpace(measType) || (measType.ToLower() == "all");
+            List<List<string>> scadaMeasurementsTable = await _appDbContext.ScadaArchiveMeasurements.Select(sm => new List<string>() { sm.MeasTag, sm.Description, sm.MeasType }).ToListAsync();
+            scadaMeasurementsTable.Insert(0, new List<string>() { "id", "name", "type" });
+            return scadaMeasurementsTable;
+        }
+
         [HttpGet("{tag}/{start_date}/{end_date}")]
         public IEnumerable<double> Index(string tag, string start_date, string end_date)
         {

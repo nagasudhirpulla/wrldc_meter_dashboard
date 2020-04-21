@@ -18,23 +18,7 @@ namespace MeterDataDashboard.Web.Controllers
     public class WbesArchiveController : ControllerBase
     {
         private readonly IWbesArchiveDataService _wbesArchDataService;
-
-        public WbesArchiveController(IWbesArchiveDataService wbesArchDataService)
-        {
-            _wbesArchDataService = wbesArchDataService;
-        }
-
-        [HttpGet("GetUtilities")]
-        public IEnumerable<string> GetUtilities()
-        {
-            IEnumerable<string> utilNames = _wbesArchDataService.FetchSchUtils();
-            return utilNames;
-        }
-
-        [HttpGet("GetSchTypes")]
-        public IEnumerable<object> GetSchTypes()
-        {
-            List<object> schTypes = new List<object>() {
+        private readonly List<object> _schTypes = new List<object>() {
                 new { t = "Total", v= "Total"},
                 new { t = "ISGS", v= "ISGS"},
                 new { t = "Onbar Installed Capacity", v= "icOnBar"},
@@ -53,7 +37,44 @@ namespace MeterDataDashboard.Web.Controllers
                 new { t = "Ramp Down", v= "rampDn"},
                 new { t = "AGC", v= "AGC"}
             };
-            return schTypes;
+
+        public WbesArchiveController(IWbesArchiveDataService wbesArchDataService)
+        {
+            _wbesArchDataService = wbesArchDataService;
+        }
+
+        [HttpGet("GetMeasurementsTable")]
+        public IEnumerable<IEnumerable<string>> GetMeasurementsTable()
+        {
+            IEnumerable<string> utilNames = _wbesArchDataService.FetchSchUtils();
+            // create a matrix of all possible measurements
+            List<List<string>> measTable = new List<List<string>>();
+            foreach (string util in utilNames)
+            {
+                foreach (var st in _schTypes)
+                {
+                    Type type = st.GetType();
+                    string schTypeText = (string)type.GetProperty("t").GetValue(st, null);
+                    string schTypeValue = (string)type.GetProperty("v").GetValue(st, null);
+                    List<string> measData = new List<string>() { $"{util}/{schTypeValue}", util, schTypeText };
+                    measTable.Add(measData);
+                }
+            }
+            measTable.Insert(0, new List<string>() { "id", "Utility", "Schedule Type" });
+            return measTable;
+        }
+
+        [HttpGet("GetUtilities")]
+        public IEnumerable<string> GetUtilities()
+        {
+            IEnumerable<string> utilNames = _wbesArchDataService.FetchSchUtils();
+            return utilNames;
+        }
+
+        [HttpGet("GetSchTypes")]
+        public IEnumerable<object> GetSchTypes()
+        {
+            return _schTypes;
         }
 
         [HttpGet("{utilName}/{schType}/{start_date}/{end_date}")]

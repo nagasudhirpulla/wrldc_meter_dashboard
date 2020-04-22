@@ -41,6 +41,7 @@
     <None Include="wwwroot\js\all-meas-dash-app\node_modules\plotly.js\dist\plotly.min.js" />
     <None Include="wwwroot\js\all-meas-dash-app\node_modules\react-plotly.js\dist\create-plotly-component.min.js" />
     <None Include="wwwroot\js\fict-dash-app\node_modules\startbootstrap-sb-admin-2\js\sb-admin-2.min.js" />
+    <None Include="wwwroot\js\web-dashboard\images\Sorting icons.psd" />
   </ItemGroup>
 
 

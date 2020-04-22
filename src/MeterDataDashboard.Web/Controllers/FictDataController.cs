@@ -36,7 +36,7 @@ namespace MeterDataDashboard.Web.Controllers
         {
             // https://localhost:44390/api/fictdata/GetMeasurementsTable
             List<List<string>> measTable = await _meterDbContext.FictMeasurements.Select(fm => new List<string> { fm.LocationTag, fm.Description }).ToListAsync();
-            measTable.Insert(0, new List<string>() { "id", "Description" });
+            measTable.Insert(0, new List<string>() { "id", "name" });
             return measTable;
         }
 

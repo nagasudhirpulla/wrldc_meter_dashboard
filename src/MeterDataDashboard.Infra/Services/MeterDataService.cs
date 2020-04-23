@@ -40,7 +40,7 @@ namespace MeterDataDashboard.Infra.Services
                 {
                     DateTime dt = dr.GetDateTime(0);
                     double ts = TimeUtils.ToMillisSinceUnixEpoch(dt);
-                    double val = dr.GetDouble(1);
+                    double val = 4 * dr.GetDouble(1);
                     res.Add(ts);
                     res.Add(val);
                 }

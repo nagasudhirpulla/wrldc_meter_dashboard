@@ -66,6 +66,7 @@ namespace MeterDataDashboard.Web.Controllers
             IEnumerable<double> res = new List<double>();
             DateTime startDate = DateTime.ParseExact(start_date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
             DateTime endDate = DateTime.ParseExact(end_date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            endDate += new TimeSpan(23,59,59);
             try
             {
                 res = _scadaDataService.FetchScadaData(tag, startDate, endDate);

@@ -19,14 +19,15 @@ export const getFictMeasData = async (locationTag: string, startDate: string, en
         const resp = await fetch(`../api/fictdata/${locationTag}/${startDate}/${endDate}`, {
             method: 'get'
         });
-        const respJSON = (await resp.json() as number[]).map((val, ind) => {
+        const respJSON = (await resp.json() as number[])
+        //console.log(respJSON);
+        /*const respJSON = (await resp.json() as number[]).map((val, ind) => {
             // multiplying values by 4 for fict measurements
             if (ind % 2 != 0) {
                 return val * 4
             }
             return val
-        })
-        //console.log(respJSON);
+        })*/
         return respJSON;
     } catch (e) {
         console.error(e);

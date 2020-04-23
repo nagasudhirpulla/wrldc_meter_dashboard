@@ -7,5 +7,6 @@ namespace MeterDataDashboard.Core.MeterData.Services
     public interface IMeterDataService
     {
         IEnumerable<double> FetchFictData(string tag, DateTime startDate, DateTime endDate);
+        IEnumerable<double> FetchLocationData(string tag, DateTime startDate, DateTime endDate, bool isFreqFetch);
     }
 }

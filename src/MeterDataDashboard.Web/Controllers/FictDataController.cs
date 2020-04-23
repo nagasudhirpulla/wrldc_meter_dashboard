@@ -35,7 +35,7 @@ namespace MeterDataDashboard.Web.Controllers
         public async Task<IEnumerable<IEnumerable<string>>> GetMeasurementsTable()
         {
             // https://localhost:44390/api/fictdata/GetMeasurementsTable
-            List<List<string>> measTable = await _meterDbContext.FictMeasurements.Select(fm => new List<string> { fm.LocationTag, fm.Description }).ToListAsync();
+            List<List<string>> measTable = await _meterDbContext.FictMeasurements.Select(fm => new List<string> { $"{fm.LocationTag}{(fm.MeasType == FictMeasType.Real ? "/real" : "")}", fm.Description }).ToListAsync();
             measTable.Insert(0, new List<string>() { "id", "name" });
             return measTable;
         }
@@ -44,7 +44,7 @@ namespace MeterDataDashboard.Web.Controllers
         public async Task<IEnumerable<FictMeasurement>> GetMeasurements()
         {
             // https://localhost:44390/api/fictdata/getmeasurements
-            List<FictMeasurement> fictMeasurements = await _meterDbContext.FictMeasurements.ToListAsync();
+            List<FictMeasurement> fictMeasurements = await _meterDbContext.FictMeasurements.Where(fm => fm.MeasType == FictMeasType.Fict).ToListAsync();
             return fictMeasurements;
         }
 
@@ -59,6 +59,30 @@ namespace MeterDataDashboard.Web.Controllers
             try
             {
                 res = _meterDataService.FetchFictData(tag, startDate, endDate);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            return res;
+        }
+
+        [HttpGet("{tag}/{type}/{start_date}/{end_date}")]
+        public IEnumerable<double> RealData(string tag, string type, string start_date, string end_date)
+        {
+            // https://localhost:44390/api/fictdata/LO-91/real/2018-05-01/2018-05-10
+            bool isRealFetch = true;
+            if (type.ToLower() == "freq")
+            {
+                isRealFetch = false;
+            }
+            IEnumerable<double> res = new List<double>();
+            DateTime startDate = DateTime.ParseExact(start_date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            DateTime endDate = DateTime.ParseExact(end_date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            endDate += new TimeSpan(23, 59, 59);
+            try
+            {
+                res = _meterDataService.FetchLocationData(tag, startDate, endDate, !isRealFetch);
             }
             catch (Exception ex)
             {

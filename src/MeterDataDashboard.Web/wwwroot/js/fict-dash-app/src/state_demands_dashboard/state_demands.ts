@@ -41,13 +41,13 @@ const refreshData = async () => {
         const traceSuffix = (traceInd + 1) + ""
         //const traceSuffix = traceInd
         const tracePnt = tracePnts[traceInd]
-        let fetchedMeasData = await getScadaMeasData(tracePnt.id, yestDate, startDate);
+        let fetchedMeasData = await getScadaMeasData(tracePnt.id, yestDate, yestDate);
         let traceData = getPlotXYArrays(fetchedMeasData);
         let traceObj: PlotTrace = {
             timestamps: traceData.timestamps.map(t => { t.setDate(t.getDate() + 1); return t; }), vals: traceData.vals, title: `${tracePnt.name} Yest`, xaxis: `x${traceSuffix}`, yaxis: `y${traceSuffix}`, line: { color: 'magenta' }
         }
         traces.push(traceObj)
-        fetchedMeasData = await getScadaMeasData(tracePnt.id, startDate, endDate);
+        fetchedMeasData = await getScadaMeasData(tracePnt.id, startDate, startDate);
         traceData = getPlotXYArrays(fetchedMeasData);
         traceObj = { timestamps: traceData.timestamps, vals: traceData.vals, title: tracePnt.name, xaxis: `x${traceSuffix}`, yaxis: `y${traceSuffix}`, line: { color: '#7B68EE' } }
         traces.push(traceObj)

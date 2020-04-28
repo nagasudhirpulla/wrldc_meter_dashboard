@@ -17,6 +17,8 @@ using System.Collections.Generic;
 using System.Text;
 using MeterDataDashboard.Core.PmuData;
 using MeterDataDashboard.Core.PmuData.Services;
+using MeterDataDashboard.Core.ReportsData;
+using MeterDataDashboard.Core.ReportsData.Services;
 
 namespace MeterDataDashboard.Infra
 {
@@ -78,8 +80,16 @@ namespace MeterDataDashboard.Infra
             configuration.Bind("PmuConfig", pmuConfig);
             services.AddSingleton(pmuConfig);
 
+            // add reports data config
+            ReportsConfig reportsConfig = new ReportsConfig();
+            configuration.Bind("ReportsData", reportsConfig);
+            services.AddSingleton(reportsConfig);
+
             // add pmu data service
             services.AddSingleton<IPMUHistDataService, PMUHistDataService>();
+
+            // add reports data service
+            services.AddSingleton<IReportsDataService, ReportsDataService>();
 
             // Add Infra services
             services.AddTransient<IEmailSender, EmailSender>();

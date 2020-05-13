@@ -34,6 +34,7 @@
     <Content Include="wwwroot\js\all-meas-dash-app\node_modules\react-datetime\css\react-datetime.css" />
     <Content Include="wwwroot\js\fict-dash-app\node_modules\%40fortawesome\fontawesome-free\css\all.min.css" />
     <Content Include="wwwroot\js\fict-dash-app\node_modules\startbootstrap-sb-admin-2\css\sb-admin-2.min.css" />
+    <Content Include="wwwroot\lib\node_modules\datatables\media\css\jquery.dataTables.min.css" />
   </ItemGroup>
 
   <ItemGroup>
@@ -42,6 +43,10 @@
     <None Include="wwwroot\js\all-meas-dash-app\node_modules\react-plotly.js\dist\create-plotly-component.min.js" />
     <None Include="wwwroot\js\fict-dash-app\node_modules\startbootstrap-sb-admin-2\js\sb-admin-2.min.js" />
     <None Include="wwwroot\js\web-dashboard\images\Sorting icons.psd" />
+    <None Include="wwwroot\lib\node_modules\datatables.net-buttons\js\buttons.html5.min.js" />
+    <None Include="wwwroot\lib\node_modules\datatables.net-buttons\js\buttons.print.min.js" />
+    <None Include="wwwroot\lib\node_modules\datatables.net-buttons\js\dataTables.buttons.min.js" />
+    <None Include="wwwroot\lib\node_modules\datatables\media\js\jquery.dataTables.min.js" />
   </ItemGroup>
 
 

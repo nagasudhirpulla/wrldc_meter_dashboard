@@ -20,5 +20,11 @@ namespace MeterDataDashboard.Web.Models.UserMgmt
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        [Required]
+        public bool IsTwoFactorEnabled { get; set; }
+
+        [Phone]
+        public string PhoneNumber { get; set; }
     }
 }

@@ -148,7 +148,9 @@ namespace MeterDataDashboard.Web.Controllers
             {
                 Email = user.Email,
                 Username = user.UserName,
-                UserRole = userRole
+                UserRole = userRole,
+                IsTwoFactorEnabled = user.TwoFactorEnabled,
+                PhoneNumber = user.PhoneNumber
             };
             ViewData["UserRole"] = new SelectList(SecurityConstants.GetRoles());
             return View(vm);
@@ -229,6 +231,35 @@ namespace MeterDataDashboard.Web.Controllers
                         await _userManager.RemoveFromRolesAsync(user, existingUserRoles);
                         // add new Role to user from VM
                         await _userManager.AddToRoleAsync(user, vm.UserRole);
+                    }
+                }
+
+                // check if two factor authentication to be changed
+                if (user.TwoFactorEnabled != vm.IsTwoFactorEnabled)
+                {
+                    IdentityResult twoFactorChangeResult = await _userManager.SetTwoFactorEnabledAsync(user, vm.IsTwoFactorEnabled);
+                    if (twoFactorChangeResult.Succeeded)
+                    {
+                        _logger.LogInformation($"two factor enabled = {vm.IsTwoFactorEnabled}");
+                    }
+                    else
+                    {
+                        identityErrors.AddRange(twoFactorChangeResult.Errors);
+                    }
+                }
+
+                // check if phone number to be changed
+                if (user.PhoneNumber != vm.PhoneNumber)
+                {
+                    string phoneChangeToken = await _userManager.GenerateChangePhoneNumberTokenAsync(user, vm.PhoneNumber);
+                    IdentityResult phoneChangeResult = await _userManager.ChangePhoneNumberAsync(user, vm.PhoneNumber, phoneChangeToken);
+                    if (phoneChangeResult.Succeeded)
+                    {
+                        _logger.LogInformation($"phone number of user {user.UserName} with id {user.Id} changed to {vm.PhoneNumber}");
+                    }
+                    else
+                    {
+                        identityErrors.AddRange(phoneChangeResult.Errors);
                     }
                 }
 

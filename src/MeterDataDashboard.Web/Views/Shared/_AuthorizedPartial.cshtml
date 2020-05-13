@@ -9,6 +9,12 @@
     @if (User.IsInRole(SecurityConstants.AdminRoleString))
     {
         <li class="nav-item">
+            <a class="nav-link" asp-controller="Users" asp-action="Index">
+                <i class="fas fa-users"></i>
+                <span>Users</span>
+            </a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link" asp-controller="AgcUpload" asp-action="Index">
                 <i class="fas fa-fw fa-file-upload"></i>
                 <span>Upload AGC Files</span>

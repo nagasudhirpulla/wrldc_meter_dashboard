@@ -21,7 +21,7 @@ namespace MeterDataDashboard.Web.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger _logger;
         private readonly UserInitVariables _identityInit;
-        
+
         public UsersController(UserManager<ApplicationUser> userManager, ILogger<UsersController> logger, IConfiguration configuration)
         {
             // acquire user manager via dependency injection
@@ -58,7 +58,9 @@ namespace MeterDataDashboard.Web.Controllers
                         UserId = user.Id,
                         Username = user.UserName,
                         Email = user.Email,
-                        UserRole = userRole
+                        UserRole = userRole,
+                        Phone = user.PhoneNumber,
+                        TwoFactorEnabled = user.TwoFactorEnabled
                     });
                 }
 
@@ -79,7 +81,7 @@ namespace MeterDataDashboard.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                ApplicationUser user = new ApplicationUser { UserName = vm.Username, Email = vm.Email };
+                ApplicationUser user = new ApplicationUser { UserName = vm.Username, Email = vm.Email, TwoFactorEnabled = vm.IsTwoFactorEnabled };
                 IdentityResult result = await _userManager.CreateAsync(user, vm.Password);
                 if (result.Succeeded)
                 {
@@ -102,6 +104,14 @@ namespace MeterDataDashboard.Web.Controllers
                     else
                     {
                         _logger.LogInformation($"Email verify failed for {user.UserName} with id {user.Id} and email {vm.Email} due to errors {emaiVerifiedResult.Errors}");
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(vm.PhoneNumber))
+                    {
+                        // verify phone number
+                        string phoneVerifyToken = await _userManager.GenerateChangePhoneNumberTokenAsync(user, vm.PhoneNumber);
+                        IdentityResult phoneVeifyResult = await _userManager.ChangePhoneNumberAsync(user, vm.PhoneNumber, phoneVerifyToken);
+                        _logger.LogInformation($"Phone verified new user {user.UserName} with id {user.Id} and phone {vm.PhoneNumber} = {phoneVeifyResult.Succeeded}");
                     }
 
                     return RedirectToAction(nameof(Index)).WithSuccess($"Created new user {user.UserName} {(isValidRole ? $"with role {vm.UserRole}" : "")}");

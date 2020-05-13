@@ -10,5 +10,7 @@ namespace MeterDataDashboard.Web.Models.UserMgmt
         public string Username { get; set; }
         public string Email { get; set; }
         public string UserRole { get; set; }
+        public bool TwoFactorEnabled { get; set; }
+        public string Phone { get; set; }
     }
 }

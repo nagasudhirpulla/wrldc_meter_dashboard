@@ -19,6 +19,7 @@ using MeterDataDashboard.Core.PmuData;
 using MeterDataDashboard.Core.PmuData.Services;
 using MeterDataDashboard.Core.ReportsData;
 using MeterDataDashboard.Core.ReportsData.Services;
+using MeterDataDashboard.Infra.Services.Email;
 
 namespace MeterDataDashboard.Infra
 {
@@ -90,6 +91,11 @@ namespace MeterDataDashboard.Infra
 
             // add reports data service
             services.AddSingleton<IReportsDataService, ReportsDataService>();
+
+            // add email settings from app config
+            EmailConfiguration emailConfig = new EmailConfiguration();
+            configuration.Bind("EmailSettings", emailConfig);
+            services.AddSingleton(emailConfig);
 
             // Add Infra services
             services.AddTransient<IEmailSender, EmailSender>();

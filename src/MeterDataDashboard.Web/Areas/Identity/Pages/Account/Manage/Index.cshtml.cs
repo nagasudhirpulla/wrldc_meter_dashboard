@@ -80,7 +80,9 @@ namespace MeterDataDashboard.Web.Areas.Identity.Pages.Account.Manage
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
             if (Input.PhoneNumber != phoneNumber)
             {
-                var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
+                // verify phone here itself
+                string phoneChangeToken = await _userManager.GenerateChangePhoneNumberTokenAsync(user, Input.PhoneNumber);
+                IdentityResult setPhoneResult = await _userManager.ChangePhoneNumberAsync(user, Input.PhoneNumber, phoneChangeToken);
                 if (!setPhoneResult.Succeeded)
                 {
                     var userId = await _userManager.GetUserIdAsync(user);

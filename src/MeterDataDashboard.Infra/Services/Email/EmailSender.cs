@@ -11,10 +11,10 @@ namespace MeterDataDashboard.Infra.Services.Email
 {
     public class EmailSender : IEmailSender
     {
-        EmailConfiguration EmailConfig { get; }
+        private readonly EmailConfiguration _emailConfig;
         public EmailSender(EmailConfiguration emailConfig)
         {
-            EmailConfig = emailConfig;
+            _emailConfig = emailConfig;
         }
         public async Task SendEmailAsync(string emailAddresses, string subject, string htmlMessage)
         {
@@ -22,7 +22,7 @@ namespace MeterDataDashboard.Infra.Services.Email
 
             MailMessage message = new MailMessage
             {
-                From = new MailAddress(EmailConfig.MailAddress),
+                From = new MailAddress(_emailConfig.MailAddress),
                 Subject = subject,
                 IsBodyHtml = true,
                 Body = htmlMessage
@@ -34,18 +34,18 @@ namespace MeterDataDashboard.Infra.Services.Email
             }
 
             // since we are not getting entries in sent mail, we will add mail manually
-            if (!emailAddresses.Split(";").ToList().Any(em => em == EmailConfig.MailAddress))
+            if (!emailAddresses.Split(";").ToList().Any(em => em == _emailConfig.MailAddress))
             {
                 // add sender mail if not present in to addresses
-                message.To.Add(EmailConfig.MailAddress);
+                message.To.Add(_emailConfig.MailAddress);
             }
 
             using (var smtpClient = new SmtpClient())
             {
-                smtpClient.Host = EmailConfig.HostName;
+                smtpClient.Host = _emailConfig.HostName;
                 smtpClient.Port = 587;
                 smtpClient.UseDefaultCredentials = false;
-                smtpClient.Credentials = new NetworkCredential(EmailConfig.Username, EmailConfig.Password, EmailConfig.Domain);
+                smtpClient.Credentials = new NetworkCredential(_emailConfig.Username, _emailConfig.Password, _emailConfig.Domain);
                 smtpClient.Timeout = (60 * 5 * 1000);
                 await smtpClient.SendMailAsync(message);
             }

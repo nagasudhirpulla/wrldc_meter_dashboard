@@ -20,6 +20,8 @@ using MeterDataDashboard.Core.PmuData.Services;
 using MeterDataDashboard.Core.ReportsData;
 using MeterDataDashboard.Core.ReportsData.Services;
 using MeterDataDashboard.Infra.Services.Email;
+using MeterDataDashboard.Infra.Services.Sms;
+using MeterDataDashboard.Core.Sms;
 
 namespace MeterDataDashboard.Infra
 {
@@ -97,8 +99,14 @@ namespace MeterDataDashboard.Infra
             configuration.Bind("EmailSettings", emailConfig);
             services.AddSingleton(emailConfig);
 
+            // add sms settings from app config
+            SmsConfiguration smsConfig = new SmsConfiguration();
+            configuration.Bind("SmsSettings", smsConfig);
+            services.AddSingleton(smsConfig);
+
             // Add Infra services
             services.AddTransient<IEmailSender, EmailSender>();
+            services.AddTransient<ISmsSender, SmsSender>();
 
             return services;
         }

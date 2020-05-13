@@ -44,7 +44,7 @@ namespace MeterDataDashboard.Web.Controllers
                 // get user is of admin role
                 //bool isSuperAdmin = (await _userManager.GetRolesAsync(user)).Any(r => r == SecurityConstants.AdminRoleString);
                 bool isSuperAdmin = (user.UserName == _identityInit.AdminUserName);
-                if (!isSuperAdmin)
+                if (true)
                 {
                     // add user to vm only if not admin
                     string userRole = "";

@@ -12,8 +12,9 @@
                 <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
             </div>
             <form class="user" id="account" method="post">
+                <div asp-validation-summary="All" class="text-danger"></div>
                 <div class="form-group">
-                    <input class="form-control form-control-user" asp-for="Input.Username" placeholder="Enter Username...">
+                    <input class="form-control form-control-user" asp-for="Input.Username" placeholder="Enter Email or Username...">
                     <span asp-validation-for="Input.Username" class="text-danger"></span>
                 </div>
                 <div class="form-group">

@@ -92,6 +92,18 @@ namespace MeterDataDashboard.Web.Controllers
                         _logger.LogInformation($"{vm.UserRole} role assigned to new user {user.UserName} with id {user.Id}");
                     }
 
+                    // verify user email
+                    string emailToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    IdentityResult emaiVerifiedResult = await _userManager.ConfirmEmailAsync(user, emailToken);
+                    if (emaiVerifiedResult.Succeeded)
+                    {
+                        _logger.LogInformation($"Email verified for new user {user.UserName} with id {user.Id} and email {vm.Email}");
+                    }
+                    else
+                    {
+                        _logger.LogInformation($"Email verify failed for {user.UserName} with id {user.Id} and email {vm.Email} due to errors {emaiVerifiedResult.Errors}");
+                    }
+
                     return RedirectToAction(nameof(Index)).WithSuccess($"Created new user {user.UserName} {(isValidRole ? $"with role {vm.UserRole}" : "")}");
                 }
                 AddErrors(result);

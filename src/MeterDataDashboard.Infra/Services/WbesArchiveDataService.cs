@@ -77,7 +77,34 @@ namespace MeterDataDashboard.Infra.Services
             dr.Dispose();
 
             conn.Close();
+
+            // schtype is agc, then fill the voids for each 15 mins
+            if (schType.ToLower() == "agc")
+            {
+                // create a timestamp dictionary of data with zeros
+                Dictionary<double, double> timeDict = new Dictionary<double, double>();
+                DateTime dictStartTime = startDate.Date + new TimeSpan(startDate.Hour, startDate.Minute, 0);
+                for (DateTime currTime = dictStartTime; currTime <= endDate; currTime += new TimeSpan(0, 15, 0))
+                {
+                    timeDict.Add(TimeUtils.ToMillisSinceUnixEpoch(currTime), 0);
+                }
+                // override zeros with fetched values
+                for (int resIter = 0; resIter < res.Count - 1; resIter += 2)
+                {
+                    timeDict[res[resIter]] = res[resIter + 1];
+                }
+
+                // create a new res object with the new results
+                res = new List<double>();
+                foreach (KeyValuePair<double, double> entry in timeDict)
+                {
+                    // do something with entry.Value or entry.Key
+                    res.Add(entry.Key);
+                    res.Add(entry.Value);
+                }
+            }
             return res;
+
         }
 
         public void PushSchRowsToArchive(List<UtilSchRow> rows)

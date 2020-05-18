@@ -55,13 +55,15 @@ export const getMargins = async (): Promise<void> => {
         isCheckBoxesListCreated = true;
     }
 
-    global_g['plot_title'] = `${margin_type == 'up' ? 'Up' : 'Down'} Reserves for ${start_date_str} ${start_date_str != end_date_str ? `to ${end_date_str}` : ""}`;
+    var marginTitleDict = { 'up': 'Up Reserves', 'down': 'Down Reserves', 'rras': 'RRAS', 'sced': 'SCED' }
+
+    global_g['plot_title'] = `${marginTitleDict[margin_type]} for ${start_date_str} ${start_date_str != end_date_str ? `to ${end_date_str}` : ""}`;
 
     updatePlot();
 
     createTable(dcSchObj, document.getElementById('dcTable') as HTMLTableElement);
 
-    document.getElementById('fetchStatusLabel').innerHTML = (new Date()).toLocaleString() + ': fetching margins done!';
+    document.getElementById('fetchStatusLabel').innerHTML = (new Date()).toLocaleString() + ': fetching data done!';
 }
 
 export const updateDateString = (): void => {
@@ -147,7 +149,7 @@ function updatePlot() {
             title: 'Time'
         },
         yaxis: {
-            title: 'Down Reserve'
+            title: 'MW'
         },
         legend: {
             font: {

@@ -20,11 +20,11 @@
     <Content Remove="wwwroot\js\all-meas-dash-app\src\server_mediators\schArchData.tsx" />
     <Content Remove="wwwroot\js\all-meas-dash-app\src\type_defs\IMeterMeas.tsx" />
     <Content Remove="wwwroot\js\fict-dash-app\src\dem_freq_dashboard\dem_freq.ts" />
-    <Content Remove="wwwroot\js\fict-dash-app\src\isgs_down_margins\fetchUtils.ts" />
-    <Content Remove="wwwroot\js\fict-dash-app\src\isgs_down_margins\index.ts" />
-    <Content Remove="wwwroot\js\fict-dash-app\src\isgs_down_margins\plotStuff.ts" />
-    <Content Remove="wwwroot\js\fict-dash-app\src\isgs_down_margins\tableExportUtils.ts" />
-    <Content Remove="wwwroot\js\fict-dash-app\src\isgs_down_margins\timerStuff.ts" />
+    <Content Remove="wwwroot\js\fict-dash-app\src\isgs_stats\fetchUtils.ts" />
+    <Content Remove="wwwroot\js\fict-dash-app\src\isgs_stats\index.ts" />
+    <Content Remove="wwwroot\js\fict-dash-app\src\isgs_stats\plotStuff.ts" />
+    <Content Remove="wwwroot\js\fict-dash-app\src\isgs_stats\tableExportUtils.ts" />
+    <Content Remove="wwwroot\js\fict-dash-app\src\isgs_stats\timerStuff.ts" />
     <Content Remove="wwwroot\js\fict-dash-app\src\pmu_freq_dashboard\index.ts" />
     <Content Remove="wwwroot\js\fict-dash-app\src\pmu_freq_dashboard\pmuUtils.ts" />
     <Content Remove="wwwroot\js\fict-dash-app\src\timeUtils.ts" />
@@ -96,17 +96,17 @@
     <TypeScriptCompile Include="wwwroot\js\all-meas-dash-app\src\type_defs\IMeterMeas.tsx" />
     <TypeScriptCompile Include="wwwroot\js\all-meas-dash-app\src\uitls\toastUtils.tsx" />
     <TypeScriptCompile Include="wwwroot\js\fict-dash-app\src\dem_freq_dashboard\dem_freq.ts" />
-    <TypeScriptCompile Include="wwwroot\js\fict-dash-app\src\isgs_down_margins\fetchUtils.ts">
+    <TypeScriptCompile Include="wwwroot\js\fict-dash-app\src\isgs_stats\fetchUtils.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="wwwroot\js\fict-dash-app\src\isgs_down_margins\plotStuff.ts" />
-    <TypeScriptCompile Include="wwwroot\js\fict-dash-app\src\isgs_down_margins\tableExportUtils.ts">
+    <TypeScriptCompile Include="wwwroot\js\fict-dash-app\src\isgs_stats\plotStuff.ts" />
+    <TypeScriptCompile Include="wwwroot\js\fict-dash-app\src\isgs_stats\tableExportUtils.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="wwwroot\js\fict-dash-app\src\isgs_down_margins\timerStuff.ts">
+    <TypeScriptCompile Include="wwwroot\js\fict-dash-app\src\isgs_stats\timerStuff.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="wwwroot\js\fict-dash-app\src\isgs_down_margins\index.ts" />
+    <TypeScriptCompile Include="wwwroot\js\fict-dash-app\src\isgs_stats\index.ts" />
     <TypeScriptCompile Include="wwwroot\js\fict-dash-app\src\pmu_freq_dashboard\pmuUtils.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

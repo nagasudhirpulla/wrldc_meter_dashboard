@@ -5,7 +5,9 @@ namespace MeterDataDashboard.Core.ScheduleData.Services
 {
     public interface IWbesLiveDataService
     {
-        Task<IsgsMarginsDTO> GetIsgsThermalDownMarginsForDates(DateTime fromDate, DateTime toDate);
-        Task<IsgsMarginsDTO> GetIsgsThermalUpMarginsForDates(DateTime fromDate, DateTime toDate);
+        Task<IsgsSchedulesDTO> GetIsgsThermalDownMarginsForDates(DateTime fromDate, DateTime toDate);
+        Task<IsgsSchedulesDTO> GetIsgsThermalUpMarginsForDates(DateTime fromDate, DateTime toDate);
+        Task<IsgsSchedulesDTO> GetIsgsRrasForDates(DateTime fromDate, DateTime toDate);
+        Task<IsgsSchedulesDTO> GetIsgsScedForDates(DateTime fromDate, DateTime toDate);
     }
 }

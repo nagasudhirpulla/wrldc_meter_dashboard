@@ -38,7 +38,7 @@ namespace MeterDataDashboard.Web.Controllers
             return View();
         }
 
-        public IActionResult Margins()
+        public IActionResult IsgsStats()
         {
             return View();
         }

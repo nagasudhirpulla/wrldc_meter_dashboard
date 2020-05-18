@@ -2,7 +2,6 @@
     ViewData["Title"] = "WR ISGS Margins";
 }
 
-<h2 style='text-align: center'>WR ISGS Down Reserves</h2>
 <div class="row">
     <div class="col col-11">
         <div id="dcPlotsDiv"></div>
@@ -27,13 +26,18 @@
             <input type="text" id='end_date_input' value="" class="form-control mb-2" placeholder="Start Date" />
         </div>
         <div class="col-auto">
-            <label>Line Style</label>
+            <label>Schedule Type</label>
         </div>
         <div class="col-auto">
             <select name="margin_type_combo" class="form-control mb-2" id="margin_type_combo">
                 <option value="down">Down Margins</option>
                 <option value="up">Up Margins</option>
+                <option value="rras">RRAS</option>
+                <option value="sced">SCED</option>
             </select>
+        </div>
+        <div class="col-auto">
+            <label>Line Style</label>
         </div>
         <div class="col-auto">
             <select name="line_style" class="form-control mb-2" id="line_style">
@@ -62,7 +66,7 @@
 @section Scripts {
     @*<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>*@
     <script src="~/js/fict-dash-app/node_modules/plotly.js-dist/plotly.js"></script>
-    <script src="~/js/fict-dash-app/dist/down_margins.js"></script>
+    <script src="~/js/fict-dash-app/dist/isgs_stats.js"></script>
     <style>
         .my-custom-scrollbar {
             position: relative;

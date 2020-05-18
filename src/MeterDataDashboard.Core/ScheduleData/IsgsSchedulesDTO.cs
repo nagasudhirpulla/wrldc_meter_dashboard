@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace MeterDataDashboard.Core.ScheduleData
 {
-    public class IsgsMarginsDTO
+    public class IsgsSchedulesDTO
     {
         public List<string> GenNames { get; set; } = new List<string>();
         public List<DateTime> Timestamps { get; set; } = new List<DateTime>();

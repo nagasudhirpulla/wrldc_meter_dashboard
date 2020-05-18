@@ -122,16 +122,14 @@ namespace MeterDataDashboard.Infra.Services
                     // get dc data
                     con.Open();
                     cmd.BindByName = true;
-                    cmd.CommandText = @$"select table1.declared_for_date, table1.ON_BAR_INSTALLED_CAPACITY, table2.acronym from 
-                                            (SELECT util_id, declared_for_date, ON_BAR_INSTALLED_CAPACITY FROM {dbName}.declaration where (util_id, declared_for_date, revision_no) in 
+                    cmd.CommandText = @$"SELECT declared_for_date, ON_BAR_INSTALLED_CAPACITY FROM {dbName}.declaration where (util_id, declared_for_date, revision_no) in 
                                             (
                                                 select util_id, declared_for_date, max(revision_no) from {dbName}.declaration 
                                                 WHERE declared_for_date between :win_start and :win_end and is_scheduled=1
                                                 and util_id = :util_id
-                                                GROUP BY (util_id, declared_for_date)
-                                            )) table1
-                                            left join WBES_NR7.utility table2 on table1.util_id = table2.util_id
-                                            order by declared_for_date, acronym";
+                                                GROUP BY (util_id,declared_for_date)
+                                            )
+                                            order by declared_for_date";
 
                     // Assign parameters
                     OracleParameter win_start = new OracleParameter("win_start", fromDate.Date);
@@ -181,16 +179,14 @@ namespace MeterDataDashboard.Infra.Services
                     // get dc data
                     con.Open();
                     cmd.BindByName = true;
-                    cmd.CommandText = @$"select table1.declared_for_date, table1.DECLARED_ON_BAR, table2.acronym from 
-                                            (SELECT util_id, declared_for_date, DECLARED_ON_BAR FROM {dbName}.declaration where (util_id, declared_for_date, revision_no) in 
+                    cmd.CommandText = @$"SELECT declared_for_date, DECLARED_ON_BAR FROM {dbName}.declaration where (util_id, declared_for_date, revision_no) in 
                                             (
                                                 select util_id, declared_for_date, max(revision_no) from {dbName}.declaration 
                                                 WHERE declared_for_date between :win_start and :win_end and is_scheduled=1
                                                 and util_id = :util_id
-                                                GROUP BY (util_id, declared_for_date)
-                                            )) table1
-                                            left join WBES_NR7.utility table2 on table1.util_id = table2.util_id
-                                            order by declared_for_date, acronym";
+                                                GROUP BY (util_id,declared_for_date)
+                                            )
+                                            order by declared_for_date";
 
                     // Assign parameters
                     OracleParameter win_start = new OracleParameter("win_start", fromDate.Date);
@@ -215,6 +211,128 @@ namespace MeterDataDashboard.Infra.Services
                             for (int valIter = 0; valIter < onBarVals.Count; valIter++)
                             {
                                 utilData.SchVals.Add(new ScheduleValue() { Timestamp = dcDate.AddMinutes(valIter * 15), Val = onBarVals[valIter] });
+                            }
+                        }
+                    }
+                    reader.Dispose();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            return utilData;
+        }
+
+        public UtilSchData GetRrasForDates(string utilId, DateTime fromDate, DateTime toDate)
+        {
+            UtilSchData utilData = new UtilSchData();
+            string dbName = (DateTime.Now.Date - fromDate.Date).TotalDays > 6 ? "WBES_OLD" : "WBES_NR7";
+            using (OracleConnection con = new OracleConnection(_oracleConnString))
+            {
+                using OracleCommand cmd = con.CreateCommand();
+                try
+                {
+                    // get dc data
+                    con.Open();
+                    cmd.BindByName = true;
+                    cmd.CommandText = @$"SELECT schedule_date, seller_amount FROM {dbName}.full_schedule 
+                                            where (schedule_date,revision_no) in
+                                            (
+                                            select effective_date, max(WR) from {dbName}.revision_main where effective_date between :win_start and :win_end group by effective_date
+                                            ) and
+                                            seller_id = :util_id and
+                                            buyer_id = :buyer_id and
+                                            schedule_type = 9 order by schedule_date";
+
+                    // Assign parameters
+                    OracleParameter win_start = new OracleParameter("win_start", fromDate.Date);
+                    cmd.Parameters.Add(win_start);
+
+                    OracleParameter win_end = new OracleParameter("win_end", toDate.Date);
+                    cmd.Parameters.Add(win_end);
+
+                    OracleParameter util_id = new OracleParameter("util_id", utilId);
+                    cmd.Parameters.Add(util_id);
+
+                    OracleParameter buyer_id = new OracleParameter("buyer_id", "e1e5ccad-9f05-4130-9362-baf3033f1f40");
+                    cmd.Parameters.Add(buyer_id);
+
+                    //Execute the command and use DataReader to read the data
+                    OracleDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        DateTime schDate = reader.GetDateTime(0);
+                        string rrasStr = reader.GetString(1);
+                        List<double> rrasVals = rrasStr.Split(',').Select(s => Convert.ToDouble(s)).ToList();
+                        // populate the data
+                        if (rrasVals.Count == 96)
+                        {
+                            for (int valIter = 0; valIter < rrasVals.Count; valIter++)
+                            {
+                                utilData.SchVals.Add(new ScheduleValue() { Timestamp = schDate.AddMinutes(valIter * 15), Val = rrasVals[valIter] });
+                            }
+                        }
+                    }
+                    reader.Dispose();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            return utilData;
+        }
+
+        public UtilSchData GetScedForDates(string utilId, DateTime fromDate, DateTime toDate)
+        {
+            UtilSchData utilData = new UtilSchData();
+            string dbName = (DateTime.Now.Date - fromDate.Date).TotalDays > 6 ? "WBES_OLD" : "WBES_NR7";
+            using (OracleConnection con = new OracleConnection(_oracleConnString))
+            {
+                using OracleCommand cmd = con.CreateCommand();
+                try
+                {
+                    // get dc data
+                    con.Open();
+                    cmd.BindByName = true;
+                    cmd.CommandText = @$"select effective_date, actual_up, actual_down from {dbName}.sced 
+                                        where 
+                                            util_id = '489fe396-7c38-4ce8-aeb5-927e2749c83a' 
+                                            and (revision_no, effective_date) in (
+                                            select max(revision_no), effective_date from {dbName}.sced 
+                                            where 
+                                                util_id = :util_id 
+                                                and effective_date between :win_start and :win_end 
+                                            group by effective_date
+                                            ) 
+                                        order by effective_date";
+
+                    // Assign parameters
+                    OracleParameter win_start = new OracleParameter("win_start", fromDate.Date);
+                    cmd.Parameters.Add(win_start);
+
+                    OracleParameter win_end = new OracleParameter("win_end", toDate.Date);
+                    cmd.Parameters.Add(win_end);
+
+                    OracleParameter util_id = new OracleParameter("util_id", utilId);
+                    cmd.Parameters.Add(util_id);
+
+                    //Execute the command and use DataReader to read the data
+                    OracleDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        DateTime schDate = reader.GetDateTime(0);
+                        string scedUpStr = reader.GetString(1);
+                        string scedDownStr = reader.GetString(2);
+                        List<double> scedUpVals = scedUpStr.Split(',').Select(s => Convert.ToDouble(s)).ToList();
+                        List<double> scedDownVals = scedDownStr.Split(',').Select(s => Convert.ToDouble(s)).ToList();
+                        // populate the data
+                        if (scedUpVals.Count == 96 && scedDownVals.Count == 96)
+                        {
+                            for (int valIter = 0; valIter < scedUpVals.Count; valIter++)
+                            {
+                                utilData.SchVals.Add(new ScheduleValue() { Timestamp = schDate.AddMinutes(valIter * 15), Val = scedUpVals[valIter] - scedDownVals[valIter] });
                             }
                         }
                     }
@@ -257,9 +375,9 @@ namespace MeterDataDashboard.Infra.Services
             return margins;
         }
 
-        public async Task<IsgsMarginsDTO> GetIsgsThermalDownMarginsForDates(DateTime fromDate, DateTime toDate)
+        public async Task<IsgsSchedulesDTO> GetIsgsThermalDownMarginsForDates(DateTime fromDate, DateTime toDate)
         {
-            IsgsMarginsDTO margins = new IsgsMarginsDTO();
+            IsgsSchedulesDTO margins = new IsgsSchedulesDTO();
             List<(string utilId, string utilName)> utils = GetAllThermalIsgsUtils();
             bool isFirstIter = true;
             foreach ((string utilId, string utilName) util in utils)
@@ -310,9 +428,9 @@ namespace MeterDataDashboard.Infra.Services
             return margins;
         }
 
-        public async Task<IsgsMarginsDTO> GetIsgsThermalUpMarginsForDates(DateTime fromDate, DateTime toDate)
+        public async Task<IsgsSchedulesDTO> GetIsgsThermalUpMarginsForDates(DateTime fromDate, DateTime toDate)
         {
-            IsgsMarginsDTO margins = new IsgsMarginsDTO();
+            IsgsSchedulesDTO margins = new IsgsSchedulesDTO();
             List<(string utilId, string utilName)> utils = GetAllThermalIsgsUtils();
             bool isFirstIter = true;
             foreach ((string utilId, string utilName) util in utils)
@@ -332,6 +450,46 @@ namespace MeterDataDashboard.Infra.Services
                 }
             }
             return margins;
+        }
+
+        public async Task<IsgsSchedulesDTO> GetIsgsRrasForDates(DateTime fromDate, DateTime toDate)
+        {
+            IsgsSchedulesDTO margins = new IsgsSchedulesDTO();
+            List<(string utilId, string utilName)> utils = GetAllThermalIsgsUtils();
+            bool isFirstIter = true;
+            foreach ((string utilId, string utilName) in utils)
+            {
+                UtilSchData utilRras = GetRrasForDates(utilId, fromDate.Date, toDate.Date);
+
+                margins.Margins.Add(utilName, utilRras.SchVals.Select(v => v.Val).ToList());
+                margins.GenNames.Add(utilName);
+                if (isFirstIter)
+                {
+                    margins.Timestamps = utilRras.SchVals.Select(v => v.Timestamp).ToList();
+                    isFirstIter = false;
+                }
+            }
+            return await Task.FromResult(margins);
+        }
+
+        public async Task<IsgsSchedulesDTO> GetIsgsScedForDates(DateTime fromDate, DateTime toDate)
+        {
+            IsgsSchedulesDTO margins = new IsgsSchedulesDTO();
+            List<(string utilId, string utilName)> utils = GetAllThermalIsgsUtils();
+            bool isFirstIter = true;
+            foreach ((string utilId, string utilName) in utils)
+            {
+                UtilSchData utilSced = GetScedForDates(utilId, fromDate.Date, toDate.Date);
+
+                margins.Margins.Add(utilName, utilSced.SchVals.Select(v => v.Val).ToList());
+                margins.GenNames.Add(utilName);
+                if (isFirstIter)
+                {
+                    margins.Timestamps = utilSced.SchVals.Select(v => v.Timestamp).ToList();
+                    isFirstIter = false;
+                }
+            }
+            return await Task.FromResult(margins);
         }
     }
 }

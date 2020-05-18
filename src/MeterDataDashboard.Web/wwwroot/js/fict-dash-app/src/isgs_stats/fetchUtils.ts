@@ -5,6 +5,12 @@ export const getIsgsMargins = async (startDate: string, endDate: string, margin_
     if (margin_type == 'up') {
         fetchUrl = `../api/WbesLiveData/GetIsgsThermalUpMargins/${startDate}/${endDate}`
     }
+    else if (margin_type == 'rras') {
+        fetchUrl = `../api/WbesLiveData/GetIsgsRras/${startDate}/${endDate}`
+    }
+    else if (margin_type == 'sced') {
+        fetchUrl = `../api/WbesLiveData/GetIsgsSced/${startDate}/${endDate}`
+    }
     try {
         const resp = await fetch(fetchUrl, {
             method: 'get'

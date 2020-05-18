@@ -298,7 +298,7 @@ namespace MeterDataDashboard.Infra.Services
                     cmd.BindByName = true;
                     cmd.CommandText = @$"select effective_date, actual_up, actual_down from {dbName}.sced 
                                         where 
-                                            util_id = '489fe396-7c38-4ce8-aeb5-927e2749c83a' 
+                                            util_id = :util_id 
                                             and (revision_no, effective_date) in (
                                             select max(revision_no), effective_date from {dbName}.sced 
                                             where 

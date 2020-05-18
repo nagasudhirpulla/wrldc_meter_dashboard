@@ -1,8 +1,12 @@
 ﻿import { IsgsMarginsDTO } from "./type_defs/IsgsMarginsDTO";
 
-export const getIsgsDownMargins = async (startDate: string, endDate: string): Promise<IsgsMarginsDTO> => {
+export const getIsgsMargins = async (startDate: string, endDate: string, margin_type: string): Promise<IsgsMarginsDTO> => {
+    let fetchUrl = `../api/WbesLiveData/GetIsgsThermalDownMargins/${startDate}/${endDate}`
+    if (margin_type == 'up') {
+        fetchUrl = `../api/WbesLiveData/GetIsgsThermalUpMargins/${startDate}/${endDate}`
+    }
     try {
-        const resp = await fetch(`../api/WbesLiveData/GetIsgsThermalDownMargins/${startDate}/${endDate}`, {
+        const resp = await fetch(fetchUrl, {
             method: 'get'
         });
         const respJSON = await resp.json() as IsgsMarginsDTO;

@@ -2,7 +2,7 @@
 import Plotly from 'plotly.js-dist'
 import { IsgsMarginsDTO } from "./type_defs/IsgsMarginsDTO";
 import { stackedArea } from "./plotStuff";
-import { getIsgsDownMargins } from "./fetchUtils";
+import { getIsgsMargins } from "./fetchUtils";
 import { createTable, exportTableToCSV } from "./tableExportUtils";
 
 let isCheckBoxesListCreated = false;
@@ -34,8 +34,9 @@ export const getMargins = async (): Promise<void> => {
 
     var start_date_str = (document.getElementById('start_date_input') as HTMLInputElement).value;
     var end_date_str = (document.getElementById('end_date_input') as HTMLInputElement).value;
+    var margin_type = (document.getElementById('margin_type_combo') as HTMLInputElement).value;
 
-    const dcSchObj = await getIsgsDownMargins(start_date_str, end_date_str);
+    const dcSchObj = await getIsgsMargins(start_date_str, end_date_str, margin_type);
     global_g.dcSchObj = dcSchObj;
 
     // Now create the checkbox list
@@ -54,7 +55,7 @@ export const getMargins = async (): Promise<void> => {
         isCheckBoxesListCreated = true;
     }
 
-    global_g['plot_title'] = `Down Reserves for ${start_date_str} ${start_date_str != end_date_str ? `to ${end_date_str}` : ""}`;
+    global_g['plot_title'] = `${margin_type == 'up' ? 'Up' : 'Down'} Reserves for ${start_date_str} ${start_date_str != end_date_str ? `to ${end_date_str}` : ""}`;
 
     updatePlot();
 
@@ -187,5 +188,7 @@ window.onload = () => { doOnLoadStuff() }
 (document.getElementById('updateTimerPeriodBtn') as HTMLButtonElement).onclick = updateTimerBtnCallback;
 // wire up selectAllGenBtn
 (document.getElementById('updateMarginsBtn') as HTMLButtonElement).onclick = getMargins;
+// wire up margin_type_combo
+(document.getElementById('margin_type_combo') as HTMLSelectElement).onchange = getMargins;
 // wire up exportBtn
 (document.getElementById('exportBtn') as HTMLButtonElement).onclick = () => { exportTableToCSV('margin_export.csv') };

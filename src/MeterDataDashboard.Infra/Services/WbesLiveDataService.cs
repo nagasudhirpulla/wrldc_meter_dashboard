@@ -168,6 +168,66 @@ namespace MeterDataDashboard.Infra.Services
             }
             return utilData;
         }
+
+        public UtilSchData GetOnbarForDates(string utilId, DateTime fromDate, DateTime toDate)
+        {
+            UtilSchData utilData = new UtilSchData();
+            string dbName = (DateTime.Now.Date - fromDate.Date).TotalDays > 6 ? "WBES_OLD" : "WBES_NR7";
+            using (OracleConnection con = new OracleConnection(_oracleConnString))
+            {
+                using OracleCommand cmd = con.CreateCommand();
+                try
+                {
+                    // get dc data
+                    con.Open();
+                    cmd.BindByName = true;
+                    cmd.CommandText = @$"select table1.declared_for_date, table1.DECLARED_ON_BAR, table2.acronym from 
+                                            (SELECT util_id, declared_for_date, DECLARED_ON_BAR FROM {dbName}.declaration where (util_id, declared_for_date, revision_no) in 
+                                            (
+                                                select util_id, declared_for_date, max(revision_no) from {dbName}.declaration 
+                                                WHERE declared_for_date between :win_start and :win_end and is_scheduled=1
+                                                and util_id = :util_id
+                                                GROUP BY (util_id, declared_for_date)
+                                            )) table1
+                                            left join WBES_NR7.utility table2 on table1.util_id = table2.util_id
+                                            order by declared_for_date, acronym";
+
+                    // Assign parameters
+                    OracleParameter win_start = new OracleParameter("win_start", fromDate.Date);
+                    cmd.Parameters.Add(win_start);
+
+                    OracleParameter win_end = new OracleParameter("win_end", toDate.Date);
+                    cmd.Parameters.Add(win_end);
+
+                    OracleParameter util_id = new OracleParameter("util_id", utilId);
+                    cmd.Parameters.Add(util_id);
+
+                    //Execute the command and use DataReader to read the data
+                    OracleDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        DateTime dcDate = reader.GetDateTime(0);
+                        string onBarStr = reader.GetString(1);
+                        List<double> onBarVals = onBarStr.Split(',').Select(s => Convert.ToDouble(s)).ToList();
+                        // populate the data
+                        if (onBarVals.Count == 96)
+                        {
+                            for (int valIter = 0; valIter < onBarVals.Count; valIter++)
+                            {
+                                utilData.SchVals.Add(new ScheduleValue() { Timestamp = dcDate.AddMinutes(valIter * 15), Val = onBarVals[valIter] });
+                            }
+                        }
+                    }
+                    reader.Dispose();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            return utilData;
+        }
+
         public async Task<UtilSchData> GetDownMarginsForDate(string utilId, DateTime fromDate)
         {
             UtilSchData margins = new UtilSchData();
@@ -197,9 +257,9 @@ namespace MeterDataDashboard.Infra.Services
             return margins;
         }
 
-        public async Task<IsgsDownMarginsDTO> GetIsgsThermalDownMarginsForDates(DateTime fromDate, DateTime toDate)
+        public async Task<IsgsMarginsDTO> GetIsgsThermalDownMarginsForDates(DateTime fromDate, DateTime toDate)
         {
-            IsgsDownMarginsDTO margins = new IsgsDownMarginsDTO();
+            IsgsMarginsDTO margins = new IsgsMarginsDTO();
             List<(string utilId, string utilName)> utils = GetAllThermalIsgsUtils();
             bool isFirstIter = true;
             foreach ((string utilId, string utilName) util in utils)
@@ -210,7 +270,60 @@ namespace MeterDataDashboard.Infra.Services
                     UtilSchData dateMargins = await GetDownMarginsForDate(util.utilId, currDate);
                     utilMargins.SchVals.AddRange(dateMargins.SchVals);
                 }
-                margins.DownMargins.Add(util.utilName, utilMargins.SchVals.Select(v => v.Val).ToList());
+                margins.Margins.Add(util.utilName, utilMargins.SchVals.Select(v => v.Val).ToList());
+                margins.GenNames.Add(util.utilName);
+                if (isFirstIter)
+                {
+                    margins.Timestamps = utilMargins.SchVals.Select(v => v.Timestamp).ToList();
+                    isFirstIter = false;
+                }
+            }
+            return margins;
+        }
+
+        public async Task<UtilSchData> GetUpMarginsForDate(string utilId, DateTime fromDate)
+        {
+            UtilSchData margins = new UtilSchData();
+            UtilSchData onBar = GetOnbarForDates(utilId, fromDate, fromDate);
+            UtilSchData fullSch = await GetSellerFullSchForDate(utilId, fromDate);
+            if (onBar == null || fullSch == null || onBar.SchVals.Count != 96 || fullSch.SchVals.Count != 96)
+            {
+                return margins;
+            }
+            for (int valIter = 0; valIter < onBar.SchVals.Count; valIter++)
+            {
+                double val = onBar.SchVals[valIter].Val - fullSch.SchVals[valIter].Val;
+                DateTime timestamp = fullSch.SchVals[valIter].Timestamp;
+                margins.SchVals.Add(new ScheduleValue { Timestamp = timestamp, Val = val > 0 ? val : 0 });
+            }
+            return margins;
+        }
+
+        public async Task<UtilSchData> GetUpMarginsForDates(string utilId, DateTime fromDate, DateTime toDate)
+        {
+            UtilSchData margins = new UtilSchData();
+            for (DateTime currDate = fromDate.Date; currDate <= toDate.Date; currDate = currDate.AddDays(1))
+            {
+                UtilSchData dateMargins = await GetUpMarginsForDate(utilId, currDate);
+                margins.SchVals.AddRange(dateMargins.SchVals);
+            }
+            return margins;
+        }
+
+        public async Task<IsgsMarginsDTO> GetIsgsThermalUpMarginsForDates(DateTime fromDate, DateTime toDate)
+        {
+            IsgsMarginsDTO margins = new IsgsMarginsDTO();
+            List<(string utilId, string utilName)> utils = GetAllThermalIsgsUtils();
+            bool isFirstIter = true;
+            foreach ((string utilId, string utilName) util in utils)
+            {
+                UtilSchData utilMargins = new UtilSchData();
+                for (DateTime currDate = fromDate.Date; currDate <= toDate.Date; currDate = currDate.AddDays(1))
+                {
+                    UtilSchData dateMargins = await GetUpMarginsForDate(util.utilId, currDate);
+                    utilMargins.SchVals.AddRange(dateMargins.SchVals);
+                }
+                margins.Margins.Add(util.utilName, utilMargins.SchVals.Select(v => v.Val).ToList());
                 margins.GenNames.Add(util.utilName);
                 if (isFirstIter)
                 {

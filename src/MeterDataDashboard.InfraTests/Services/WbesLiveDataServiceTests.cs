@@ -81,11 +81,11 @@ namespace MeterDataDashboard.Infra.Services.Tests
         {
             WbesLiveDataService service = new WbesLiveDataService(_config);
             int numDays = 3;
-            IsgsDownMarginsDTO schData = await service.GetIsgsThermalDownMarginsForDates(DateTime.Now.AddDays(-1 * (numDays - 1)), DateTime.Now);
+            IsgsMarginsDTO schData = await service.GetIsgsThermalDownMarginsForDates(DateTime.Now.AddDays(-1 * (numDays - 1)), DateTime.Now);
             Assert.IsTrue(schData != null);
             Assert.IsTrue(schData.GenNames.Count > 10);
             Assert.IsTrue(schData.Timestamps.Count == 96 * (numDays));
-            Assert.IsTrue(schData.DownMargins.Keys.Count == schData.GenNames.Count);
+            Assert.IsTrue(schData.Margins.Keys.Count == schData.GenNames.Count);
         }
     }
 }

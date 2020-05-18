@@ -1,13 +1,13 @@
 ﻿import { restartTimer, updateTimerPeriodFromUI } from "./timerStuff";
 import Plotly from 'plotly.js-dist'
-import { IsgsDownMarginsDTO } from "./type_defs/IsgsDownMarginsDTO";
+import { IsgsMarginsDTO } from "./type_defs/IsgsMarginsDTO";
 import { stackedArea } from "./plotStuff";
 import { getIsgsDownMargins } from "./fetchUtils";
 import { createTable, exportTableToCSV } from "./tableExportUtils";
 
 let isCheckBoxesListCreated = false;
 let initialDesiredGenerators = [];
-let global_g: { dcSchObj: IsgsDownMarginsDTO, plot_title: string } = { dcSchObj: null, 'plot_title': 'WR Down Margins Plot' };
+let global_g: { dcSchObj: IsgsMarginsDTO, plot_title: string } = { dcSchObj: null, 'plot_title': 'WR Down Margins Plot' };
 
 export const doOnLoadStuff = (): void => {
     const todayDateStr: string = (new Date()).toISOString().substring(0, 10);
@@ -133,7 +133,7 @@ function updatePlot() {
         if (activeGenerators.length != 0 && activeGenerators.indexOf(genName) == -1) { continue; }
         traces.push({
             x: xLabels,
-            y: dcSchObj.downMargins[genName].map(x => x),
+            y: dcSchObj.margins[genName].map(x => x),
             fill: 'tonexty',
             name: genName,
             line: { shape: lineStyle }

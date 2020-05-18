@@ -1,6 +1,6 @@
-﻿import { IsgsDownMarginsDTO } from "./type_defs/IsgsDownMarginsDTO";
+﻿import { IsgsMarginsDTO } from "./type_defs/IsgsMarginsDTO";
 
-export const createTable = (tableData: IsgsDownMarginsDTO, tableEl: HTMLTableElement) => {
+export const createTable = (tableData: IsgsMarginsDTO, tableEl: HTMLTableElement) => {
     // delete all table rows
     while (tableEl.rows.length > 0) {
         tableEl.deleteRow(0);
@@ -23,7 +23,7 @@ export const createTable = (tableData: IsgsDownMarginsDTO, tableEl: HTMLTableEle
         row.appendChild(cell);
         tableData.genNames.forEach(genName => {
             var cell = document.createElement('td');
-            cell.appendChild(document.createTextNode(Math.round(tableData.downMargins[genName][tsInd] * 100) / 100 + ""));
+            cell.appendChild(document.createTextNode(Math.round(tableData.margins[genName][tsInd] * 100) / 100 + ""));
             row.appendChild(cell);
         });
         tableEl.appendChild(row);

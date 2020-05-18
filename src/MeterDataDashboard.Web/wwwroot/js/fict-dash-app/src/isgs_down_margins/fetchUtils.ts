@@ -1,11 +1,11 @@
-﻿import { IsgsDownMarginsDTO } from "./type_defs/IsgsDownMarginsDTO";
+﻿import { IsgsMarginsDTO } from "./type_defs/IsgsMarginsDTO";
 
-export const getIsgsDownMargins = async (startDate: string, endDate: string): Promise<IsgsDownMarginsDTO> => {
+export const getIsgsDownMargins = async (startDate: string, endDate: string): Promise<IsgsMarginsDTO> => {
     try {
         const resp = await fetch(`../api/WbesLiveData/GetIsgsThermalDownMargins/${startDate}/${endDate}`, {
             method: 'get'
         });
-        const respJSON = await resp.json() as IsgsDownMarginsDTO;
+        const respJSON = await resp.json() as IsgsMarginsDTO;
         //console.log(respJSON);
         return respJSON;
     } catch (e) {

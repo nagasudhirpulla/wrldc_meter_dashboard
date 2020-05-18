@@ -21,11 +21,20 @@ namespace MeterDataDashboard.Web.Controllers
         }
 
         [HttpGet("GetIsgsThermalDownMargins/{start_date}/{end_date}")]
-        public async Task<IsgsDownMarginsDTO> GetIsgsThermalDownMargins(string start_date, string end_date)
+        public async Task<IsgsMarginsDTO> GetIsgsThermalDownMargins(string start_date, string end_date)
         {
             DateTime startDate = DateTime.ParseExact(start_date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
             DateTime endDate = DateTime.ParseExact(end_date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
-            IsgsDownMarginsDTO res = await _wbesLiveDataService.GetIsgsThermalDownMarginsForDates(startDate, endDate);
+            IsgsMarginsDTO res = await _wbesLiveDataService.GetIsgsThermalDownMarginsForDates(startDate, endDate);
+            return res;
+        }
+
+        [HttpGet("GetIsgsThermalUpMargins/{start_date}/{end_date}")]
+        public async Task<IsgsMarginsDTO> GetIsgsThermalUpMargins(string start_date, string end_date)
+        {
+            DateTime startDate = DateTime.ParseExact(start_date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            DateTime endDate = DateTime.ParseExact(end_date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            IsgsMarginsDTO res = await _wbesLiveDataService.GetIsgsThermalUpMarginsForDates(startDate, endDate);
             return res;
         }
     }

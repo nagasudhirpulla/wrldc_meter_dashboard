@@ -1,7 +1,7 @@
-﻿export interface IsgsDownMarginsDTO {
+﻿export interface IsgsMarginsDTO {
     genNames: string[];
     timestamps: string[];
-    downMargins: {
+    margins: {
         [key: string]: number[];
     };
 }

@@ -457,11 +457,16 @@ namespace MeterDataDashboard.Infra.Services
             IsgsSchedulesDTO margins = new IsgsSchedulesDTO();
             List<(string utilId, string utilName)> utils = GetAllThermalIsgsUtils();
             bool isFirstIter = true;
+            List<(DateTime, DateTime)> dates = SplitDateRangeForDbFetch(fromDate.Date, toDate.Date);
             foreach ((string utilId, string utilName) in utils)
             {
                 // todo check if from and to dates belong in different databases
-                UtilSchData utilRras = GetRrasForDates(utilId, fromDate.Date, toDate.Date);
-
+                UtilSchData utilRras = new UtilSchData();
+                foreach ((DateTime, DateTime) date in dates)
+                {
+                    UtilSchData schData = GetRrasForDates(utilId, date.Item1, date.Item2);
+                    utilRras.SchVals.AddRange(schData.SchVals);
+                }
                 margins.Margins.Add(utilName, utilRras.SchVals.Select(v => v.Val).ToList());
                 margins.GenNames.Add(utilName);
                 if (isFirstIter)
@@ -478,11 +483,15 @@ namespace MeterDataDashboard.Infra.Services
             IsgsSchedulesDTO margins = new IsgsSchedulesDTO();
             List<(string utilId, string utilName)> utils = GetAllThermalIsgsUtils();
             bool isFirstIter = true;
+            List<(DateTime, DateTime)> dates = SplitDateRangeForDbFetch(fromDate.Date, toDate.Date);
             foreach ((string utilId, string utilName) in utils)
             {
-                // todo check if from and to dates belong in different databases
-                UtilSchData utilSced = GetScedForDates(utilId, fromDate.Date, toDate.Date);
-
+                UtilSchData utilSced = new UtilSchData();
+                foreach ((DateTime, DateTime) date in dates)
+                {
+                    UtilSchData schData = GetScedForDates(utilId, date.Item1, date.Item2);
+                    utilSced.SchVals.AddRange(schData.SchVals);
+                }
                 margins.Margins.Add(utilName, utilSced.SchVals.Select(v => v.Val).ToList());
                 margins.GenNames.Add(utilName);
                 if (isFirstIter)
@@ -492,6 +501,26 @@ namespace MeterDataDashboard.Infra.Services
                 }
             }
             return await Task.FromResult(margins);
+        }
+
+        public List<(DateTime, DateTime)> SplitDateRangeForDbFetch(DateTime fromDate, DateTime toDate)
+        {
+            DateTime d = DateTime.Now.Date;
+            DateTime dMinus6 = d - new TimeSpan(6, 0, 0, 0);
+            DateTime dMinus7 = d - new TimeSpan(7, 0, 0, 0);
+
+            if (fromDate < dMinus6 && toDate < dMinus6)
+            {
+                return new List<(DateTime, DateTime)>() { (fromDate, toDate) };
+            }
+            else if (fromDate >= dMinus6 && toDate >= dMinus6)
+            {
+                return new List<(DateTime, DateTime)>() { (fromDate, toDate) };
+            }
+            else
+            {
+                return new List<(DateTime, DateTime)>() { (fromDate, dMinus7), (dMinus6, toDate) };
+            }
         }
     }
 }

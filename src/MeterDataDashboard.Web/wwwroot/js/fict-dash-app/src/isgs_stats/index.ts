@@ -130,19 +130,34 @@ function updatePlot() {
     div.id = 'plotDiv_0';
     div.style.border = '1px gray dashed';
     dcPlotsDiv.appendChild(div);
+    var margin_type = (document.getElementById('margin_type_combo') as HTMLInputElement).value;
+
+    var isBarChart = false;
+    if (['sced', 'rras'].includes(margin_type)) {
+        isBarChart = true
+    }
+
     for (var k = 0; k < dcSchObj.genNames.length; k++) {
         // dynamically create divs - https://stackoverflow.com/questions/14094697/javascript-how-to-create-new-div-dynamically-change-it-move-it-modify-it-in
         let genName = dcSchObj.genNames[k];
         if (activeGenerators.length != 0 && activeGenerators.indexOf(genName) == -1) { continue; }
-        traces.push({
+        var trace = {
             x: xLabels,
             y: dcSchObj.margins[genName].map(x => x),
-            fill: 'tonexty',
             name: genName,
-            line: { shape: lineStyle }
-        });
+        }
+        if (isBarChart) {
+            trace['type'] = 'bar'
+        } else {
+            trace['fill'] = 'tonexty';
+            trace['line'] = { shape: lineStyle }
+        }
+        traces.push(trace)
     }
-    traces[0].fill = 'tozeroy';
+    if (!isBarChart) {
+        traces[0].fill = 'tozeroy';
+    }
+
     var layout = {
         title: global_g['plot_title'],
         xaxis: {
@@ -159,8 +174,18 @@ function updatePlot() {
         },
         margin: { 't': 35 },
         height: 800
-    };
-    Plotly.newPlot(div, stackedArea(traces), layout);
+    }
+
+    if (isBarChart) {
+        layout['barmode'] = 'relative'
+    }
+
+    if (isBarChart) {
+        Plotly.newPlot(div, stackedArea(traces), layout)
+    } else {
+        Plotly.newPlot(div, stackedArea(traces), layout)
+    }
+
     div
         .on('plotly_hover', function (data) {
             if (data.points.length > 0) {

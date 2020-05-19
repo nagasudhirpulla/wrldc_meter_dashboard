@@ -459,6 +459,7 @@ namespace MeterDataDashboard.Infra.Services
             bool isFirstIter = true;
             foreach ((string utilId, string utilName) in utils)
             {
+                // todo check if from and to dates belong in different databases
                 UtilSchData utilRras = GetRrasForDates(utilId, fromDate.Date, toDate.Date);
 
                 margins.Margins.Add(utilName, utilRras.SchVals.Select(v => v.Val).ToList());
@@ -479,6 +480,7 @@ namespace MeterDataDashboard.Infra.Services
             bool isFirstIter = true;
             foreach ((string utilId, string utilName) in utils)
             {
+                // todo check if from and to dates belong in different databases
                 UtilSchData utilSced = GetScedForDates(utilId, fromDate.Date, toDate.Date);
 
                 margins.Margins.Add(utilName, utilSced.SchVals.Select(v => v.Val).ToList());

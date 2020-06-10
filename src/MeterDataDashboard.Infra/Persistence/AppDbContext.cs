@@ -19,6 +19,7 @@ namespace MeterDataDashboard.Infra.Persistence
         }
         public DbSet<FictMeasurement> FictMeasurements { get; set; }
         public DbSet<ScadaArchiveMeasurement> ScadaArchiveMeasurements { get; set; }
+        public DbSet<ScadaNode> ScadaNodes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

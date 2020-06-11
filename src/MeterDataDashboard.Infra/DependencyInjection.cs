@@ -21,7 +21,9 @@ using MeterDataDashboard.Core.ReportsData;
 using MeterDataDashboard.Core.ReportsData.Services;
 using MeterDataDashboard.Infra.Services.Email;
 using MeterDataDashboard.Infra.Services.Sms;
+using MeterDataDashboard.Infra.Services.ScadaNodes;
 using MeterDataDashboard.Core.Sms;
+using MeterDataDashboard.Core.ScadaNodes.Services;
 
 namespace MeterDataDashboard.Infra
 {
@@ -77,6 +79,7 @@ namespace MeterDataDashboard.Infra
             services.AddSingleton<IWbesArchiveDataService, WbesArchiveDataService>();
             services.AddSingleton<IAgcFileUtilsService, AgcFileUtilsService>();
             services.AddSingleton<IWbesLiveDataService, WbesLiveDataService>();
+            services.AddSingleton<IScadaNodesPingStatsService, ScadaNodesPingStatsService>();
 
             // add pmu config
             PmuConfig pmuConfig = new PmuConfig();

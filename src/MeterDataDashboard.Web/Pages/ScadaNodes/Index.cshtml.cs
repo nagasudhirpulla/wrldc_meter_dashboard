@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using MeterDataDashboard.Core.Entities;
 using MeterDataDashboard.Infra.Persistence;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MeterDataDashboard.Web.Pages.ScadaNodes
 {
+    [Authorize]
     public class IndexModel : PageModel
     {
         private readonly MeterDataDashboard.Infra.Persistence.AppDbContext _context;

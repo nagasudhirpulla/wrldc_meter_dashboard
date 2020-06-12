@@ -6,7 +6,7 @@
 
 <h1>Live Ping status of SCADA Nodes</h1>
 
-<table class="table table-bordered table-hover display" id="meas_table">
+<table class="table table-responsive table-bordered table-hover display" id="meas_table">
     <thead>
         <tr>
             <th>
@@ -61,6 +61,7 @@
 </table>
 
 @section Scripts{
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" />
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/fc-3.2.5/fh-3.1.4/r-2.2.2/datatables.min.css" />
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/fc-3.2.5/fh-3.1.4/r-2.2.2/datatables.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
@@ -112,7 +113,7 @@
             padding: 2px;
             box-sizing: border-box;
             font-size: small;
-            width: 100%
+            width: 100%;
         }
     </style>
 }

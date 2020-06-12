@@ -21,6 +21,9 @@
             <th>
                 Last Updated
             </th>
+            <th>
+                Latest Status Change
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -39,6 +42,9 @@
                 <td>
                     @item.StatusTime.ToString("yyyy-MM-dd HH:mm:ss")
                 </td>
+                <td>
+                    @item.LatestStatusToggleTime.ToString("yyyy-MM-dd HH:mm:ss")
+                </td>
             </tr>
         }
     </tbody>
@@ -55,6 +61,9 @@
             </th>
             <th>
                 Last Updated
+            </th>
+            <th>
+                Latest Status Change
             </th>
         </tr>
     </tfoot>
@@ -84,7 +93,7 @@
             var meas_table = $('#meas_table').DataTable({
                 fixedHeader: true,
                 "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
-                "pageLength": 50,
+                "pageLength": 20,
                 dom: 'Bfrtip',
                 "order": [[0, "asc"]],
                 buttons: ['pageLength', 'copy', 'csv', 'excel', 'pdf', 'print']

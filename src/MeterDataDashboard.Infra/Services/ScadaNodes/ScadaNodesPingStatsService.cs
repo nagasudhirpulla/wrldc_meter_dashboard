@@ -24,7 +24,7 @@ namespace MeterDataDashboard.Infra.Services.ScadaNodes
             conn.Open();
 
             // Define a query
-            NpgsqlCommand command = new NpgsqlCommand(@"SELECT name, ip, status, data_time FROM public.real_node_status 
+            NpgsqlCommand command = new NpgsqlCommand(@"SELECT name, ip, status, data_time, last_toggled_at FROM public.real_node_status 
                                                         order by status desc,name", conn);
 
             // Execute the query and obtain a result set
@@ -38,12 +38,14 @@ namespace MeterDataDashboard.Infra.Services.ScadaNodes
                     string nodeIp = dr.GetString(1);
                     int nodeStatus = dr.GetInt32(2);
                     DateTime statusTime = dr.GetDateTime(3);
+                    DateTime latestToggleTime = dr.GetDateTime(4);
                     res.Add(new NodesPingLiveStatusDTO()
                     {
                         NodeName = nodeName,
                         NodeIp = nodeIp,
                         Status = nodeStatus,
-                        StatusTime = statusTime
+                        StatusTime = statusTime,
+                        LatestStatusToggleTime = latestToggleTime
                     });
                 }
                 dr.NextResult();

@@ -10,20 +10,20 @@ namespace MeterDataDashboard.Infra.Services.ScadaNodes
 {
     public class ScadaNodesPingStatsService : IScadaNodesPingStatsService
     {
-        private readonly IConfiguration _configuration;
+        private readonly string _connStr;
         public ScadaNodesPingStatsService(IConfiguration configuration)
         {
-            _configuration = configuration;
+            _connStr = configuration["ConnectionStrings:ScadaArchiveConnection"];
         }
 
         public IEnumerable<NodesPingLiveStatusDTO> FetchNodesPingLiveStatus()
         {
             List<NodesPingLiveStatusDTO> res = new List<NodesPingLiveStatusDTO>();
             // Connect to a PostgreSQL database
-            NpgsqlConnection conn = new NpgsqlConnection(_configuration["ConnectionStrings:ScadaArchiveConnection"]);
+            NpgsqlConnection conn = new NpgsqlConnection(_connStr);
             conn.Open();
 
-            // Define a query
+            // Define query
             NpgsqlCommand command = new NpgsqlCommand(@"SELECT name, ip, status, data_time, last_toggled_at FROM public.real_node_status 
                                                         order by status desc,name", conn);
 
@@ -57,5 +57,55 @@ namespace MeterDataDashboard.Infra.Services.ScadaNodes
             return res;
         }
 
+        public IEnumerable<double> FetchNodePingHist(string nodeName, DateTime startTime, DateTime endTime)
+        {
+            List<double> res = new List<double>();
+            // Connect to a PostgreSQL database
+            NpgsqlConnection conn = new NpgsqlConnection(_connStr);
+            conn.Open();
+
+            // Define query
+            NpgsqlCommand command = new NpgsqlCommand(@"SELECT data_time, status FROM public.node_status_history 
+                                                        where data_time >= 
+                                                        (
+	                                                        SELECT COALESCE((SELECT max(data_time) FROM public.node_status_history 
+	                                                        where data_time <= @startTime and 
+	                                                        name=@nodeName), @startTime)
+                                                        )
+                                                        and data_time <= @endTime
+                                                        and name=@nodeName 
+                                                        order by data_time", conn);
+            command.Parameters.AddWithValue("@nodeName", nodeName);
+            command.Parameters.AddWithValue("@startTime", startTime);
+            command.Parameters.AddWithValue("@endTime", endTime);
+
+            // Execute the query and obtain a result set
+            NpgsqlDataReader dr = command.ExecuteReader();
+
+            while (dr.HasRows)
+            {
+                while (dr.Read())
+                {
+                    DateTime dt = dr.GetDateTime(0);
+                    double ts = TimeUtils.ToMillisSinceUnixEpoch(dt);
+                    int status = dr.GetInt32(1);
+                    res.Add(ts);
+                    res.Add(status);
+                }
+                dr.NextResult();
+            }
+
+            dr.Dispose();
+
+            conn.Close();
+
+            // if first sample < startTime, then make it equal to startTime
+            double startTimeUnixTs = TimeUtils.ToMillisSinceUnixEpoch(startTime);
+            if (res.Count > 0 && res[0] < startTimeUnixTs)
+            {
+                res[0] = startTimeUnixTs;
+            }
+            return res;
+        }
     }
 }

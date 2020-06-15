@@ -13,4 +13,5 @@ namespace MeterDataDashboard.Core.ScadaNodes
         public DateTime LatestStatusToggleTime { get; set; }
         public int Status { get; set; }
     }
+
 }

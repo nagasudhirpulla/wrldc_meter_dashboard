@@ -4,6 +4,7 @@ module.exports = {
     // multiple entry points - https://github.com/webpack/docs/wiki/multiple-entry-points
     entry: {
         main: ['babel-polyfill', path.resolve(__dirname, 'src/meter_dashboard/index.ts')],
+        ping: ['babel-polyfill', path.resolve(__dirname, 'src/scada_ping_status/index.ts')],
         scada: ['babel-polyfill', path.resolve(__dirname, 'src/scada_dashboard/scada.ts')],
         wbes_archive: ['babel-polyfill', path.resolve(__dirname, 'src/wbes_arch_dashboard/wbes_arch.ts')],
         state_demands: ['babel-polyfill', path.resolve(__dirname, 'src/state_demands_dashboard/state_demands.ts')],

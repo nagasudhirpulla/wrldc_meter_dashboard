@@ -10,7 +10,7 @@ export const getPlotXYArrays = (measData: number[]): { timestamps: Date[], vals:
     return { timestamps: timestamps, vals: vals }
 }
 
-export const setPlot = (divId: string, measDataList: { data: number[], title: string }[], plotTitle: string) => {
+export const setPlot = (divId: string, measDataList: { data: number[], title: string, lineShape?: string, fillMode?: string }[], plotTitle: string) => {
     let traceData = [];
     const layout = {
         title: plotTitle,
@@ -21,12 +21,21 @@ export const setPlot = (divId: string, measDataList: { data: number[], title: st
     for (var measIter = 0; measIter < measDataList.length; measIter++) {
         let measTraceData = getPlotXYArrays(measDataList[measIter].data);
         let measTraceName = measDataList[measIter].title;
-        traceData.push({
+        let traceObj = {
             x: measTraceData.timestamps,
             y: measTraceData.vals,
+            fill: 'none',
             mode: 'lines',
             name: measTraceName,
-        });
+            line: {}
+        }
+        if (measDataList[measIter].lineShape != undefined) {
+            traceObj['line']['shape'] = measDataList[measIter].lineShape
+        }
+        if (measDataList[measIter].fillMode != undefined) {
+            traceObj['fill'] = measDataList[measIter].fillMode
+        }
+        traceData.push(traceObj);
     }
 
     // https://stackoverflow.com/questions/39084438/how-to-import-plotly-js-into-typescript
@@ -37,7 +46,7 @@ export interface PlotTrace {
     timestamps: Date[], vals: number[], title: string, xaxis: string, yaxis: string, line?: { color?: string, width?: string }
 }
 
-export const setPlotTraces = (divId: string, traces: PlotTrace[], plotTitle: string, axTitles: { name: string, axisStr: string }[], nRows:number, nCols:number, height?: number) => {
+export const setPlotTraces = (divId: string, traces: PlotTrace[], plotTitle: string, axTitles: { name: string, axisStr: string }[], nRows: number, nCols: number, height?: number) => {
     let traceData = [];
     const layout = {
         title: plotTitle,

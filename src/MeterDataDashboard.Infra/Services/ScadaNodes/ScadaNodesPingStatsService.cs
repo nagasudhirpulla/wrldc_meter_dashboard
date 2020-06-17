@@ -105,6 +105,14 @@ namespace MeterDataDashboard.Infra.Services.ScadaNodes
             {
                 res[0] = startTimeUnixTs;
             }
+            // if last sample < endTime, then add a sample at the end
+            double endTimeUnixTs = TimeUtils.ToMillisSinceUnixEpoch(endTime);
+            if (res.Count > 0 && res[res.Count - 2] < endTimeUnixTs)
+            {
+                double endSampleVal = res[res.Count - 1];
+                res.Add(endTimeUnixTs);
+                res.Add(endSampleVal);
+            }
             return res;
         }
     }

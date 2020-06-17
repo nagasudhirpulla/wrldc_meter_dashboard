@@ -16,10 +16,13 @@
                 Name
             </th>
             <th>
-                Last Updated
+                Latest Updat At
             </th>
             <th>
-                Latest Status Change
+                Last Status Change
+            </th>
+            <th>
+                No Change Since
             </th>
         </tr>
     </thead>
@@ -39,6 +42,9 @@
                 <td>
                     @item.LatestStatusToggleTime.ToString("yyyy-MM-dd HH:mm:ss")
                 </td>
+                <td>
+                    <span style="color:transparent;font-size:0.1em">@((item.StatusTime - item.LatestStatusToggleTime).ToString(@"dd\:hh\:mm"))|</span>@(string.Format("{0:%d} days {0:%h} hrs {0:%m} mins", item.StatusTime - item.LatestStatusToggleTime))
+                </td>
             </tr>
         }
     </tbody>
@@ -51,10 +57,13 @@
                 Name
             </th>
             <th>
-                Last Updated
+                Latest Updat At
             </th>
             <th>
-                Latest Status Change
+                Last Status Change
+            </th>
+            <th>
+                No Change Since
             </th>
         </tr>
     </tfoot>

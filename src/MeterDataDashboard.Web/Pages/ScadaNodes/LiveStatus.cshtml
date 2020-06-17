@@ -5,18 +5,28 @@
 }
 
 <h1>Live Ping status of SCADA Nodes <a asp-page="/ScadaNodes/History">See History</a></h1>
+<p>
+    <label class="mr-1">Status Filters - </label>
+    <label class="mr-1"><input type="checkbox" onchange="updateTableFilters()" id="onlineShowChkBx"> Online</label>
+    <label class="mr-3"><input type="checkbox" onchange="updateTableFilters()" id="offlineShowChkBx"> Offline</label>
+    <label class="mr-1"> Node Filters - </label>
+    <label class="mr-1"><input type="checkbox" onchange="updateTableFilters()" id="rtuPShowChkBx"> RTU (P)</label>
+    <label class="mr-1"><input type="checkbox" onchange="updateTableFilters()" id="rtuSShowChkBx"> RTU (S)</label>
+    <label class="mr-1"><input type="checkbox" onchange="updateTableFilters()" id="tsPShowChkBx"> TS (P)</label>
+    <label class="mr-1"><input type="checkbox" onchange="updateTableFilters()" id="tsSShowChkBx"> TS (S)</label>
+</p>
 
 <table class="table table-responsive table-bordered table-hover display" id="meas_table">
     <thead>
         <tr>
-            <th>
+            <th class="pingStatusCol">
                 Status
             </th>
-            <th>
+            <th class="nodeNameCol">
                 Name
             </th>
             <th>
-                Latest Updat At
+                Latest Update At
             </th>
             <th>
                 Last Status Change
@@ -57,7 +67,7 @@
                 Name
             </th>
             <th>
-                Latest Updat At
+                Latest Update At
             </th>
             <th>
                 Last Status Change
@@ -116,6 +126,49 @@
                     .draw();
             });
         });
+
+        function updateTableFilters() {
+            var meas_table = $('#meas_table').dataTable();
+            // apply filter on status column
+            var statusFilterStrs = [];
+            if (document.getElementById("onlineShowChkBx").checked) {
+                statusFilterStrs.push('online');
+            }
+            if (document.getElementById("offlineShowChkBx").checked) {
+                statusFilterStrs.push('offline');
+            }
+            var statusSearchStr = '';
+            if (statusFilterStrs.length > 0) {
+                statusSearchStr = '(' + statusFilterStrs.join('|') + ').*'
+            }
+            meas_table.api()
+                .columns('.pingStatusCol')
+                .search(statusSearchStr, true)
+                .draw();
+
+            // apply filter on name column
+            var nameFilterStrs = [];
+            if (document.getElementById("rtuPShowChkBx").checked) {
+                nameFilterStrs.push('rtu_p_');
+            }
+            if (document.getElementById("rtuSShowChkBx").checked) {
+                nameFilterStrs.push('rtu_s_');
+            }
+            if (document.getElementById("tsPShowChkBx").checked) {
+                nameFilterStrs.push('ts_p_');
+            }
+            if (document.getElementById("tsSShowChkBx").checked) {
+                nameFilterStrs.push('ts_s_');
+            }
+            var nameSearchStr = '';
+            if (nameFilterStrs.length > 0) {
+                nameSearchStr = '(' + nameFilterStrs.join('|') + ').*'
+            }
+            meas_table.api()
+                .columns('.nodeNameCol')
+                .search(nameSearchStr, true)
+                .draw();
+        }
     </script>
     <style>
         thead input {

@@ -4,7 +4,7 @@
     ViewData["Title"] = "Live Ping status of SCADA Nodes";
 }
 
-<h1>Live Ping status of SCADA Nodes <a asp-page="/ScadaNodes/History">See History</a></h1>
+<h1>Live Ping status <a asp-page="/ScadaNodes/History">See History</a></h1>
 <p>
     <label class="mr-1">Status Filters - </label>
     <label class="mr-1"><input type="checkbox" onchange="updateTableFilters()" id="onlineShowChkBx"> Online</label>
@@ -14,6 +14,7 @@
     <label class="mr-1"><input type="checkbox" onchange="updateTableFilters()" id="rtuSShowChkBx"> RTU (S)</label>
     <label class="mr-1"><input type="checkbox" onchange="updateTableFilters()" id="tsPShowChkBx"> TS (P)</label>
     <label class="mr-1"><input type="checkbox" onchange="updateTableFilters()" id="tsSShowChkBx"> TS (S)</label>
+    <label class="mr-1"><input type="checkbox" onchange="updateTableFilters()" id="voipShowChkBx"> VOIP</label>
 </p>
 
 <table class="table table-responsive table-bordered table-hover display" id="meas_table">
@@ -159,6 +160,9 @@
             }
             if (document.getElementById("tsSShowChkBx").checked) {
                 nameFilterStrs.push('ts_s_');
+            }
+            if (document.getElementById("voipShowChkBx").checked) {
+                nameFilterStrs.push('_voip');
             }
             var nameSearchStr = '';
             if (nameFilterStrs.length > 0) {

@@ -7,20 +7,25 @@
 <div class="row align-content-center">
     <input id="start_date" class="form-inline bg-light border-1" type="date" />
     <input id="end_date" class="form-inline bg-light border-1" type="date" />
-    <button id="plotBtn" class="btn btn-success btn-icon-split">
+</div>
+<br />
+<div class="row align-content-center mb-2">
+    <select multiple id="nodeNameSelect" class="chzen-select col-md-11"></select>
+</div>
+
+<div class="row align-content-center mb-3">
+    <button id="plotBtn" class="btn btn-sm btn-success btn-icon-split">
         <span class="icon text-white-50">
             <i class="fas fa-sync"></i>
         </span>
         <span class="text">Plot Data</span>
     </button>
 </div>
-<br />
-<div class="row align-content-center">
-    <select multiple id="nodeNameSelect" class="chzen-select col-md-11"></select>
-</div>
-<div class="row">
+
+<div class="row mb-1">
     <div id="plotDiv" class="col-md-12"></div>
 </div>
+
 <div class="row">
     <button class="btn btn-sm btn-outline-info" id="plotExportBtn">Export Data</button>
 </div>

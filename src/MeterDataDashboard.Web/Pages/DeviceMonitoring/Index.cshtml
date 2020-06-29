@@ -1,0 +1,39 @@
+﻿@page
+@model MeterDataDashboard.Web.Pages.DeviceMonitoring.IndexModel
+@{
+    ViewData["Title"] = "Realtime Temperature and Humidity Data";
+}
+
+<h3>@ViewData["Title"]</h3>
+
+<table class="table table-bordered table-hover display" id="meas_table">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Tempurature (°C)
+            </th>
+            <th>
+                Humidity
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.DeviceData)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DeviceName)
+                </td>
+                <td>
+                    @(item.Tempurature)
+                </td>
+                <td>
+                    @(item.Humidity)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

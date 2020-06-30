@@ -27,7 +27,7 @@ namespace MeterDataDashboard.Web.Controllers
         [HttpGet("{tag}/{start_date}/{end_date}")]
         public async Task<IEnumerable<double>> Index(string tag, string start_date, string end_date)
         {
-            // https://localhost:44390/TempMointor/Server_Room|Temperature/2018-06-18-00-00-00/2018-06-28-00-00-00
+            // https://localhost:44390/api/TempMointor/Server_Room|Temperature/2020-06-18-00-00-00/2020-06-28-00-00-00
             IEnumerable<double> res = new List<double>();
             DateTime startDate = DateTime.ParseExact(start_date, "yyyy-MM-dd-HH-mm-ss", CultureInfo.InvariantCulture);
             DateTime endDate = DateTime.ParseExact(end_date, "yyyy-MM-dd-HH-mm-ss", CultureInfo.InvariantCulture);
@@ -47,9 +47,12 @@ namespace MeterDataDashboard.Web.Controllers
         {
             // https://localhost:44390/api/TempMointor/GetMeasurementsTable
             List<List<string>> roomNamesTable = new List<List<string>>() {
-                new List<string>() { CommRoomName },
-                new List<string>() { ServRoomName },
-                new List<string>() { UpsRoomName }
+                new List<string>() { $"{CommRoomName}|Temperature" },
+                new List<string>() { $"{CommRoomName}|Humidity" },
+                new List<string>() { $"{ServRoomName}|Temperature" },
+                new List<string>() { $"{ServRoomName}|Humidity" },
+                new List<string>() { $"{UpsRoomName}|Temperature" },
+                new List<string>() { $"{UpsRoomName}|Humidity" },
             };
             roomNamesTable.Insert(0, new List<string>() { "id" });
             return await Task.FromResult(roomNamesTable);
@@ -59,7 +62,11 @@ namespace MeterDataDashboard.Web.Controllers
         public async Task<IEnumerable<string>> GetMeasurements()
         {
             // https://localhost:44390/api/TempMointor/getmeasurements
-            List<string> roomNames = new List<string>() { CommRoomName, ServRoomName, UpsRoomName };
+            List<string> roomNames = new List<string>() {
+                $"{CommRoomName}|Temperature", $"{CommRoomName}|Humidity",
+                $"{ServRoomName}|Temperature", $"{ServRoomName}|Humidity",
+                $"{UpsRoomName}|Temperature", $"{UpsRoomName}|Humidity"
+            };
             return await Task.FromResult(roomNames);
         }
     }

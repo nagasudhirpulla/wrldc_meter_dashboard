@@ -21,7 +21,7 @@ namespace MeterDataDashboard.Infra.Services.TempHumidity
         public async Task<List<double>> GetHistDeviceData(string measTag, DateTime startTime, DateTime endTime)
         {
             List<double> res = new List<double>();
-            List<string> measSegs = measTag.Split(' ').ToList();
+            List<string> measSegs = measTag.Split('|').ToList();
             // device name can be like Server Room|Temperature or UPS Room|Humidity
             if (measSegs.Count != 2)
             {
@@ -45,8 +45,9 @@ namespace MeterDataDashboard.Infra.Services.TempHumidity
             // field1 is temp, field2 is humidity
             string valColName = (measType == tempMeasType) ? "field1" : "field2";
             using var command = new MySqlCommand($@"select time, {valColName} FROM wrldc_temperature.data where 
-                                                    date between @startTime and @endTime;", connection);
+                                                    name=@name and date between @startTime and @endTime;", connection);
 
+            command.Parameters.AddWithValue("@name", deviceName);
             command.Parameters.AddWithValue("@startTime", startTime.ToString("yyyy-MM-dd HH:mm:ss"));
             command.Parameters.AddWithValue("@endTime", endTime.ToString("yyyy-MM-dd HH:mm:ss"));
 
@@ -56,10 +57,13 @@ namespace MeterDataDashboard.Infra.Services.TempHumidity
                 try
                 {
                     var timeStr = reader.GetString(0);
-                    double timeEpochMs = int.Parse(timeStr) * 1000;
+                    double timeEpochMs = long.Parse(timeStr) * 1000;
                     double val = double.Parse(reader.GetString(1));
-                    res.Add(timeEpochMs);
-                    res.Add(val);
+                    if (val != 0)
+                    {
+                        res.Add(timeEpochMs);
+                        res.Add(val);
+                    }
                 }
                 catch (Exception ex)
                 {

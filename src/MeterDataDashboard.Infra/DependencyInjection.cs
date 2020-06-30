@@ -26,6 +26,7 @@ using MeterDataDashboard.Core.Sms;
 using MeterDataDashboard.Core.ScadaNodes.Services;
 using MeterDataDashboard.Infra.Services.TempHumidity;
 using MeterDataDashboard.Core.TempHumidity.Services;
+using MySql.Data.MySqlClient;
 
 namespace MeterDataDashboard.Infra
 {
@@ -82,7 +83,6 @@ namespace MeterDataDashboard.Infra
             services.AddSingleton<IAgcFileUtilsService, AgcFileUtilsService>();
             services.AddSingleton<IWbesLiveDataService, WbesLiveDataService>();
             services.AddSingleton<IScadaNodesPingStatsService, ScadaNodesPingStatsService>();
-            services.AddSingleton<IDeviceDataService, DeviceDataService>();
 
             // add pmu config
             PmuConfig pmuConfig = new PmuConfig();
@@ -113,6 +113,9 @@ namespace MeterDataDashboard.Infra
             // Add Infra services
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<ISmsSender, SmsSender>();
+
+            // Add temp monitoring realtime service
+            services.AddSingleton<IDeviceDataService, DeviceDataService>();
 
             return services;
         }

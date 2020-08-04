@@ -7,18 +7,79 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Npgsql;
 
 namespace MeterDataDashboard.Infra.Services.TempHumidity
 {
     public partial class DeviceDataService : IDeviceDataService
     {
         private readonly string _mysqlConnStr;
+        private readonly string _scadaArchiveConnStr;
         public DeviceDataService(IConfiguration configuration)
         {
             _mysqlConnStr = configuration["ConnectionStrings:TempMonitorConnection"];
+            _scadaArchiveConnStr = configuration["ConnectionStrings:ScadaArchiveConnection"];
         }
 
         public async Task<List<double>> GetHistDeviceData(string measTag, DateTime startTime, DateTime endTime)
+        {
+            List<double> res = new List<double>();
+            List<string> measSegs = measTag.Split('|').ToList();
+            // device name can be like Server Room|Temperature or UPS Room|Humidity
+            if (measSegs.Count != 2)
+            {
+                return new List<double>();
+            }
+
+            string deviceName = measSegs[0];
+            deviceName = deviceName.Replace("_", " ");
+            string measType = measSegs[1];
+            string tempMeasType = "Temperature";
+            string humMeasType = "Humidity";
+
+            if (!new List<string>() { tempMeasType, humMeasType }.Any(s => measType.ToLower().Equals(s.ToLower())))
+            {
+                return new List<double>();
+            }
+
+            // Connect to a PostgreSQL database
+            NpgsqlConnection conn = new NpgsqlConnection(_scadaArchiveConnStr);
+            conn.Open();
+
+            // field1 is temp, field2 is humidity
+            string valColName = (measType == tempMeasType) ? "temp_val" : "hum_val";
+            // Define a query
+            NpgsqlCommand command = new NpgsqlCommand(@$"SELECT data_time, {valColName} FROM public.devices_time_data 
+                                                        where device_name=@deviceName and data_time 
+                                                        between @startTime and @endTime order by data_time", conn);
+
+            command.Parameters.AddWithValue("@deviceName", deviceName);
+            command.Parameters.AddWithValue("@startTime", startTime);
+            command.Parameters.AddWithValue("@endTime", endTime);
+
+            // Execute the query and obtain a result set
+            NpgsqlDataReader dr = command.ExecuteReader();
+
+            while (dr.HasRows)
+            {
+                while (dr.Read())
+                {
+                    DateTime dt = dr.GetDateTime(0);
+                    double ts = TimeUtils.ToMillisSinceUnixEpoch(dt);
+                    double val = dr.GetDouble(1);
+                    res.Add(ts);
+                    res.Add(val);
+                }
+                dr.NextResult();
+            }
+
+            dr.Dispose();
+
+            conn.Close();
+            return await Task.FromResult(res);
+        }
+
+        public async Task<List<double>> GetHistDeviceDataVendor(string measTag, DateTime startTime, DateTime endTime)
         {
             List<double> res = new List<double>();
             List<string> measSegs = measTag.Split('|').ToList();

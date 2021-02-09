@@ -15,6 +15,8 @@
     <label class="mr-1"><input type="checkbox" onchange="updateTableFilters()" id="tsPShowChkBx"> TS (P)</label>
     <label class="mr-1"><input type="checkbox" onchange="updateTableFilters()" id="tsSShowChkBx"> TS (S)</label>
     <label class="mr-1"><input type="checkbox" onchange="updateTableFilters()" id="voipShowChkBx"> VOIP</label>
+    <label class="mr-1"><input type="checkbox" onchange="updateTableFilters()" id="iccp1ChkBx"> ICCP 1</label>
+    <label class="mr-1"><input type="checkbox" onchange="updateTableFilters()" id="iccp2ChkBx"> ICCP 2</label>
 </p>
 
 <table class="table table-responsive table-bordered table-hover display" id="meas_table">
@@ -163,6 +165,12 @@
             }
             if (document.getElementById("voipShowChkBx").checked) {
                 nameFilterStrs.push('_voip');
+            }
+            if (document.getElementById("iccp1ChkBx").checked) {
+                nameFilterStrs.push('ICCP1_');
+            }
+            if (document.getElementById("iccp2ChkBx").checked) {
+                nameFilterStrs.push('ICCP2_');
             }
             var nameSearchStr = '';
             if (nameFilterStrs.length > 0) {

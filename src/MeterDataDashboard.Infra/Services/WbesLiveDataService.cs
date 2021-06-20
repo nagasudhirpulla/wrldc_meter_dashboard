@@ -33,7 +33,7 @@ namespace MeterDataDashboard.Infra.Services
                     // get dc data
                     con.Open();
                     cmd.BindByName = true;
-                    cmd.CommandText = @"select util_id, acronym from WBES_NR7.utility 
+                    cmd.CommandText = @"select util_id, acronym from SCHN7.utility 
                                         where is_active = 1 and region_id=2 
                                         and util_type_id=2 and isgs_type_id=1";
 
@@ -58,7 +58,8 @@ namespace MeterDataDashboard.Infra.Services
 
         public async Task<int> GetMaxRevForDate(DateTime targetDt)
         {
-            string url = $"http://scheduling.wrldc.in/wbes/Report/GetCurrentDayFullScheduleMaxRev?regionid=2&ScheduleDate={targetDt.ToString("dd-MM-yyyy")}";
+            // https://wbes.wrldc.in/Report/GetCurrentDayFullScheduleMaxRev?regionid=2&ScheduleDate=20-06-2021
+            string url = $"https://wbes.wrldc.in/Report/GetCurrentDayFullScheduleMaxRev?regionid=2&ScheduleDate={targetDt.ToString("dd-MM-yyyy")}";
             using var client = new HttpClient();
             client.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3887.7 Safari/537.36");
             client.DefaultRequestHeaders.Add("Accept-Encoding", "gzip, deflate");
@@ -79,7 +80,7 @@ namespace MeterDataDashboard.Infra.Services
             int rev = await GetMaxRevForDate(targetDt);
             UtilSchData schData = new UtilSchData();
             if (rev == -1) { return null; }
-            string url = $"http://scheduling.wrldc.in/wbes/ReportFullSchedule/GetFullInjSummary?scheduleDate={targetDt.ToString("dd-MM-yyyy")}&sellerId={utilId}&revisionNumber={rev}&regionId=2&byDetails=0&isDrawer=0&isBuyer=0";
+            string url = $"https://wbes.wrldc.in/ReportFullSchedule/GetFullInjSummary?scheduleDate={targetDt.ToString("dd-MM-yyyy")}&sellerId={utilId}&revisionNumber={rev}&regionId=2&byDetails=0&isDrawer=0&isBuyer=0";
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/45.0.2454.101 Safari/537.36";
             request.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8";
@@ -113,7 +114,7 @@ namespace MeterDataDashboard.Infra.Services
         public UtilSchData GetOnbarInstalledCapacityForDates(string utilId, DateTime fromDate, DateTime toDate)
         {
             UtilSchData utilData = new UtilSchData();
-            string dbName = (DateTime.Now.Date - fromDate.Date).TotalDays > 6 ? "WBES_OLD" : "WBES_NR7";
+            string dbName = (DateTime.Now.Date - fromDate.Date).TotalDays > 6 ? "SCHOLD" : "SCHN7";
             using (OracleConnection con = new OracleConnection(_oracleConnString))
             {
                 using OracleCommand cmd = con.CreateCommand();
@@ -170,7 +171,7 @@ namespace MeterDataDashboard.Infra.Services
         public UtilSchData GetOnbarForDates(string utilId, DateTime fromDate, DateTime toDate)
         {
             UtilSchData utilData = new UtilSchData();
-            string dbName = (DateTime.Now.Date - fromDate.Date).TotalDays > 6 ? "WBES_OLD" : "WBES_NR7";
+            string dbName = (DateTime.Now.Date - fromDate.Date).TotalDays > 6 ? "SCHOLD" : "SCHN7";
             using (OracleConnection con = new OracleConnection(_oracleConnString))
             {
                 using OracleCommand cmd = con.CreateCommand();
@@ -227,7 +228,7 @@ namespace MeterDataDashboard.Infra.Services
         public UtilSchData GetRrasForDates(string utilId, DateTime fromDate, DateTime toDate)
         {
             UtilSchData utilData = new UtilSchData();
-            string dbName = (DateTime.Now.Date - fromDate.Date).TotalDays > 6 ? "WBES_OLD" : "WBES_NR7";
+            string dbName = (DateTime.Now.Date - fromDate.Date).TotalDays > 6 ? "SCHOLD" : "SCHN7";
             using (OracleConnection con = new OracleConnection(_oracleConnString))
             {
                 using OracleCommand cmd = con.CreateCommand();
@@ -287,7 +288,7 @@ namespace MeterDataDashboard.Infra.Services
         public UtilSchData GetScedForDates(string utilId, DateTime fromDate, DateTime toDate)
         {
             UtilSchData utilData = new UtilSchData();
-            string dbName = (DateTime.Now.Date - fromDate.Date).TotalDays > 6 ? "WBES_OLD" : "WBES_NR7";
+            string dbName = (DateTime.Now.Date - fromDate.Date).TotalDays > 6 ? "SCHOLD" : "SCHN7";
             using (OracleConnection con = new OracleConnection(_oracleConnString))
             {
                 using OracleCommand cmd = con.CreateCommand();

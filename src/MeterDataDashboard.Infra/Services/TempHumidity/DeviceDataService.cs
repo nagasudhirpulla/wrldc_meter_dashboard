@@ -138,12 +138,6 @@ namespace MeterDataDashboard.Infra.Services.TempHumidity
         public async Task<List<DeviceDataDTO>> GetRealTimeDevicesData()
         {
             List<DeviceDataDTO> res = new List<DeviceDataDTO>();
-            //List<(string name, string ip, int port)> devices = new List<(string name, string ip, int port)>()
-            //{
-            //    ("Server Room", "10.2.100.72", 4567),
-            //    ("Communication Room", "10.2.100.73", 4567),
-            //    ("UPS Room", "10.2.100.74", 4567)
-            //};
             List<(string name, string ip, int port)> devices = new List<(string name, string ip, int port)>();
             foreach ((string name, string ip, int port) in devices)
             {
